@@ -46,7 +46,7 @@ void Player::Initialize()
 	hModelanime_[1] = Model::Load("Model\\Running.fbx");
 	hModel_ = hModelanime_[0];
 
-	speed_ = 0.15;
+	speed_ = 0.2;
 	float_ = XMVECTOR({ 0,0,1,0 });
 	transform_.scale_ = { 2,2,2 };
 	transform_.position_.z = -100;

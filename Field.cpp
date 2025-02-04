@@ -13,7 +13,7 @@ Field::~Field()
 
 void Field::Initialize()
 {
-	hModel_ = Model::Load("Model\\Map.fbx");
+	hModel_ = Model::Load("Model\\MyFieldPrototype.fbx");
 	assert(hModel_ >= 0);
 }
 
