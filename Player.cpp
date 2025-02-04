@@ -42,18 +42,18 @@ void Player::Initialize()
 	//hModel_ = Model::Load("Model\\Running.fbx");
 	//assert(hModel_ >= 0);
 	
-	hModelanime_[0]= Model::Load("Model\\Standing.fbx");
+	hModelanime_[0]= Model::Load("Model\\Idle.fbx");
 	hModelanime_[1] = Model::Load("Model\\Running.fbx");
 	hModel_ = hModelanime_[0];
 
-	speed_ = 0.5;
+	speed_ = 0.15;
 	float_ = XMVECTOR({ 0,0,1,0 });
 	transform_.scale_ = { 2,2,2 };
-	transform_.position_.z = -80;
+	transform_.position_.z = -100;
 
-	animType_ = (ANM_TYPE::WAIT);
+	//animType_ = (ANM_TYPE::WAIT);
 	//↓待機モーション
-	Model::SetAnimFrame(hModelanime_[0], 1, 153, 1);
+	Model::SetAnimFrame(hModelanime_[0], 1, 311, 1);
 	//↓ランアニメーションのフレーム実装
 	Model::SetAnimFrame(hModelanime_[1], 1, 50, 1);
 }
