@@ -177,8 +177,9 @@ void Player::Update()
 
 	case CAM_TYPE::TPS_TYPE://TPSŽ‹“_
 	{
+		//Camera::SetPosition(transform_.position_);
 		Camera::SetTarget(transform_.position_);
-		XMVECTOR vEye{ 0,3,-10,-10 };
+		XMVECTOR vEye{ 0,5,-1};
 		vEye = XMVector3TransformCoord(vEye, rotY);
 		XMFLOAT3 camPos;
 		XMStoreFloat3(&camPos, pos + vEye);
