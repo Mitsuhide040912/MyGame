@@ -20,6 +20,7 @@ enum ANM_TYPE
 {
 	WAIT = 0,
 	RUN,
+	PICK,
 	MAX
 };
 
@@ -44,6 +45,7 @@ void Player::Initialize()
 	
 	hModelanime_[0]= Model::Load("Model\\Idle.fbx");
 	hModelanime_[1] = Model::Load("Model\\Running.fbx");
+	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
 	hModel_ = hModelanime_[0];
 
 	speed_ = 0.2;
@@ -52,10 +54,12 @@ void Player::Initialize()
 	transform_.position_.z = -100;
 
 	//animType_ = (ANM_TYPE::WAIT);
-	//↓待機モーション
+	//↓待機モーションのフレーム管理
 	Model::SetAnimFrame(hModelanime_[0], 1, 311, 1);
-	//↓ランアニメーションのフレーム実装
+	//↓ランアニメーションのフレーム管理
 	Model::SetAnimFrame(hModelanime_[1], 1, 50, 1);
+	//取るアニメーションのフレーム管理
+	Model::SetAnimFrame(hModelanime_[2], 1, 65, 1);
 }
 
 
@@ -73,6 +77,9 @@ void Player::Update()
 		break;
 	case ANM_TYPE::RUN:
 		hModel_ = hModelanime_[1];
+		break;
+	case ANM_TYPE::PICK:
+		hModel_ = hModelanime_[2];
 		break;
 	default:
 		break;
@@ -96,7 +103,6 @@ void Player::Update()
 	{
 		animType_ = ANM_TYPE::WAIT;
 	}
-
 	//後退
 	if (Input::IsKey(DIK_S))
 	{
@@ -110,22 +116,27 @@ void Player::Update()
 		pos = pos - move;
 		XMStoreFloat3(&(transform_.position_), pos);
 	}
-
-
-#if 1
+	//物をとるアニメーション
+	if (Input::IsKey(DIK_J))
+	{
+		animType_ = ANM_TYPE::PICK;
+	}
+	//左回転
 	if (Input::IsKey(DIK_A))
 	{
 		transform_.rotate_.y -= 2.0f;
 	}
+	//右回転
 	if (Input::IsKey(DIK_D))
 	{
 		transform_.rotate_.y += 2.0f;
 	}
+	//何もキーが押されていなかったらWAITを呼ぶ
 	else if (!Input::IsKey)
 	{
 		animType_ = ANM_TYPE::WAIT;
 	}
-#endif
+
 
 	//回転行列
 	rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
@@ -178,11 +189,23 @@ void Player::Update()
 	case CAM_TYPE::TPS_TYPE://TPS視点
 	{
 		//Camera::SetPosition(transform_.position_);
-		Camera::SetTarget(transform_.position_);
-		XMVECTOR vEye{ 0,5,-1};
+		
+		XMFLOAT3 camtar = transform_.position_;
+		//camtar.z -= 5;
+		//camtar.y = -6.5;
+		camtar.y +=2.64;
+		camtar.x += 0.8;
+		Camera::SetTarget(camtar);
+		//XMVECTOR vEye{ 0,3,-10};
+		//vEye = XMVector3TransformCoord(vEye, rotY);
+		XMFLOAT3 camPos = transform_.position_;
+		camPos.z -=3;
+		camPos.y +=2.64;
+		camPos.x += 1.0;
+		
+		XMVECTOR vEye = XMLoadFloat3(&camPos);
 		vEye = XMVector3TransformCoord(vEye, rotY);
-		XMFLOAT3 camPos;
-		XMStoreFloat3(&camPos, pos + vEye);
+		XMStoreFloat3(&camPos, vEye);
 		Camera::SetPosition(camPos);
 		break;
 	}

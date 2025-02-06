@@ -4,7 +4,7 @@ class Player :
     public GameObject
 {
     int hModel_;
-    int hModelanime_[2];
+    int hModelanime_[3];
     XMVECTOR float_;
     XMVECTOR front_;
     float speed_;
