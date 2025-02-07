@@ -90,14 +90,16 @@ void Player::Update()
 	{
 
 		animType_ = ANM_TYPE::RUN;
-		XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+
+		/*XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 		XMVECTOR rotVec = XMVector3TransformCoord(float_, rotY);
 
 		XMVECTOR move;
 		move = speed_ * rotVec;
 		XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
 		pos = pos + move;
-		XMStoreFloat3(&(transform_.position_), pos);
+		XMStoreFloat3(&(transform_.position_), pos);*/
+		dir = 1.0;
 	}
 	else
 	{
@@ -107,14 +109,15 @@ void Player::Update()
 	if (Input::IsKey(DIK_S))
 	{
 		animType_ = ANM_TYPE::RUN;
-		XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-		XMVECTOR rotVec = XMVector3TransformCoord(float_, rotY);
+		//XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+		//XMVECTOR rotVec = XMVector3TransformCoord(float_, rotY);
 
-		XMVECTOR move;
-		move = speed_ * rotVec;
-		XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
-		pos = pos - move;
-		XMStoreFloat3(&(transform_.position_), pos);
+		//XMVECTOR move;
+		//move = speed_ * rotVec;
+		//XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
+		//pos = pos - move;
+		//XMStoreFloat3(&(transform_.position_), pos);
+		dir = -1.0;
 	}
 	//物をとるアニメーション
 	if (Input::IsKey(DIK_J))
@@ -188,26 +191,43 @@ void Player::Update()
 
 	case CAM_TYPE::TPS_TYPE://TPS視点
 	{
-		//Camera::SetPosition(transform_.position_);
-		
-		XMFLOAT3 camtar = transform_.position_;
-		//camtar.z -= 5;
-		//camtar.y = -6.5;
+		/*XMFLOAT3 camtar = transform_.position_;
 		camtar.y +=2.64;
 		camtar.x += 0.8;
 		Camera::SetTarget(camtar);
-		//XMVECTOR vEye{ 0,3,-10};
-		//vEye = XMVector3TransformCoord(vEye, rotY);
 		XMFLOAT3 camPos = transform_.position_;
 		camPos.z -=3;
 		camPos.y +=2.64;
 		camPos.x += 1.0;
-		
 		XMVECTOR vEye = XMLoadFloat3(&camPos);
 		vEye = XMVector3TransformCoord(vEye, rotY);
-		XMStoreFloat3(&camPos, vEye);
+		XMStoreFloat3(&camPos,vEye);
+		Camera::SetPosition(camPos);
+		break;*/
+		XMFLOAT3 camtar = transform_.position_;
+		camtar.y += 2.64;
+		//camtar.x = 0.8;
+		Camera::SetTarget(camtar);
+		XMFLOAT3 camPos = transform_.position_;
+		XMVECTOR vEye = { 0,2.70,-3,0 };
+		vEye = XMVector3TransformCoord(vEye, rotY);
+		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);
 		break;
+		//XMFLOAT3 camtar = transform_.position_;
+		//camtar.y += 2.64;
+		//camtar.x += 0.8;
+		//Camera::SetTarget(camtar);
+		//XMVECTOR vEye{ 0,5,-10,0 };
+		//vEye = XMVector3TransformCoord(vEye, rotY);
+		//XMFLOAT3 camPos = transform_.position_;
+		//camPos.z -= 3;
+		//camPos.y += 2.64;
+		//camPos.x += 1.0;
+		//XMStoreFloat3(&camPos, pos + vEye);
+		//Camera::SetPosition(camPos);
+		//break;
+
 	}
 
 	case CAM_TYPE::FPS_TYPE://１人称視点
