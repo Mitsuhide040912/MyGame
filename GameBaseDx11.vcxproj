@@ -158,6 +158,7 @@
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="TestScene.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="TestScene.h" />
