@@ -13,8 +13,9 @@ Field::~Field()
 
 void Field::Initialize()
 {
-	hModel_ = Model::Load("Model\\MyFieldPrototype.fbx");
+	hModel_ = Model::Load("Model\\SandWorld1.fbx");
 	assert(hModel_ >= 0);
+	transform_.rotate_.y = 180.0f;
 }
 
 void Field::Update()

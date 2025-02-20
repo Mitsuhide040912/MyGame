@@ -51,7 +51,8 @@ void Player::Initialize()
 	speed_ = 0.2;
 	float_ = XMVECTOR({ 0,0,1,0 });
 	transform_.scale_ = { 2,2,2 };
-	transform_.position_.z = -100;
+	//transform_.position_.z = -100;
+	//transform_.rotate_.y = 180.0f;
 
 	//animType_ = (ANM_TYPE::WAIT);
 	//↓待機モーションのフレーム管理
@@ -159,7 +160,7 @@ void Player::Update()
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hGmodel, &data);
 
-	if (data.hit == true)
+	if (data.hit)
 	{
 		transform_.position_.y = -data.dist;
 	}
