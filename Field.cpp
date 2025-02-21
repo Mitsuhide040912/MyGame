@@ -13,7 +13,7 @@ Field::~Field()
 
 void Field::Initialize()
 {
-	hModel_ = Model::Load("Model\\SandWorld1.fbx");
+	hModel_ = Model::Load("Model\\MyStage2.fbx");
 	assert(hModel_ >= 0);
 	transform_.rotate_.y = 180.0f;
 }

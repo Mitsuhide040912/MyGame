@@ -4,7 +4,8 @@
 #include "Field.h"
 #include "Engine/Camera.h"
 #include "Engine/Debug.h"
-
+#include "Engine/SphereCollider.h"
+#include "Engine/BoxCollider.h"
 //カメラの指定
 enum CAM_TYPE
 {
@@ -38,11 +39,6 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	//hModel_ = Model::Load("Model\\Standing.fbx");
-	//assert(hModel_ >= 0);
-	//hModel_ = Model::Load("Model\\Running.fbx");
-	//assert(hModel_ >= 0);
-	
 	hModelanime_[0]= Model::Load("Model\\Idle.fbx");
 	hModelanime_[1] = Model::Load("Model\\Running.fbx");
 	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
@@ -54,9 +50,12 @@ void Player::Initialize()
 	//transform_.position_.z = -100;
 	//transform_.rotate_.y = 180.0f;
 
+	SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 2, 0), 1.2f);
+	AddCollider(Collision);
+
 	//animType_ = (ANM_TYPE::WAIT);
 	//↓待機モーションのフレーム管理
-	Model::SetAnimFrame(hModelanime_[0], 1, 311, 1);
+	Model::SetAnimFrame(hModelanime_[0], 1, 312, 1);
 	//↓ランアニメーションのフレーム管理
 	Model::SetAnimFrame(hModelanime_[1], 1, 50, 1);
 	//取るアニメーションのフレーム管理
@@ -89,17 +88,7 @@ void Player::Update()
 	//前進
 	if (Input::IsKey(DIK_W))
 	{
-
 		animType_ = ANM_TYPE::RUN;
-
-		/*XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-		XMVECTOR rotVec = XMVector3TransformCoord(float_, rotY);
-
-		XMVECTOR move;
-		move = speed_ * rotVec;
-		XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
-		pos = pos + move;
-		XMStoreFloat3(&(transform_.position_), pos);*/
 		dir = 1.0;
 	}
 	else
@@ -110,14 +99,6 @@ void Player::Update()
 	if (Input::IsKey(DIK_S))
 	{
 		animType_ = ANM_TYPE::RUN;
-		//XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-		//XMVECTOR rotVec = XMVector3TransformCoord(float_, rotY);
-
-		//XMVECTOR move;
-		//move = speed_ * rotVec;
-		//XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
-		//pos = pos - move;
-		//XMStoreFloat3(&(transform_.position_), pos);
 		dir = -1.0;
 	}
 	//物をとるアニメーション
@@ -192,19 +173,6 @@ void Player::Update()
 
 	case CAM_TYPE::TPS_TYPE://TPS視点
 	{
-		/*XMFLOAT3 camtar = transform_.position_;
-		camtar.y +=2.64;
-		camtar.x += 0.8;
-		Camera::SetTarget(camtar);
-		XMFLOAT3 camPos = transform_.position_;
-		camPos.z -=3;
-		camPos.y +=2.64;
-		camPos.x += 1.0;
-		XMVECTOR vEye = XMLoadFloat3(&camPos);
-		vEye = XMVector3TransformCoord(vEye, rotY);
-		XMStoreFloat3(&camPos,vEye);
-		Camera::SetPosition(camPos);
-		break;*/
 		XMFLOAT3 camtar = transform_.position_;
 		camtar.y += 2.64;
 		//camtar.x = 0.8;
@@ -215,19 +183,6 @@ void Player::Update()
 		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);
 		break;
-		//XMFLOAT3 camtar = transform_.position_;
-		//camtar.y += 2.64;
-		//camtar.x += 0.8;
-		//Camera::SetTarget(camtar);
-		//XMVECTOR vEye{ 0,5,-10,0 };
-		//vEye = XMVector3TransformCoord(vEye, rotY);
-		//XMFLOAT3 camPos = transform_.position_;
-		//camPos.z -= 3;
-		//camPos.y += 2.64;
-		//camPos.x += 1.0;
-		//XMStoreFloat3(&camPos, pos + vEye);
-		//Camera::SetPosition(camPos);
-		//break;
 
 	}
 
@@ -245,14 +200,20 @@ void Player::Update()
 		break;
 	}
 
+
 }
 
 void Player::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
+
 }
 
 void Player::Release()
+{
+}
+
+void Player::OnCollision(GameObject* pTarget)
 {
 }

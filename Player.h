@@ -13,12 +13,12 @@ class Player :
     XMFLOAT3 f;
     XMVECTOR v = XMLoadFloat3(&f);
 public:
-
     Player(GameObject* parent);
     ~Player();
     void Initialize()override;
     void Update()override;
     void Draw()override;
     void Release()override;
+    void OnCollision(GameObject* pTarget)override;
 };
 

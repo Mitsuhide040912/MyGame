@@ -1,6 +1,9 @@
 #include "Item.h"
 #include "Field.h"
+#include "Player.h"
 #include "Engine/Model.h"
+#include "Engine/SphereCollider.h"
+#include "Engine/BoxCollider.h"
 Item::Item(GameObject* parent)
 	:GameObject(parent,"Item"),hModel_(-1)
 {
@@ -12,15 +15,17 @@ Item::~Item()
 
 void Item::Initialize()
 {
-	//hModel_ = Model::Load("Model\\ItemBox.fbx");
 	hModel_ = Model::Load("Model\\ItemBox.fbx");
 	assert(hModel_ > 0);
+
+	SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.2f);
+	AddCollider(Collision);
 }
 
 void Item::Update()
 {
 
-	transform_.position_.z = 100.0f;
+	transform_.position_.z = 50.0f;
 	transform_.rotate_.y = 180.0f;
 	//«’n–Ê‚Æ‚Ì”»’è
 	Field* pGround = (Field*)FindObject("Field");
@@ -36,14 +41,26 @@ void Item::Update()
 	{
 		transform_.position_.y = -data.dist;
 	}
+
+}
+
+void Item::OnCollision(GameObject* pTarget)
+{
+	if (pTarget->GetObjectName() == "Player")
+	{
+		KillMe();
+	}
 }
 
 void Item::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
+
 }
 
 void Item::Release()
 {
 }
+
+
