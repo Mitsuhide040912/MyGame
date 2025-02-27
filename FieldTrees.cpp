@@ -11,14 +11,14 @@ FieldTrees::~FieldTrees()
 
 void FieldTrees::Initialize()
 {
-	hModel_ = Model::Load("Model\\Trees.fbx");
+	hModel_ = Model::Load("Model\\StageEndBox.fbx");
 	assert(hModel_ >= 0);
 	transform_.rotate_.y = 180.0f;
 }
 
 void FieldTrees::Update()
 {
-	transform_.position_.y = -30.0f;
+	transform_.position_.y = -25.0f;
 }
 
 void FieldTrees::Draw()

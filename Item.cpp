@@ -25,7 +25,7 @@ void Item::Initialize()
 void Item::Update()
 {
 
-	transform_.position_.z = 50.0f;
+	transform_.position_.z = 70.0f;
 	transform_.rotate_.y = 180.0f;
 	//«’n–Ê‚Æ‚Ì”»’è
 	Field* pGround = (Field*)FindObject("Field");
