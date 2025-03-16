@@ -4,6 +4,7 @@
 #include "Engine/Model.h"
 #include "Engine/SphereCollider.h"
 #include "Engine/BoxCollider.h"
+#include"Engine/SceneManager.h"
 Item::Item(GameObject* parent)
 	:GameObject(parent,"Item"),hModel_(-1)
 {
@@ -42,12 +43,16 @@ void Item::Update()
 		transform_.position_.y = -data.dist;
 	}
 
+
+
 }
 
 void Item::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetObjectName() == "Player")
 	{
+		SceneManager* cr = (SceneManager*)FindObject("SceneManager");
+		cr->ChangeScene(SCENE_ID_CLEAR);
 		KillMe();
 	}
 }
