@@ -42,9 +42,6 @@ void Item::Update()
 	{
 		transform_.position_.y = -data.dist;
 	}
-
-
-
 }
 
 void Item::OnCollision(GameObject* pTarget)
