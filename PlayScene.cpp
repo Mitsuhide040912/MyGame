@@ -2,7 +2,8 @@
 #include "Field.h"
 #include "Player.h"
 #include "Item.h"
-#include "FieldTrees.h"
+#include "Enemy.h"
+//#include "FieldTrees.h"
 PlayScene::PlayScene(GameObject* parent)
 	:GameObject(parent,"PlayScene")
 {
@@ -13,7 +14,8 @@ void PlayScene::Initialize()
 	Instantiate<Field>(this);
 	Instantiate<Player>(this);
 	Instantiate<Item>(this);
-	Instantiate<FieldTrees>(this);
+	//Instantiate<FieldTrees>(this);
+	Instantiate<Enemy>(this);
 }
 
 void PlayScene::Update()

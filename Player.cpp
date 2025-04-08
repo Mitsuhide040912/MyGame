@@ -9,7 +9,7 @@
 //カメラの指定
 enum CAM_TYPE
 {
-	FIXED_TYPE, //固定の視点
+	//FIXED_TYPE, //固定の視点
 	TPS_NORT_TYPE,//三人称回転なし
 	TPS_TYPE,//三人称回転あり
 	FPS_TYPE,//一人称
@@ -27,7 +27,7 @@ enum ANM_TYPE
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1),
-	speed_(0.05), front_({ 0,0,1,0 }), camState_(CAM_TYPE::FIXED_TYPE)
+	speed_(0.05), front_({ 0,0,1,0 }), camState_(CAM_TYPE::TPS_NORT_TYPE)
 {
 
 	//static const std::string filemename[MAX] = { "Running.fbx" };
@@ -50,8 +50,11 @@ void Player::Initialize()
 	//transform_.position_.z = -100;
 	//transform_.rotate_.y = 180.0f;
 
-	SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 2, 0), 1.2f);
-	AddCollider(Collision);
+	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 2, 0), 1.2f);
+	//AddCollider(Collision);
+
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(2, 7, 2));
+	AddCollider(collision);
 
 	//animType_ = (ANM_TYPE::WAIT);
 	//↓待機モーションのフレーム管理
@@ -149,17 +152,17 @@ void Player::Update()
 	if (Input::IsKeyDown(DIK_Z))
 	{
 		camState_++;
-		if (camState_ == CAM_TYPE::MAX_TYPE)camState_ = CAM_TYPE::FIXED_TYPE;
+		if (camState_ == CAM_TYPE::MAX_TYPE)camState_ = CAM_TYPE::TPS_NORT_TYPE;
 	}
 
 	switch (camState_)
 	{
-	case CAM_TYPE::FIXED_TYPE://固定
-	{
-		Camera::SetPosition(XMFLOAT3(0, 10, -120));
-		Camera::SetTarget(XMFLOAT3(0, -30, 0));
-		break;
-	}
+	//case CAM_TYPE::FIXED_TYPE://固定
+	//{
+	//	Camera::SetPosition(XMFLOAT3(0, 10, -120));
+	//	Camera::SetTarget(XMFLOAT3(0, -30, 0));
+	//	break;
+	//}
 
 	case CAM_TYPE::TPS_NORT_TYPE://若干上から見たついてくるカメラ
 	{
@@ -173,22 +176,39 @@ void Player::Update()
 
 	case CAM_TYPE::TPS_TYPE://TPS視点
 	{
-		XMFLOAT3 camtar = transform_.position_;
-		camtar.y += 2.64;
-		//camtar.x = 0.8;
+		//XMFLOAT3 camtar = transform_.position_;
+		//camtar.y += 2.64;
+		////camtar.x = 0.8;
+		//Camera::SetTarget(camtar);
+		//XMFLOAT3 camPos = transform_.position_;
+		//XMVECTOR vEye = { 0,2.70,-3,0 };
+		//vEye = XMVector3TransformCoord(vEye, rotY);
+		//XMStoreFloat3(&camPos, pos + vEye);
+		//Camera::SetPosition(camPos);
+		//break;
+		XMVECTOR camOff = { 0,1,2 };
+		camOff = XMVector3TransformCoord(camOff, rotY);
+
+		XMFLOAT3 camtar;
+		XMStoreFloat3(&camtar, pos + camOff);
 		Camera::SetTarget(camtar);
+		//		Camera::SetPosition(camPos);
+		//		XMFLOAT3 camtar = transform_.position_;
+//		camtar.y += 2.64;
+
+		//camtar.x = 0.8;
+//		Camera::SetTarget(camtar);
 		XMFLOAT3 camPos = transform_.position_;
-		XMVECTOR vEye = { 0,2.70,-3,0 };
+		XMVECTOR vEye = { 2,3.50,-3,0 };
 		vEye = XMVector3TransformCoord(vEye, rotY);
 		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);
 		break;
-
 	}
 
 	case CAM_TYPE::FPS_TYPE://１人称視点
 	{
-		XMFLOAT3 fpspos = { transform_.position_.x,transform_.position_.y + 3,transform_.position_.z };
+		XMFLOAT3 fpspos = { transform_.position_.x,transform_.position_.y + 4,transform_.position_.z };
 		Camera::SetPosition(fpspos);
 		XMFLOAT3 camTarget;
 		XMVECTOR campos = XMLoadFloat3(&fpspos);
