@@ -12,7 +12,7 @@ void Enemy::Initialize()
 {
 	hModel_ = Model::Load("Model\\box.fbx");
 	assert(hModel_ > 0);
-
+	transform_.position_.z = 60.0f;
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(5, 5, 5));
 	AddCollider(collision);
 }
@@ -42,19 +42,19 @@ void Enemy::Update()
 		dir = XMVector3Normalize(dir);  // 正規化して単位ベクトルにする
 
 		// 1フレーム分だけ進む
-		float speed = 0.2f;  // 1フレーム分の進行距離（調整可能）
+		float speed = 0.15f;  // 1フレーム分の進行距離（調整可能）
 		XMVECTOR move = dir * speed;  // 移動量を計算
 
 		// エネミーの位置を更新
-		XMVECTOR newPos = XMLoadFloat3(&enemyPos) + move;
+		XMVECTOR newPos = XMLoadFloat3(&enemyPos);
 		XMStoreFloat3(&transform_.position_, newPos);  // 新しい位置をセット
 	}
 	//float dir = 0;
-	if (transform_.position_.x + 5)
-	{
-		transform_.position_.x - 5;
-	}
-	transform_.position_.z = 60.0f;
+	//if (transform_.position_.x + 5)
+	//{
+	//	transform_.position_.x - 5;
+	//}
+	//transform_.position_.z = 60.0f;
 	Field* pField = (Field*)FindObject("Field");
 	int hFieldModel = pField->GetModelHandle();
 	RayCastData data;
