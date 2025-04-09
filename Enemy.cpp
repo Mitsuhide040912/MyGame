@@ -46,7 +46,7 @@ void Enemy::Update()
 		XMVECTOR move = dir * speed;  // 移動量を計算
 
 		// エネミーの位置を更新
-		XMVECTOR newPos = XMLoadFloat3(&enemyPos);
+		XMVECTOR newPos = XMLoadFloat3(&enemyPos) + move;
 		XMStoreFloat3(&transform_.position_, newPos);  // 新しい位置をセット
 	}
 	//float dir = 0;
