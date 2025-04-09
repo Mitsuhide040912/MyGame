@@ -6,6 +6,7 @@
 #include "Engine/Debug.h"
 #include "Engine/SphereCollider.h"
 #include "Engine/BoxCollider.h"
+#include "Item.h"
 //カメラの指定
 enum CAM_TYPE
 {
@@ -27,7 +28,7 @@ enum ANM_TYPE
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1),
-	speed_(0.05), front_({ 0,0,1,0 }), camState_(CAM_TYPE::TPS_NORT_TYPE)
+	speed_(0.05), front_({ 0,0,1,0 }), camState_(CAM_TYPE::TPS_NORT_TYPE),isItem_(false)
 {
 
 	//static const std::string filemename[MAX] = { "Running.fbx" };
@@ -55,7 +56,7 @@ void Player::Initialize()
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(2, 7, 2));
 	AddCollider(collision);
-
+	
 	//animType_ = (ANM_TYPE::WAIT);
 	//↓待機モーションのフレーム管理
 	Model::SetAnimFrame(hModelanime_[0], 1, 312, 1);
@@ -236,4 +237,18 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
+
+	if (pTarget->GetObjectName() == "Item")
+	{
+		XMFLOAT3 posChange = transform_.position_;
+		posChange.y = transform_.position_.y + 3.0f;
+	    pTarget->SetPosition(posChange);
+	    isItem_ = true;
+		//SceneManager* cr = (SceneManager*)FindObject("SceneManager");
+		//cr->ChangeScene(SCENE_ID_CLEAR);
+		//KillMe();
+	}
+	if (pTarget->GetObjectName() == "Goal") {
+
+	}
 }

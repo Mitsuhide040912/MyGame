@@ -18,7 +18,8 @@ void Item::Initialize()
 {
 	hModel_ = Model::Load("Model\\ItemBox.fbx");
 	assert(hModel_ > 0);
-
+	transform_.position_.z = 70.0f;
+	transform_.rotate_.y = 180.0f;
 	SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.2f);
 	AddCollider(Collision);
 }
@@ -26,8 +27,7 @@ void Item::Initialize()
 void Item::Update()
 {
 
-	transform_.position_.z = 70.0f;
-	transform_.rotate_.y = 180.0f;
+
 	//«’n–Ê‚Æ‚Ì”»’è
 	Field* pGround = (Field*)FindObject("Field");
 	int hGmodel = pGround->GetModelHandle();
@@ -46,12 +46,12 @@ void Item::Update()
 
 void Item::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetObjectName() == "Player")
-	{
-		SceneManager* cr = (SceneManager*)FindObject("SceneManager");
-		cr->ChangeScene(SCENE_ID_CLEAR);
-		KillMe();
-	}
+	//if (pTarget->GetObjectName() == "Player")
+	//{
+	//	SceneManager* cr = (SceneManager*)FindObject("SceneManager");
+	//	cr->ChangeScene(SCENE_ID_CLEAR);
+	//	KillMe();
+	//}
 }
 
 void Item::Draw()

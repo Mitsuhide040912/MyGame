@@ -12,6 +12,8 @@ class Player :
     int animType_;//アニメーションのタイプの指定
     XMFLOAT3 f;
     XMVECTOR v = XMLoadFloat3(&f);
+    bool isItem_;
+    bool isGoal_;
 public:
     Player(GameObject* parent);
     ~Player();
