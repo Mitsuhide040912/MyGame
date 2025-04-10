@@ -131,6 +131,8 @@ void Player::Update()
 	{
 		animType_ = ANM_TYPE::WAIT;
 	}
+	//↓コントローラーの処理を追加する
+	transform_.position_ = Input::GetPadStickL();
 
 
 	//回転行列

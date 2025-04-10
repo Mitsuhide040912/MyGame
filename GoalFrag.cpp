@@ -12,7 +12,7 @@ void GoalFrag::Initialize()
 {
 	hModel_ = Model::Load("Model\\GoalFrag.fbx");
 	assert(hModel_ >= 0);
-	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(1, 1, 1));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 2, 0), XMFLOAT3(1, 1, 1));
 	AddCollider(collision);
 	//transform_.position_.y = 0;
 	//transform_.position_.x - 20;
@@ -48,5 +48,5 @@ void GoalFrag::Release()
 
 void GoalFrag::OnCollision(GameObject* pTarget)
 {
-
+	
 }

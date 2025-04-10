@@ -20,6 +20,8 @@ void Enemy::Initialize()
 void Enemy::Update()
 {
 
+	
+
 	// プレイヤーの位置を取得
 	//↓GPT案
 	Player* pPlayer = (Player*)FindObject("Player");  // プレイヤーオブジェクトを取得
