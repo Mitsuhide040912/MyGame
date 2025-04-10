@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "Enemy.h"
+#include "GoalFrag.h"
 //#include "FieldTrees.h"
 PlayScene::PlayScene(GameObject* parent)
 	:GameObject(parent,"PlayScene")
@@ -16,6 +17,7 @@ void PlayScene::Initialize()
 	Instantiate<Item>(this);
 	//Instantiate<FieldTrees>(this);
 	Instantiate<Enemy>(this);
+	//Instantiate<GoalFrag>(this);
 }
 
 void PlayScene::Update()

@@ -13,8 +13,9 @@ class Player :
     XMFLOAT3 f;
     XMVECTOR v = XMLoadFloat3(&f);
     bool isItem_;
-    bool isGoal_;
+  
 public:
+    bool isGoal_;
     Player(GameObject* parent);
     ~Player();
     void Initialize()override;

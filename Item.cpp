@@ -20,8 +20,10 @@ void Item::Initialize()
 	assert(hModel_ > 0);
 	transform_.position_.z = 70.0f;
 	transform_.rotate_.y = 180.0f;
-	SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.2f);
-	AddCollider(Collision);
+	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.2f);
+	//AddCollider(Collision);
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(2, 2, 2));
+	AddCollider(collision);
 }
 
 void Item::Update()

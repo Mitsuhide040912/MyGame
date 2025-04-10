@@ -7,6 +7,9 @@
 #include "Engine/SphereCollider.h"
 #include "Engine/BoxCollider.h"
 #include "Item.h"
+#include "Engine/SceneManager.h"
+#include "GoalFrag.h"
+
 //カメラの指定
 enum CAM_TYPE
 {
@@ -28,7 +31,10 @@ enum ANM_TYPE
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1),
-	speed_(0.05), front_({ 0,0,1,0 }), camState_(CAM_TYPE::TPS_NORT_TYPE),isItem_(false)
+	speed_(0.05),
+	front_({ 0,0,1,0 }), 
+	camState_(CAM_TYPE::TPS_NORT_TYPE),
+	isItem_(false),isGoal_(false)
 {
 
 	//static const std::string filemename[MAX] = { "Running.fbx" };
@@ -40,7 +46,7 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	hModelanime_[0]= Model::Load("Model\\Idle.fbx");
+	hModelanime_[0] = Model::Load("Model\\Idle.fbx");
 	hModelanime_[1] = Model::Load("Model\\Running.fbx");
 	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
 	hModel_ = hModelanime_[0];
@@ -48,18 +54,18 @@ void Player::Initialize()
 	speed_ = 0.2;
 	float_ = XMVECTOR({ 0,0,1,0 });
 	transform_.scale_ = { 2,2,2 };
-	//transform_.position_.z = -100;
+	transform_.position_.z = -10;
 	//transform_.rotate_.y = 180.0f;
 
 	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 2, 0), 1.2f);
 	//AddCollider(Collision);
 
-	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(2, 7, 2));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(1, 5, 1));
 	AddCollider(collision);
 	
 	//animType_ = (ANM_TYPE::WAIT);
 	//↓待機モーションのフレーム管理
-	Model::SetAnimFrame(hModelanime_[0], 1, 312, 1);
+	Model::SetAnimFrame(hModelanime_[0], 1, 310, 1);
 	//↓ランアニメーションのフレーム管理
 	Model::SetAnimFrame(hModelanime_[1], 1, 50, 1);
 	//取るアニメーションのフレーム管理
@@ -220,8 +226,21 @@ void Player::Update()
 	default:
 		break;
 	}
+	GoalFrag* gf = (GoalFrag*)FindObject("GoalFrag");
+	if (gf)
+	{
+		XMFLOAT3 goalPos = gf->GetPosition();
+		float distance = XMVectorGetX(XMVector3Length(XMLoadFloat3(&transform_.position_) - XMLoadFloat3(&goalPos)));
+		if (distance > 1.0f)
+		{
+			isGoal_ = false;
+		}
+	}
 
-
+	if (isItem_ && isGoal_){
+		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
+        sm->ChangeScene(SCENE_ID_CLEAR);
+	}
 }
 
 void Player::Draw()
@@ -238,8 +257,7 @@ void Player::Release()
 void Player::OnCollision(GameObject* pTarget)
 {
 
-	if (pTarget->GetObjectName() == "Item")
-	{
+	if (pTarget->GetObjectName() == "Item"){
 		XMFLOAT3 posChange = transform_.position_;
 		posChange.y = transform_.position_.y + 3.0f;
 	    pTarget->SetPosition(posChange);
@@ -248,7 +266,12 @@ void Player::OnCollision(GameObject* pTarget)
 		//cr->ChangeScene(SCENE_ID_CLEAR);
 		//KillMe();
 	}
-	if (pTarget->GetObjectName() == "Goal") {
+	if (pTarget->GetObjectName() == "GoalFrag") {
+		
+		isGoal_ = true;
 
+		//SceneManager* sm = (SceneManager*)FindObject("SceneManager");
+		//sm->ChangeScene(SCENE_ID_CLEAR);
 	}
+	
 }
