@@ -3,6 +3,8 @@
 class PlayScene :
     public GameObject
 {
+	float timer_;//←制限時間
+	bool isTimeUp_;//←時間切れかどうか判断
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

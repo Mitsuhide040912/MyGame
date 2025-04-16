@@ -9,6 +9,16 @@
 #include "Item.h"
 #include "Engine/SceneManager.h"
 #include "GoalFrag.h"
+#include "Enemy.h"
+#include <DirectXMath.h>
+#include <algorithm>
+
+
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
+
+using namespace DirectX;
 
 //カメラの指定
 enum CAM_TYPE
@@ -75,6 +85,8 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	
+
 	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	XMVECTOR move{ 0,0,0,0 };
 	XMVECTOR rotVec{ 0,0,0,0 };
@@ -132,7 +144,7 @@ void Player::Update()
 		animType_ = ANM_TYPE::WAIT;
 	}
 	//↓コントローラーの処理を追加する
-	transform_.position_ = Input::GetPadStickL();
+	//transform_.position_ = Input::GetPadStickL();
 
 
 	//回転行列
@@ -143,6 +155,9 @@ void Player::Update()
 	XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
 	pos = pos + dir * move;
 	XMStoreFloat3(&(transform_.position_), pos);
+
+	transform_.position_.x = std::clamp(transform_.position_.x, -28.0f, 28.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
+	transform_.position_.z = std::clamp(transform_.position_.z, -12.0f, 80.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
 	//↓いちおう地面との当たり判定
 	Field* pGround = (Field*)FindObject("Field");
 	int hGmodel = pGround->GetModelHandle();
@@ -235,11 +250,11 @@ void Player::Update()
 		float distance = XMVectorGetX(XMVector3Length(XMLoadFloat3(&transform_.position_) - XMLoadFloat3(&goalPos)));
 		if (distance > 1.0f)
 		{
-			isGoal_ = false;
+			isGoal_ = false;//←isGoalをfalseにしてゴールしない
 		}
 	}
 
-	if (isItem_ && isGoal_){
+	if (isItem_ && isGoal_){//←isItemを取得かつisGoalが取得されてゴールフラッグに触れるとクリア
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
         sm->ChangeScene(SCENE_ID_CLEAR);
 	}
@@ -250,6 +265,8 @@ void Player::Draw()
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 
+	ImGui::Text("PositionX:%.3f", transform_.position_.x);
+	ImGui::Text("PositionZ:%.3f", transform_.position_.z);
 }
 
 void Player::Release()
@@ -263,17 +280,20 @@ void Player::OnCollision(GameObject* pTarget)
 		XMFLOAT3 posChange = transform_.position_;
 		posChange.y = transform_.position_.y + 3.0f;
 	    pTarget->SetPosition(posChange);
-	    isItem_ = true;
+	    isItem_ = true;//←isItemをtrueにして取得
 		//SceneManager* cr = (SceneManager*)FindObject("SceneManager");
 		//cr->ChangeScene(SCENE_ID_CLEAR);
 		//KillMe();
 	}
 	if (pTarget->GetObjectName() == "GoalFrag") {
 		
-		isGoal_ = true;
+		isGoal_ = true;//←isGoalをtrueにして取得
 
 		//SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 		//sm->ChangeScene(SCENE_ID_CLEAR);
 	}
-	
+	if (pTarget->GetObjectName() == "Enemy") {
+		SceneManager* ov = (SceneManager*)FindObject("SceneManager");
+		ov->ChangeScene(SCENE_ID_CLEAR);
+	}
 }

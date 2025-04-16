@@ -13,7 +13,7 @@ void Enemy::Initialize()
 	hModel_ = Model::Load("Model\\box.fbx");
 	assert(hModel_ > 0);
 	transform_.position_.z = 60.0f;
-	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(5, 5, 5));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
 	AddCollider(collision);
 }
 
