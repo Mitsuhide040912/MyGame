@@ -1,3 +1,5 @@
+#define NOMINMAX
+#include <Windows.h>
 #include "Player.h"
 #include "Engine/Model.h"
 #include "Engine/Input.h"
@@ -156,8 +158,10 @@ void Player::Update()
 	pos = pos + dir * move;
 	XMStoreFloat3(&(transform_.position_), pos);
 
-	transform_.position_.x = std::clamp(transform_.position_.x, -28.0f, 28.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
-	transform_.position_.z = std::clamp(transform_.position_.z, -12.0f, 80.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
+	//transform_.position_.x = std::clamp(transform_.position_.x, -28.0f, 28.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
+	//transform_.position_.z = std::clamp(transform_.position_.z, -12.0f, 80.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
+	transform_.position_.x = std::clamp(transform_.position_.x, -100.0f, 100.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
+	transform_.position_.z = std::clamp(transform_.position_.z, -100.0f, 100.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
 	//↓いちおう地面との当たり判定
 	Field* pGround = (Field*)FindObject("Field");
 	int hGmodel = pGround->GetModelHandle();
@@ -167,6 +171,18 @@ void Player::Update()
 	data.start.y = 0;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hGmodel, &data);
+
+	RayCastData head;
+	head.start = transform_.position_;
+	head.dir = XMFLOAT3(0, 1, 0);
+	head.start.y += 0.1f;
+	Model::RayCast(hGmodel, &head);
+
+	if (head.hit && head.dist < 10.0f)
+	{
+		float allowdHaight = head.start.y + head.dist - 10.0f;
+		transform_.position_.y = std::min(transform_.position_.y, allowdHaight);
+	}
 
 	if (data.hit)
 	{
