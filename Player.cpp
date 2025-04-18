@@ -188,6 +188,8 @@ void Player::Update()
 	{
 		transform_.position_.y = -data.dist;
 	}
+
+
 	//ƒJƒƒ‰‚Ì•\¦•ÏX
 	if (Input::IsKeyDown(DIK_Z))
 	{
