@@ -13,7 +13,7 @@
 
 //#include "FieldTrees.h"
 PlayScene::PlayScene(GameObject* parent)
-	:GameObject(parent,"PlayScene"),timer_(60.0f),isTimeUp_(false)
+	:GameObject(parent,"PlayScene"),timer_(180.0f),isTimeUp_(false)
 {
 }
 

@@ -66,7 +66,7 @@ void Player::Initialize()
 	speed_ = 0.2;
 	float_ = XMVECTOR({ 0,0,1,0 });
 	transform_.scale_ = { 2,2,2 };
-	transform_.position_.z = -10;
+	transform_.position_.z = -50;
 	//transform_.rotate_.y = 180.0f;
 
 	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 2, 0), 1.2f);
@@ -168,25 +168,25 @@ void Player::Update()
 	//レイキャスト
 	RayCastData data;
 	data.start = transform_.position_;
-	data.start.y = 0;
+	data.start.y += 4;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hGmodel, &data);
 
-	RayCastData head;
-	head.start = transform_.position_;
-	head.dir = XMFLOAT3(0, 1, 0);
-	head.start.y += 0.1f;
-	Model::RayCast(hGmodel, &head);
+	//RayCastData head;
+	//head.start = transform_.position_;
+	//head.dir = XMFLOAT3(0, 1, 0);
+	//head.start.y += 0.1f;
+	//Model::RayCast(hGmodel, &head);
 
-	if (head.hit && head.dist < 10.0f)
-	{
-		float allowdHaight = head.start.y + head.dist - 10.0f;
-		transform_.position_.y = std::min(transform_.position_.y, allowdHaight);
-	}
+	//if (head.hit && head.dist < 10.0f)
+	//{
+	//	float allowdHaight = head.start.y + head.dist - 10.0f;
+	//	transform_.position_.y = std::min(transform_.position_.y, allowdHaight);
+	//}
 
 	if (data.hit)
 	{
-		transform_.position_.y = -data.dist;
+		transform_.position_.y -= data.dist - 4;
 	}
 
 
@@ -284,6 +284,7 @@ void Player::Draw()
 	Model::Draw(hModel_);
 
 	ImGui::Text("PositionX:%.3f", transform_.position_.x);
+	ImGui::Text("PositionY:%.3f", transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", transform_.position_.z);
 }
 
