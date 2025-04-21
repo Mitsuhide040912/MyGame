@@ -66,7 +66,9 @@ void Player::Initialize()
 	speed_ = 0.2;
 	float_ = XMVECTOR({ 0,0,1,0 });
 	transform_.scale_ = { 2,2,2 };
-	transform_.position_.z = -50;
+	transform_.position_.x = -35;
+	//transform_.position_.x = -35;
+	transform_.position_.z = 30;
 	//transform_.rotate_.y = 180.0f;
 
 	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 2, 0), 1.2f);

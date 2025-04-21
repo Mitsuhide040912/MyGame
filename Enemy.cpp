@@ -12,7 +12,7 @@ void Enemy::Initialize()
 {
 	hModel_ = Model::Load("Model\\box.fbx");
 	assert(hModel_ > 0);
-	transform_.position_.z = 60.0f;
+	transform_.position_.z = -60.0f;
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
 	AddCollider(collision);
 }
@@ -61,13 +61,13 @@ void Enemy::Update()
 	int hFieldModel = pField->GetModelHandle();
 	RayCastData data;
 	data.start = transform_.position_;
-	data.start.y = 0;
+	data.start.y += 4;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hFieldModel, &data);
 
 	if (data.hit)
 	{
-		transform_.position_.y = -data.dist;
+		transform_.position_.y -= data.dist - 4;
 	}
 }
 
