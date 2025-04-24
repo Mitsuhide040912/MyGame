@@ -94,6 +94,7 @@ void Player::Update()
 	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	XMVECTOR move{ 0,0,0,0 };
 	XMVECTOR rotVec{ 0,0,0,0 };
+	XMFLOAT3 stickL = Input::GetPadStickL();
 	float dir = 0;
 	
 	switch (animType_)
@@ -112,43 +113,45 @@ void Player::Update()
 	}
 
 	//前進
-	if (Input::IsKey(DIK_W))
+	if (Input::IsKey(DIK_W) || stickL.y > 0.3f)//コントローラーの実装もした
 	{
 		animType_ = ANM_TYPE::RUN;
 		dir = 1.0;
+		//transform_.position_ = Input::GetPadStickL();
 	}
 	else
 	{
 		animType_ = ANM_TYPE::WAIT;
 	}
 	//後退
-	if (Input::IsKey(DIK_S))
+	if (Input::IsKey(DIK_S) || stickL.y < - 0.3f)//コントローラーの実装もした
 	{
 		animType_ = ANM_TYPE::RUN;
 		dir = -1.0;
+		//transform_.position_ = Input::GetPadStickL();
 	}
 	//物をとるアニメーション
-	if (Input::IsKey(DIK_J))
+	if (Input::IsKey(DIK_J) || Input::IsPadButton(XINPUT_GAMEPAD_A))
 	{
 		animType_ = ANM_TYPE::PICK;
 	}
 	//左回転
-	if (Input::IsKey(DIK_A))
+	if (Input::IsKey(DIK_A) || stickL.x < - 0.3)//コントローラーの実装もした
 	{
 		transform_.rotate_.y -= 2.0f;
+		//transform_.position_ = Input::GetPadStickL();
 	}
 	//右回転
-	if (Input::IsKey(DIK_D))
+	if (Input::IsKey(DIK_D) || stickL.x > 0.3f)//コントローラーの実装もした
 	{
 		transform_.rotate_.y += 2.0f;
+		//transform_.position_ = Input::GetPadStickL();
 	}
 	//何もキーが押されていなかったらWAITを呼ぶ
 	else if (!Input::IsKey)
 	{
 		animType_ = ANM_TYPE::WAIT;
 	}
-	//↓コントローラーの処理を追加する
-	//transform_.position_ = Input::GetPadStickL();
 
 
 	//回転行列
@@ -193,7 +196,7 @@ void Player::Update()
 
 
 	//カメラの表示変更
-	if (Input::IsKeyDown(DIK_Z))
+	if (Input::IsKeyDown(DIK_Z) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
 		camState_++;
 		if (camState_ == CAM_TYPE::MAX_TYPE)camState_ = CAM_TYPE::TPS_NORT_TYPE;
