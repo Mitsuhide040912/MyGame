@@ -14,6 +14,7 @@
 #include "Enemy.h"
 #include <DirectXMath.h>
 #include <algorithm>
+#include <cmath>
 
 
 #include "imgui/imgui.h"
@@ -239,14 +240,14 @@ void Player::Update()
 		XMFLOAT3 camtar;
 		XMStoreFloat3(&camtar, pos + camOff);
 		Camera::SetTarget(camtar);
-		//		Camera::SetPosition(camPos);
-		//		XMFLOAT3 camtar = transform_.position_;
+		//Camera::SetPosition(camPos);
+		//XMFLOAT3 camtar = transform_.position_;
 //		camtar.y += 2.64;
 
 		//camtar.x = 0.8;
 //		Camera::SetTarget(camtar);
 		XMFLOAT3 camPos = transform_.position_;
-		XMVECTOR vEye = { 2,3.50,-3,0 };
+		XMVECTOR vEye = { 2,3.50,-5,0 };
 		vEye = XMVector3TransformCoord(vEye, rotY);
 		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);
