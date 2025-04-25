@@ -5,7 +5,7 @@ class Player :
 {
     int hModel_;
     int hModelanime_[3];
-    XMVECTOR float_;
+    //XMVECTOR float_;
     XMVECTOR front_;
     float speed_;
     int camState_;//カメラタイプの指定

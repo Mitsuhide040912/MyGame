@@ -65,7 +65,7 @@ void Player::Initialize()
 	hModel_ = hModelanime_[0];
 
 	speed_ = 0.2;
-	float_ = XMVECTOR({ 0,0,1,0 });
+	//float_ = XMVECTOR({ 0,0,1,0 });
 	transform_.scale_ = { 2,2,2 };
 	transform_.position_.x = -35;
 	//transform_.position_.x = -35;
@@ -80,7 +80,7 @@ void Player::Initialize()
 	
 	//animType_ = (ANM_TYPE::WAIT);
 	//↓待機モーションのフレーム管理
-	Model::SetAnimFrame(hModelanime_[0], 1, 310, 1);
+	Model::SetAnimFrame(hModelanime_[0], 1, 60, 1);
 	//↓ランアニメーションのフレーム管理
 	Model::SetAnimFrame(hModelanime_[1], 1, 50, 1);
 	//取るアニメーションのフレーム管理
@@ -90,8 +90,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	
-
 	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	XMVECTOR move{ 0,0,0,0 };
 	XMVECTOR rotVec{ 0,0,0,0 };
@@ -118,7 +116,6 @@ void Player::Update()
 	{
 		animType_ = ANM_TYPE::RUN;
 		dir = 1.0;
-		//transform_.position_ = Input::GetPadStickL();
 	}
 	else
 	{
@@ -129,10 +126,9 @@ void Player::Update()
 	{
 		animType_ = ANM_TYPE::RUN;
 		dir = -1.0;
-		//transform_.position_ = Input::GetPadStickL();
 	}
 	//物をとるアニメーション
-	if (Input::IsKey(DIK_J) || Input::IsPadButton(XINPUT_GAMEPAD_A))
+	if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
 		animType_ = ANM_TYPE::PICK;
 	}
@@ -140,13 +136,11 @@ void Player::Update()
 	if (Input::IsKey(DIK_A) || stickL.x < - 0.3)//コントローラーの実装もした
 	{
 		transform_.rotate_.y -= 2.0f;
-		//transform_.position_ = Input::GetPadStickL();
 	}
 	//右回転
 	if (Input::IsKey(DIK_D) || stickL.x > 0.3f)//コントローラーの実装もした
 	{
 		transform_.rotate_.y += 2.0f;
-		//transform_.position_ = Input::GetPadStickL();
 	}
 	//何もキーが押されていなかったらWAITを呼ぶ
 	else if (!Input::IsKey)
@@ -154,6 +148,10 @@ void Player::Update()
 		animType_ = ANM_TYPE::WAIT;
 	}
 
+	if (Input::IsKey(DIK_UP))
+	{
+		transform_.rotate_.x += 2.0f;
+	}
 
 	//回転行列
 	rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
@@ -234,7 +232,7 @@ void Player::Update()
 		//XMStoreFloat3(&camPos, pos + vEye);
 		//Camera::SetPosition(camPos);
 		//break;
-		XMVECTOR camOff = { 0,1,2 };
+		XMVECTOR camOff = { 0,2,2 };
 		camOff = XMVector3TransformCoord(camOff, rotY);
 
 		XMFLOAT3 camtar;
@@ -247,7 +245,7 @@ void Player::Update()
 		//camtar.x = 0.8;
 //		Camera::SetTarget(camtar);
 		XMFLOAT3 camPos = transform_.position_;
-		XMVECTOR vEye = { 2,3.50,-5,0 };
+		XMVECTOR vEye = { 2,4.00,-5,0 };
 		vEye = XMVector3TransformCoord(vEye, rotY);
 		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);

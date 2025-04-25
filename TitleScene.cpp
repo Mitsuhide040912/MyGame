@@ -15,7 +15,7 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	if (Input::IsKey(DIK_P))
+	if (Input::IsKey(DIK_P) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
 		SceneManager* ps = (SceneManager*)FindObject("SceneManager");
 		ps->ChangeScene(SCENE_ID_PLAY);
