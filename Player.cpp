@@ -23,6 +23,8 @@
 
 using namespace DirectX;
 
+int hModelanime_[2];
+
 //カメラの指定
 enum CAM_TYPE
 {
@@ -65,26 +67,23 @@ void Player::Initialize()
 	hModel_ = hModelanime_[0];
 
 	speed_ = 0.2;
-	//float_ = XMVECTOR({ 0,0,1,0 });
 	transform_.scale_ = { 2,2,2 };
 	transform_.position_.x = -35;
-	//transform_.position_.x = -35;
 	transform_.position_.z = 30;
-	//transform_.rotate_.y = 180.0f;
 
-	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 2, 0), 1.2f);
-	//AddCollider(Collision);
+
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(1, 5, 1));
 	AddCollider(collision);
+
+
 	
-	//animType_ = (ANM_TYPE::WAIT);
 	//↓待機モーションのフレーム管理
-	Model::SetAnimFrame(hModelanime_[0], 1, 60, 1);
+	Model::SetAnimFrame(hModelanime_[0], ANIM_STRT_FRAME, ANIM_Idle_FRAME, ANIM_END_SPEED);
 	//↓ランアニメーションのフレーム管理
-	Model::SetAnimFrame(hModelanime_[1], 1, 50, 1);
+	Model::SetAnimFrame(hModelanime_[1], ANIM_STRT_FRAME, ANMI_Running_FRAME, ANIM_END_SPEED);
 	//取るアニメーションのフレーム管理
-	Model::SetAnimFrame(hModelanime_[2], 1, 65, 1);
+	Model::SetAnimFrame(hModelanime_[2], ANIM_STRT_FRAME, ANIM_Pickup_FRAME, ANIM_END_SPEED);
 }
 
 
@@ -131,6 +130,12 @@ void Player::Update()
 	if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
 		animType_ = ANM_TYPE::PICK;
+		switch (nextAnimState_)
+		{
+		case PICK:
+			Model::SetAnimFrame(hModelanime_[2], 1, ANIM_Pickup_FRAME, ANIM_STRT_FRAME);
+			break;
+		}
 	}
 	//左回転
 	if (Input::IsKey(DIK_A) || stickL.x < - 0.3)//コントローラーの実装もした
@@ -146,11 +151,6 @@ void Player::Update()
 	else if (!Input::IsKey)
 	{
 		animType_ = ANM_TYPE::WAIT;
-	}
-
-	if (Input::IsKey(DIK_UP))
-	{
-		transform_.rotate_.x += 2.0f;
 	}
 
 	//回転行列
@@ -175,18 +175,6 @@ void Player::Update()
 	data.start.y += 4;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hGmodel, &data);
-
-	//RayCastData head;
-	//head.start = transform_.position_;
-	//head.dir = XMFLOAT3(0, 1, 0);
-	//head.start.y += 0.1f;
-	//Model::RayCast(hGmodel, &head);
-
-	//if (head.hit && head.dist < 10.0f)
-	//{
-	//	float allowdHaight = head.start.y + head.dist - 10.0f;
-	//	transform_.position_.y = std::min(transform_.position_.y, allowdHaight);
-	//}
 
 	if (data.hit)
 	{
@@ -222,28 +210,12 @@ void Player::Update()
 
 	case CAM_TYPE::TPS_TYPE://TPS視点
 	{
-		//XMFLOAT3 camtar = transform_.position_;
-		//camtar.y += 2.64;
-		////camtar.x = 0.8;
-		//Camera::SetTarget(camtar);
-		//XMFLOAT3 camPos = transform_.position_;
-		//XMVECTOR vEye = { 0,2.70,-3,0 };
-		//vEye = XMVector3TransformCoord(vEye, rotY);
-		//XMStoreFloat3(&camPos, pos + vEye);
-		//Camera::SetPosition(camPos);
-		//break;
 		XMVECTOR camOff = { 0,2,2 };
 		camOff = XMVector3TransformCoord(camOff, rotY);
 
 		XMFLOAT3 camtar;
 		XMStoreFloat3(&camtar, pos + camOff);
 		Camera::SetTarget(camtar);
-		//Camera::SetPosition(camPos);
-		//XMFLOAT3 camtar = transform_.position_;
-//		camtar.y += 2.64;
-
-		//camtar.x = 0.8;
-//		Camera::SetTarget(camtar);
 		XMFLOAT3 camPos = transform_.position_;
 		XMVECTOR vEye = { 2,4.00,-5,0 };
 		vEye = XMVector3TransformCoord(vEye, rotY);
@@ -311,12 +283,15 @@ void Player::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "GoalFrag") {
 		
 		isGoal_ = true;//←isGoalをtrueにして取得
-
-		//SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-		//sm->ChangeScene(SCENE_ID_CLEAR);
 	}
 	if (pTarget->GetObjectName() == "Enemy") {
 		SceneManager* ov = (SceneManager*)FindObject("SceneManager");
 		ov->ChangeScene(SCENE_ID_CLEAR);
 	}
 }
+
+void Player::ResetAnimFirstFrame(int animIndex)
+{
+	Model::SetAnimFrame(hModelanime_[2], 1, ANIM_Pickup_FRAME, ANIM_END_SPEED);
+}
+

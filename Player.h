@@ -5,6 +5,8 @@ class Player :
 {
     int hModel_;
     int hModelanime_[3];
+    bool hModelanim_;
+    bool nextAnimState_;
     //XMVECTOR float_;
     XMVECTOR front_;
     float speed_;
@@ -13,7 +15,12 @@ class Player :
     XMFLOAT3 f;
     XMVECTOR v = XMLoadFloat3(&f);
     bool isItem_;
-  
+    const int ANIM_STRT_FRAME = 1;
+    const int ANIM_END_SPEED = 1;
+
+    const int ANIM_Idle_FRAME = 60;
+    const int ANMI_Running_FRAME = 50;
+    const int ANIM_Pickup_FRAME = 65;
 public:
     bool isGoal_;
     Player(GameObject* parent);
@@ -23,6 +30,6 @@ public:
     void Draw()override;
     void Release()override;
     void OnCollision(GameObject* pTarget)override;
-    
+    void ResetAnimFirstFrame(int animIndex);
 };
 
