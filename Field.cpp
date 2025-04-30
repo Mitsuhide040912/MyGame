@@ -14,9 +14,9 @@ Field::~Field()
 
 void Field::Initialize()
 {
-	hModel_ = Model::Load("Model\\preGameStage.fbx");
+	hModel_ = Model::Load("Model\\MyGameStage300.fbx");
 	assert(hModel_ >= 0);
-	transform_.rotate_.y = 180.0f;
+	//transform_.rotate_.y = 180.0f;
 	Instantiate<GoalFrag>(this);
 }
 

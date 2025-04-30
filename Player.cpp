@@ -67,7 +67,7 @@ void Player::Initialize()
 	hModel_ = hModelanime_[0];
 
 	speed_ = 0.2;
-	transform_.scale_ = { 2,2,2 };
+	transform_.scale_ = { 3,3,3 };
 	transform_.position_.x = -35;
 	transform_.position_.z = 30;
 
@@ -130,12 +130,6 @@ void Player::Update()
 	if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
 		animType_ = ANM_TYPE::PICK;
-		switch (nextAnimState_)
-		{
-		case PICK:
-			Model::SetAnimFrame(hModelanime_[2], 1, ANIM_Pickup_FRAME, ANIM_STRT_FRAME);
-			break;
-		}
 	}
 	//左回転
 	if (Input::IsKey(DIK_A) || stickL.x < - 0.3)//コントローラーの実装もした
@@ -147,11 +141,12 @@ void Player::Update()
 	{
 		transform_.rotate_.y += 2.0f;
 	}
+
 	//何もキーが押されていなかったらWAITを呼ぶ
-	else if (!Input::IsKey)
-	{
-		animType_ = ANM_TYPE::WAIT;
-	}
+	//else if (!Input::IsKey)
+	//{
+	//	animType_ = ANM_TYPE::WAIT;
+	//}
 
 	//回転行列
 	rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
@@ -162,8 +157,6 @@ void Player::Update()
 	pos = pos + dir * move;
 	XMStoreFloat3(&(transform_.position_), pos);
 
-	//transform_.position_.x = std::clamp(transform_.position_.x, -28.0f, 28.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
-	//transform_.position_.z = std::clamp(transform_.position_.z, -12.0f, 80.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
 	transform_.position_.x = std::clamp(transform_.position_.x, -100.0f, 100.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
 	transform_.position_.z = std::clamp(transform_.position_.z, -100.0f, 100.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
 	//↓いちおう地面との当たり判定
@@ -210,14 +203,14 @@ void Player::Update()
 
 	case CAM_TYPE::TPS_TYPE://TPS視点
 	{
-		XMVECTOR camOff = { 0,2,2 };
+		XMVECTOR camOff = { 0,3,2 };
 		camOff = XMVector3TransformCoord(camOff, rotY);
 
 		XMFLOAT3 camtar;
 		XMStoreFloat3(&camtar, pos + camOff);
 		Camera::SetTarget(camtar);
 		XMFLOAT3 camPos = transform_.position_;
-		XMVECTOR vEye = { 2,4.00,-5,0 };
+		XMVECTOR vEye = { 0,4,-5 };
 		vEye = XMVector3TransformCoord(vEye, rotY);
 		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);
@@ -248,7 +241,7 @@ void Player::Update()
 		}
 	}
 
-	if (isItem_ && isGoal_){//←isItemを取得かつisGoalが取得されてゴールフラッグに触れるとクリア
+	if (isItem_ && isGoal_){//←isItemを取得かつプレイヤーがゴールフラッグに触れるとクリア
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
         sm->ChangeScene(SCENE_ID_CLEAR);
 	}
@@ -276,9 +269,6 @@ void Player::OnCollision(GameObject* pTarget)
 		posChange.y = transform_.position_.y + 3.0f;
 	    pTarget->SetPosition(posChange);
 	    isItem_ = true;//←isItemをtrueにして取得
-		//SceneManager* cr = (SceneManager*)FindObject("SceneManager");
-		//cr->ChangeScene(SCENE_ID_CLEAR);
-		//KillMe();
 	}
 	if (pTarget->GetObjectName() == "GoalFrag") {
 		
@@ -290,8 +280,8 @@ void Player::OnCollision(GameObject* pTarget)
 	}
 }
 
-void Player::ResetAnimFirstFrame(int animIndex)
-{
-	Model::SetAnimFrame(hModelanime_[2], 1, ANIM_Pickup_FRAME, ANIM_END_SPEED);
-}
+//void Player::ResetAnimFirstFrame(int animIndex)
+//{
+//	Model::SetAnimFrame(hModelanime_[2], 1, ANIM_Pickup_FRAME, ANIM_END_SPEED);
+//}
 

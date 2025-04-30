@@ -18,9 +18,9 @@ class Player :
     const int ANIM_STRT_FRAME = 1;
     const int ANIM_END_SPEED = 1;
 
-    const int ANIM_Idle_FRAME = 60;
+    const int ANIM_Idle_FRAME = 65;
     const int ANMI_Running_FRAME = 50;
-    const int ANIM_Pickup_FRAME = 65;
+    const int ANIM_Pickup_FRAME = 50;
 public:
     bool isGoal_;
     Player(GameObject* parent);
@@ -30,6 +30,6 @@ public:
     void Draw()override;
     void Release()override;
     void OnCollision(GameObject* pTarget)override;
-    void ResetAnimFirstFrame(int animIndex);
+    //void ResetAnimFirstFrame(int animIndex);
 };
 
