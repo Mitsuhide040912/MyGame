@@ -157,8 +157,8 @@ void Player::Update()
 	pos = pos + dir * move;
 	XMStoreFloat3(&(transform_.position_), pos);
 
-	transform_.position_.x = std::clamp(transform_.position_.x, -100.0f, 100.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
-	transform_.position_.z = std::clamp(transform_.position_.z, -100.0f, 100.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
+	transform_.position_.x = std::clamp(transform_.position_.x, -300.0f, 300.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
+	transform_.position_.z = std::clamp(transform_.position_.z, -300.0f, 300.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
 	//↓いちおう地面との当たり判定
 	Field* pGround = (Field*)FindObject("Field");
 	int hGmodel = pGround->GetModelHandle();
@@ -173,7 +173,16 @@ void Player::Update()
 	{
 		transform_.position_.y -= data.dist - 4;
 	}
+	RayCastData data1;
+	data1.start = transform_.position_;
+	data1.start.y =0;
+	data1.dir = XMFLOAT3({ 0,0,1 });
+	Model::RayCast(hGmodel, &data1);
 
+	if (data1.hit)
+	{
+		transform_.position_.y -= data1.dist;
+	}
 
 	//カメラの表示変更
 	if (Input::IsKeyDown(DIK_Z) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))

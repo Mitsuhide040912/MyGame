@@ -18,8 +18,9 @@ void Item::Initialize()
 {
 	hModel_ = Model::Load("Model\\ItemBox.fbx");
 	assert(hModel_ > 0);
-	transform_.position_.z = 10.0f;
-	transform_.rotate_.y = 0.0f;
+	transform_.position_.x = -79;
+	transform_.position_.y = -107;
+	transform_.position_.z = 210;
 	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.2f);
 	//AddCollider(Collision);
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(2, 2, 2));
