@@ -16,7 +16,7 @@ Item::~Item()
 
 void Item::Initialize()
 {
-	hModel_ = Model::Load("Model\\ItemBox.fbx");
+	hModel_ = Model::Load("Model\\egg.fbx");
 	assert(hModel_ > 0);
 	transform_.position_.x = -79;
 	transform_.position_.y = -107;
