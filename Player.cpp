@@ -49,10 +49,9 @@ Player::Player(GameObject* parent)
 	speed_(0.05),
 	front_({ 0,0,1,0 }), 
 	camState_(CAM_TYPE::TPS_NORT_TYPE),
-	isItem_(false),isGoal_(false)
+	isItem_(false)
+	,isGoal_(false)
 {
-
-	//static const std::string filemename[MAX] = { "Running.fbx" };
 }
 
 Player::~Player()
@@ -90,9 +89,12 @@ void Player::Initialize()
 void Player::Update()
 {
 	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
 	XMVECTOR move{ 0,0,0,0 };
-	XMVECTOR rotVec{ 0,0,0,0 };
+	XMVECTOR rotVecY{ 0,0,0,0 };
+	XMVECTOR rotVecX{ 0,0,0,0 };
 	XMFLOAT3 stickL = Input::GetPadStickL();
+	XMFLOAT3 stickR = Input::GetPadStickR();
 	float dir = 0;
 	
 	switch (animType_)
@@ -132,27 +134,35 @@ void Player::Update()
 		animType_ = ANM_TYPE::PICK;
 	}
 	//左回転
-	if (Input::IsKey(DIK_A) || stickL.x < - 0.3)//コントローラーの実装もした
+	if (Input::IsKey(DIK_A) || stickR.x < - 0.3)//コントローラーの実装もした
 	{
 		transform_.rotate_.y -= 2.0f;
 	}
 	//右回転
-	if (Input::IsKey(DIK_D) || stickL.x > 0.3f)//コントローラーの実装もした
+	if (Input::IsKey(DIK_D) || stickR.x > 0.3f)//コントローラーの実装もした
 	{
 		transform_.rotate_.y += 2.0f;
 	}
+	if (Input::IsKey(DIK_UP))
+	{
+		CameraTransform_.rotate_.x += 2.0f;
+	}
 
+	if (Input::IsKey(DIK_DOWN))
+	{
+		CameraTransform_.rotate_.x -= 2.0f;
+	}
 	//何もキーが押されていなかったらWAITを呼ぶ
 	//else if (!Input::IsKey)
 	//{
 	//	animType_ = ANM_TYPE::WAIT;
 	//}
 
-	//回転行列
+	//回転行列Y
 	rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	//ベクトルの回転結果
-	rotVec = XMVector3TransformCoord(front_, rotY);
-	move = speed_ * rotVec;
+	rotVecY = XMVector3TransformCoord(front_, rotY);
+	move = speed_ * rotVecY;
 	XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
 	pos = pos + dir * move;
 	XMStoreFloat3(&(transform_.position_), pos);
@@ -172,16 +182,6 @@ void Player::Update()
 	if (data.hit)
 	{
 		transform_.position_.y -= data.dist - 4;
-	}
-	RayCastData data1;
-	data1.start = transform_.position_;
-	data1.start.y =0;
-	data1.dir = XMFLOAT3({ 0,0,1 });
-	Model::RayCast(hGmodel, &data1);
-
-	if (data1.hit)
-	{
-		transform_.position_.y -= data1.dist;
 	}
 
 	//カメラの表示変更

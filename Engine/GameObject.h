@@ -24,6 +24,7 @@ protected:
 	
 	//位置や向きなどを管理するオブジェクト
 	Transform				transform_;
+	Transform               CameraTransform_;
 
 	//オブジェクトの名前
 	std::string				objectName_;
