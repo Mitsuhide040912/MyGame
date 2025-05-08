@@ -22,28 +22,26 @@ void PlayScene::Initialize()
 	Instantiate<Player>(this);
 	Instantiate<Item>(this);
 	Instantiate<Enemy>(this);
+	Instantiate<GoalFrag>(this);
 	Instantiate<Timer>(this);
-	//Instantiate<GoalFrag>(this);
 }
 
 void PlayScene::Update()
 {
 	//if (Input::IsKey(DIK_SPACE))
-		if (!isTimeUp_)
-		{
-			timer_ -= 1.0f / 60.0f;
-			if (timer_ <= 0)
-			{
-				timer_ = 0;
-				isTimeUp_ = true;
-			}
-			//if (timer_ == 0)
-			//{
-			//	SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-			//	sm->ChangeScene(SCENE_ID_CLEAR);
-			//}
-
-		}
+	//	if (!isTimeUp_)
+	//	{
+	//		timer_ -= 1.0f / 60.0f;
+	//		if (timer_ <= 0)
+	//		{
+	//			timer_ = 0;
+	//			isTimeUp_ = true;
+	//		}
+	//		if (timer_ == 0)
+	//		{
+	//			SceneManager* sm = (SceneManager*)FindObject("SceneManager");
+	//			sm->ChangeScene(SCENE_ID_CLEAR);
+	//		}
 
 }
 

@@ -26,13 +26,13 @@ void GoalFrag::Update()
 	//レイキャスト
 	RayCastData data;
 	data.start = transform_.position_;
-	data.start.y = 0;
+	data.start.y += 4;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hGmodel, &data);
 
 	if (data.hit)
 	{
-		transform_.position_.y = -data.dist;
+		transform_.position_.y -= data.dist - 4;
 	}
 }
 
