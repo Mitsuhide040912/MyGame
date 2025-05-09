@@ -4,6 +4,7 @@ class GoalFrag :
     public GameObject
 {
 	int hModel_;
+	float x, y, z;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

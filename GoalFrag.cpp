@@ -3,6 +3,11 @@
 #include "Engine/BoxCollider.h"
 #include "Field.h"
 #include "Player.h"
+
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
+
 GoalFrag::GoalFrag(GameObject* parent)
 	:GameObject(parent,"GoalFrag"),hModel_(-1)
 {
@@ -14,6 +19,8 @@ void GoalFrag::Initialize()
 	assert(hModel_ >= 0);
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 2, 0), XMFLOAT3(1, 1, 1));
 	AddCollider(collision);
+
+	transform_.position_ = { x,y,z };
 	//transform_.position_.y = 0;
 	//transform_.position_.x - 20;
 }

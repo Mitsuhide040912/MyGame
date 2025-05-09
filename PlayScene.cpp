@@ -12,7 +12,7 @@
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 PlayScene::PlayScene(GameObject* parent)
-	:GameObject(parent,"PlayScene"),timer_(300.0f),isTimeUp_(false)
+	:GameObject(parent,"PlayScene")//,timer_(300.0f),isTimeUp_(false)
 {
 }
 
@@ -47,7 +47,7 @@ void PlayScene::Update()
 
 void PlayScene::Draw()
 {
-	ImGui::Text("Timer:%.3f", timer_);
+	//ImGui::Text("Timer:%.3f", timer_);
 }
 
 void PlayScene::Release()
