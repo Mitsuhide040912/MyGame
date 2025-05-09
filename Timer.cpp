@@ -1,6 +1,7 @@
 #include "Timer.h"
 #include "Engine/SceneManager.h"
 #include "Engine/Image.h"
+#include "Engine/time.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -8,7 +9,7 @@
 
 Timer::Timer(GameObject* parent)
 	:GameObject(parent,"Timer")
-	,timer_(10.0f)
+	,timer_(300.0f)
 	,isTimeUp_(false)
 	,hImage_(-1)
 	,x(0.7),y(0.7),z(0)
@@ -27,7 +28,7 @@ void Timer::Update()
 {
 	if (!isTimeUp_)
 	{
-		timer_ -= 1.0f / 60.0f;
+		timer_ -= Time::DeltaTime();
 		if (timer_ <= 0)
 		{
 			timer_ = 0;
@@ -51,6 +52,7 @@ void Timer::Draw()
 	{
 		transform_.position_ = { pos[0], pos[1], pos[2] };
 	}
+	ImGui::Text("Timer:%.3f", timer_);
 }
 
 void Timer::Release()

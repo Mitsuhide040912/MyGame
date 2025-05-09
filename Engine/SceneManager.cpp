@@ -7,7 +7,7 @@
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
-
+#include "time.h"
 
 //コンストラクタ
 SceneManager::SceneManager(GameObject * parent)
@@ -18,10 +18,12 @@ SceneManager::SceneManager(GameObject * parent)
 //初期化
 void SceneManager::Initialize()
 {
+	Time::Init();
 	//最初のシーンを準備
 	currentSceneID_ = SCENE_ID_PLAY;
 	nextSceneID_ = currentSceneID_;
 	Instantiate<PlayScene>(this);
+	
 }
 
 //更新
@@ -53,6 +55,7 @@ void SceneManager::Update()
 //描画
 void SceneManager::Draw()
 {
+	Time::Refresh();
 }
 
 //開放

@@ -15,6 +15,7 @@
 #include <DirectXMath.h>
 #include <algorithm>
 #include <cmath>
+#include "Engine/time.h"
 
 
 #include "imgui/imgui.h"
@@ -22,6 +23,7 @@
 #include "imgui/imgui_impl_win32.h"
 
 using namespace DirectX;
+//using namespace Time;
 
 int hModelanime_[2];
 
@@ -45,13 +47,15 @@ enum ANM_TYPE
 };
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hModel_(-1),
-	speed_(0.05),
-	front_({ 0,0,1,0 }), 
-	camState_(CAM_TYPE::TPS_NORT_TYPE),
-	isItem_(false)
-	,isGoal_(false)
+	:GameObject(parent, "Player")
+	,hModel_(-1)
+	,speed_(0.05)
+	,front_({ 0,0,1,0 })
+	,camState_(CAM_TYPE::TPS_NORT_TYPE)
+	,isItem_(false)
+	,isGoal_(false),fall_(0),thisFall_(false),prevDist_(9999)
 {
+	
 }
 
 Player::~Player()
@@ -64,12 +68,10 @@ void Player::Initialize()
 	hModelanime_[1] = Model::Load("Model\\Running.fbx");
 	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
 	hModel_ = hModelanime_[0];
-
 	speed_ = 0.2;
 	transform_.scale_ = { 3,3,3 };
 	transform_.position_.x = -35;
 	transform_.position_.z = 30;
-
 
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(1, 5, 1));
@@ -96,7 +98,7 @@ void Player::Update()
 	XMFLOAT3 stickL = Input::GetPadStickL();
 	XMFLOAT3 stickR = Input::GetPadStickR();
 	float dir = 0;
-	
+
 	switch (animType_)
 	{
 	case ANM_TYPE::WAIT:
@@ -178,10 +180,34 @@ void Player::Update()
 	data.start.y += 4;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hGmodel, &data);
-
-	if (data.hit)
+	if (!thisFall_)
 	{
-		transform_.position_.y -= data.dist - 4;
+		if (data.hit)
+		{
+			if (prevDist_ < data.dist - 4)
+			{
+				fallDist_ = data.dist - 4;
+				thisFall_ = true;
+				fallTime = fallDist_ / 10;
+			}
+			else
+			{
+				transform_.position_.y -= data.dist - 4;
+				prevDist_ = data.dist;
+			}
+
+		}
+	}
+	else
+	{
+		if (fallTime > 0)
+		{
+			Fall();
+		}
+		else
+		{
+			thisFall_ = false;
+		}
 	}
 
 	//ƒJƒƒ‰‚Ì•\Ž¦•ÏX
@@ -264,6 +290,8 @@ void Player::Draw()
 	ImGui::Text("PositionX:%.3f", transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", transform_.position_.z);
+
+	ImGui::Text("DeltaTime:%.6f", Time::DeltaTime());
 }
 
 void Player::Release()
@@ -287,6 +315,13 @@ void Player::OnCollision(GameObject* pTarget)
 		SceneManager* ov = (SceneManager*)FindObject("SceneManager");
 		ov->ChangeScene(SCENE_ID_CLEAR);
 	}
+}
+
+void Player::Fall()
+{
+	//float fallTime;
+	transform_.position_.y -= 10 * Time::DeltaTime();
+	fallTime -= Time::DeltaTime();
 }
 
 //void Player::ResetAnimFirstFrame(int animIndex)

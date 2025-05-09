@@ -131,6 +131,9 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Engine\time.cpp">
+      <Filter>01Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -238,6 +241,9 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Engine\time.h">
+      <Filter>01Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -22,7 +22,7 @@ void PlayScene::Initialize()
 	Instantiate<Player>(this);
 	Instantiate<Item>(this);
 	Instantiate<Enemy>(this);
-	Instantiate<GoalFrag>(this);
+	//Instantiate<GoalFrag>(this);
 	Instantiate<Timer>(this);
 }
 

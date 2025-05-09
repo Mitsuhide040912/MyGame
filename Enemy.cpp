@@ -12,7 +12,8 @@ void Enemy::Initialize()
 {
 	hModel_ = Model::Load("Model\\box.fbx");
 	assert(hModel_ > 0);
-	transform_.position_.z = -20.0f;
+	
+	transform_.position_ = { EnemyPosX,EnemyPosY,EnemyPosZ };
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
 	AddCollider(collision);
 }

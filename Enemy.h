@@ -4,6 +4,10 @@ class Enemy :
     public GameObject
 {
 	int hModel_;
+
+	float EnemyPosX = 105;
+	float EnemyPosY = -140;
+	float EnemyPosZ = -10;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
