@@ -24,11 +24,6 @@ class Player :
     const int ANIM_Idle_FRAME = 65;
     const int ANMI_Running_FRAME = 50;
     const int ANIM_Pickup_FRAME = 50;
-
-    float gravity = 0.0f;//初期の重力
-    float velocityY = 0.0f;//初期速度
-    float MaxGravity = 9.8f;//最大重力
-    float GravityAccelertion = 0.1f;//重力の加速率
 public:
     bool isGoal_;
     Player(GameObject* parent);

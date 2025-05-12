@@ -9,7 +9,7 @@
 
 Timer::Timer(GameObject* parent)
 	:GameObject(parent,"Timer")
-	,timer_(300.0f)
+	,timer_(900.0f)
 	,isTimeUp_(false)
 	,hImage_(-1)
 	,x(0.7),y(0.7),z(0)
@@ -57,16 +57,4 @@ void Timer::Draw()
 
 void Timer::Release()
 {
-}
-
-void Timer::DrawDigit(int digit, float posX, float posY)
-{
-	//const int digitWidth = 512 / 9;
-	//const int digitHeight = 380 / 6;
-	//Image::SetRect(hImage_, digitWidth * digit, 0, digitWidth, digitHeight);
-	//Transform t;
-	//t.position_ = { posX,posY,z };
-	//Image::SetTransform(hImage_, t);
-
-	//Image::Draw(hImage_);
 }

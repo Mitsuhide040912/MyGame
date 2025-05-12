@@ -24,7 +24,5 @@ public:
 
 	//ŠJ•ú
 	void Release() override;
-
-	void DrawDigit(int digit, float posX, float posY);
 };
 
