@@ -3,10 +3,18 @@
 class Timer :
     public GameObject
 {
-	float timer_;//←制限時間
+	const float IMAGE_WIDTH = 51.2;
+	int timer_;//←制限時間
 	bool isTimeUp_;//←時間切れかどうか判断
 	int hImage_;
 	float x, y, z;
+
+	int tenMin_;
+	int min_;
+	int tenSec_;
+	int sec_;
+
+	float oneSec_;
 
 public:
 	//コンストラクタ
