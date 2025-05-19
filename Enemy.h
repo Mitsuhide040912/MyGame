@@ -4,6 +4,11 @@ class Enemy :
     public GameObject
 {
 	int hModel_;
+	int hModelAnime_[1];
+	int animType_;
+	bool hModelAnim_;
+	bool nextAnimState_;
+
 
 	float EnemyPosX = 105;
 	float EnemyPosY = -140;
@@ -12,6 +17,7 @@ class Enemy :
 	DirectX::XMFLOAT3 enemyForwad{ 0.0f,0.0f,1.0f };
 	float angle = 90.0f;
 	float maxDistance = 10.0f;
+
 
 public:
 	//コンストラクタ
