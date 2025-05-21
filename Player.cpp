@@ -92,7 +92,7 @@ void Player::Update()
 {
 	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
-	XMVECTOR move{ 0,0,0,0 };
+	XMVECTOR move   { 0,0,0,0 };
 	XMVECTOR rotVecY{ 0,0,0,0 };
 	XMVECTOR rotVecX{ 0,0,0,0 };
 	XMFLOAT3 stickL = Input::GetPadStickL();
@@ -238,7 +238,7 @@ void Player::Update()
 
 	case CAM_TYPE::TPS_TYPE://TPS‹“_
 	{
-		XMVECTOR camOff = { 0,3,2 };
+		XMVECTOR camOff = { 0,4,3 };
 		camOff = XMVector3TransformCoord(camOff, rotY);
 
 		XMFLOAT3 camtar;
@@ -304,6 +304,7 @@ void Player::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Item"){
 		XMFLOAT3 posChange = transform_.position_;
 		posChange.y = transform_.position_.y + 3.0f;
+		posChange.z = transform_.position_.z + 1.0f;
 	    pTarget->SetPosition(posChange);
 	    isItem_ = true;//©isItem‚ğtrue‚É‚µ‚Äæ“¾
 	}

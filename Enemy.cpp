@@ -22,15 +22,15 @@ void Enemy::Initialize()
 {
 	//hModel_ = Model::Load("Model\\box.fbx");
 	hModelAnime_[0] = Model::Load("Model\\Boss Idle.fbx");
-	assert(hModel_ > 0);
+	//assert(hModel_ > 0);
 	
 	transform_.position_ = { EnemyPosX,EnemyPosY,EnemyPosZ };
-
+	transform_.scale_ = { 3,3,3 };
 	
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
 	AddCollider(collision);
 	//待機
-	Model::SetAnimFrame(hModelAnime_[0], 1, 60, 1);
+	Model::SetAnimFrame(hModelAnime_[0], 1, 242, 1);
 }
 
 void Enemy::Update()
@@ -51,27 +51,6 @@ void Enemy::Update()
 	XMFLOAT3 playerPos = pPlayer->GetPosition();  // プレイヤーの位置を取得
 	XMFLOAT3 enemyPos = transform_.position_;  // エネミーの位置を取得
 
-	//// プレイヤーとエネミーの距離を計算
-	//float dx = playerPos.x - enemyPos.x;
-	//float dy = playerPos.y - enemyPos.y;
-	//float dz = playerPos.z - enemyPos.z;
-	//float distance = sqrt(dx * dx + dy * dy + dz * dz);
-
-	//// プレイヤーが半径3メートル以内にいる場合、追尾する
-	//if (distance <= 20.0f)
-	//{
-	//	// 追尾方向を計算
-	//	XMVECTOR dir = XMVectorSet(dx, dy, dz, 0);  // プレイヤー方向ベクトル
-	//	dir = XMVector3Normalize(dir);  // 正規化して単位ベクトルにする
-
-	//	// 1フレーム分だけ進む
-	//	float speed = 0.15f;  // 1フレーム分の進行距離（調整可能）
-	//	XMVECTOR move = dir * speed;  // 移動量を計算
-
-	//	// エネミーの位置を更新
-	//	XMVECTOR newPos = XMLoadFloat3(&enemyPos) + move;
-	//	XMStoreFloat3(&transform_.position_, newPos);  // 新しい位置をセット
-	//}
 	Field* pField = (Field*)FindObject("Field");
 	int hFieldModel = pField->GetModelHandle();
 	RayCastData data;

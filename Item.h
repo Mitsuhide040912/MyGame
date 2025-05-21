@@ -3,6 +3,9 @@
 class Item :
     public GameObject
 {
+    float speed_;
+    XMVECTOR front_;
+
     int hModel_;
 public:
 

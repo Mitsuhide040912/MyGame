@@ -36,7 +36,7 @@ void Timer::Update()
 		{
 			timer_ -= 1;
 			tenMin_ = timer_ / 600;  //10•ª‚ÌˆÊ‚ğ‹‚ß‚éBtenMin_‚ğtimer_‚©‚ç600•bŠ„‚é
-			int temp_ = timer_ % 600;//
+			int temp_ = timer_ % 600;
 			min_ = temp_ / 60;
 			temp_ = temp_ % 60;
 			tenSec_ = temp_ / 10;

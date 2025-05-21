@@ -16,12 +16,12 @@ class Player :
     float speed_;
     int camState_;//カメラタイプの指定
     int animType_;//アニメーションのタイプの指定
-    XMFLOAT3 f;
-    XMVECTOR v = XMLoadFloat3(&f);
+    //XMFLOAT3 f;
+    //XMVECTOR v = XMLoadFloat3(&f);
     bool isItem_;
     const int ANIM_STRT_FRAME = 1;
     const int ANIM_END_SPEED = 1;
-    const int ANIM_Idle_FRAME = 65;
+    const int ANIM_Idle_FRAME = 600;
     const int ANMI_Running_FRAME = 50;
     const int ANIM_Pickup_FRAME = 50;
 public:

@@ -29,6 +29,18 @@ void Item::Initialize()
 
 void Item::Update()
 {
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+	XMVECTOR move   { 0,0,0,0 };
+	XMVECTOR rotVecY{ 0,0,0,0 };
+	XMVECTOR rotVecX{ 0,0,0,0 };
+	float dir = 0;
+	rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	rotVecY = XMVector3TransformCoord(front_, rotY);
+	move = speed_ * rotVecY;
+	XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
+	pos = pos + dir * move;
+	XMStoreFloat3(&(transform_.position_), pos);
 
 
 	//Å´ínñ Ç∆ÇÃîªíË
