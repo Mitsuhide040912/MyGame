@@ -21,6 +21,7 @@ void Item::Initialize()
 	transform_.position_.x = -79;
 	transform_.position_.y = -107;
 	transform_.position_.z = 210;
+	transform_.scale_ = { 1,1,1 };
 	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.2f);
 	//AddCollider(Collision);
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(2, 2, 2));

@@ -290,8 +290,6 @@ void Player::Draw()
 	ImGui::Text("PositionX:%.3f", transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", transform_.position_.z);
-
-	ImGui::Text("DeltaTime:%.6f", Time::DeltaTime());
 }
 
 void Player::Release()
@@ -325,8 +323,4 @@ void Player::Fall()
 	fallTime -= Time::DeltaTime();
 }
 
-//void Player::ResetAnimFirstFrame(int animIndex)
-//{
-//	Model::SetAnimFrame(hModelanime_[2], 1, ANIM_Pickup_FRAME, ANIM_END_SPEED);
-//}
 

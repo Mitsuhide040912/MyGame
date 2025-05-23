@@ -34,6 +34,5 @@ public:
     void Release()override;
     void OnCollision(GameObject* pTarget)override;
     void Fall();
-    //void ResetAnimFirstFrame(int animIndex);
 };
 
