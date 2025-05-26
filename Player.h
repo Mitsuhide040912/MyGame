@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Item.h"
 class Player :
     public GameObject
 {
@@ -24,6 +25,13 @@ class Player :
     const int ANIM_Idle_FRAME = 600;
     const int ANMI_Running_FRAME = 50;
     const int ANIM_Pickup_FRAME = 50;
+
+    XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+
+    XMMATRIX WorldMatrix;//自分のワールド行列
+    Item* CarryItem = nullptr;//今持ってるアイテム
+
+    float itemDir;
 public:
     bool isGoal_;
     Player(GameObject* parent);

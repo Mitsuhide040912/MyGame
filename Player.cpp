@@ -90,7 +90,7 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	//XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
 	XMVECTOR move   { 0,0,0,0 };
 	XMVECTOR rotVecY{ 0,0,0,0 };
@@ -119,6 +119,7 @@ void Player::Update()
 	{
 		animType_ = ANM_TYPE::RUN;
 		dir = 1.0;
+		itemDir = 1.0;
 	}
 	else
 	{
@@ -129,6 +130,7 @@ void Player::Update()
 	{
 		animType_ = ANM_TYPE::RUN;
 		dir = -1.0;
+		itemDir = -1.0;
 	}
 	//物をとるアニメーション
 	if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
@@ -139,11 +141,13 @@ void Player::Update()
 	if (Input::IsKey(DIK_A) || stickR.x < - 0.3)//コントローラーの実装もした
 	{
 		transform_.rotate_.y -= 2.0f;
+		itemDir = -1.0f;
 	}
 	//右回転
 	if (Input::IsKey(DIK_D) || stickR.x > 0.3f)//コントローラーの実装もした
 	{
 		transform_.rotate_.y += 2.0f;
+		itemDir = 1.0f;
 	}
 	if (Input::IsKey(DIK_UP))
 	{
@@ -167,6 +171,7 @@ void Player::Update()
 	move = speed_ * rotVecY;
 	XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
 	pos = pos + dir * move;
+
 	XMStoreFloat3(&(transform_.position_), pos);
 
 	transform_.position_.x = std::clamp(transform_.position_.x, -300.0f, 300.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
@@ -280,6 +285,8 @@ void Player::Update()
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
         sm->ChangeScene(SCENE_ID_CLEAR);
 	}
+
+
 }
 
 void Player::Draw()
@@ -302,9 +309,28 @@ void Player::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Item"){
 		XMFLOAT3 posChange = transform_.position_;
 		posChange.y = transform_.position_.y + 3.0f;
-		posChange.z = transform_.position_.z + 1.0f;
+		//posChange.z = transform_.position_.z + 1.0f;
 	    pTarget->SetPosition(posChange);
-	    isItem_ = true;//←isItemをtrueにして取得
+		
+		//if (isItem_ && (CarryItem != nullptr)) {
+		//	XMMATRIX offset = XMMatrixTranslation(0.0f, 1.0f, 0.5f);
+		//	CarryItem->SetWorldMatrix(offset * WorldMatrix);
+		//	
+		//}
+	
+	    //isItem_ = true;//←isItemをtrueにして取得
+		//if (isItem_) {
+		//	XMVECTOR rotVecY = XMVector3TransformCoord(front_, rotY);
+		//	XMVECTOR pos = XMLoadFloat3(&(posChange));
+		//	
+		//	XMVECTOR move = speed_ * rotVecY;
+		//	pos = pos + itemDir * move;
+
+		//	XMStoreFloat3(&(posChange), pos);
+		//	pTarget->SetPosition(posChange);
+		//	//posChange = posChange + XMStoreFloat3(&(temp),rotVecY);
+		//}
+		isItem_ = true;
 	}
 	if (pTarget->GetObjectName() == "GoalFrag") {
 		

@@ -7,6 +7,7 @@ class Item :
     XMVECTOR front_;
 
     int hModel_;
+    XMMATRIX WorldItemMatrix;
 public:
 
     Item(GameObject* parent);
@@ -16,5 +17,7 @@ public:
     void Draw()override;
     void Release()override;
     void OnCollision(GameObject* pTarget)override;
+    void SetWorldMatrix(const XMMATRIX mat) { WorldItemMatrix = mat; }
+    const XMMATRIX& GetWorldMatrix()const { return WorldItemMatrix; }
 };
 
