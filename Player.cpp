@@ -119,7 +119,6 @@ void Player::Update()
 	{
 		animType_ = ANM_TYPE::RUN;
 		dir = 1.0;
-		itemDir = 1.0;
 	}
 	else
 	{
@@ -130,7 +129,6 @@ void Player::Update()
 	{
 		animType_ = ANM_TYPE::RUN;
 		dir = -1.0;
-		itemDir = -1.0;
 	}
 	//物をとるアニメーション
 	if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
@@ -141,13 +139,11 @@ void Player::Update()
 	if (Input::IsKey(DIK_A) || stickR.x < - 0.3)//コントローラーの実装もした
 	{
 		transform_.rotate_.y -= 2.0f;
-		itemDir = -1.0f;
 	}
 	//右回転
 	if (Input::IsKey(DIK_D) || stickR.x > 0.3f)//コントローラーの実装もした
 	{
 		transform_.rotate_.y += 2.0f;
-		itemDir = 1.0f;
 	}
 	if (Input::IsKey(DIK_UP))
 	{
@@ -285,40 +281,25 @@ void Player::Update()
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
         sm->ChangeScene(SCENE_ID_CLEAR);
 	}
-
-
-}
-
-void Player::Draw()
-{
-	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
-
-	ImGui::Text("PositionX:%.3f", transform_.position_.x);
-	ImGui::Text("PositionY:%.3f", transform_.position_.y);
-	ImGui::Text("PositionZ:%.3f", transform_.position_.z);
-}
-
-void Player::Release()
-{
+	float heightOffset = 10.0f;
+	if (CarryItem) {
+		
+		XMFLOAT3 itemPos = { transform_.position_.x,
+			transform_.position_.y + heightOffset,
+			transform_.position_.z + 2.0f };
+		XMFLOAT3 itemRot = { transform_.rotate_.x,transform_.rotate_.y,transform_.rotate_.z };
+		CarryItem->SetTransform(itemPos, itemRot);
+	}
 }
 
 void Player::OnCollision(GameObject* pTarget)
 {
 
-	if (pTarget->GetObjectName() == "Item"){
-		XMFLOAT3 posChange = transform_.position_;
-		posChange.y = transform_.position_.y + 3.0f;
+	if (pTarget->GetObjectName() == "Item") {
+		CarryItem = dynamic_cast<Item*>(pTarget);
+		//XMFLOAT3 posChange = transform_.position_;
+		//posChange.y = transform_.position_.y + 3.0f;
 		//posChange.z = transform_.position_.z + 1.0f;
-	    pTarget->SetPosition(posChange);
-		
-		//if (isItem_ && (CarryItem != nullptr)) {
-		//	XMMATRIX offset = XMMatrixTranslation(0.0f, 1.0f, 0.5f);
-		//	CarryItem->SetWorldMatrix(offset * WorldMatrix);
-		//	
-		//}
-	
-	    //isItem_ = true;//←isItemをtrueにして取得
 		//if (isItem_) {
 		//	XMVECTOR rotVecY = XMVector3TransformCoord(front_, rotY);
 		//	XMVECTOR pos = XMLoadFloat3(&(posChange));
@@ -328,12 +309,12 @@ void Player::OnCollision(GameObject* pTarget)
 
 		//	XMStoreFloat3(&(posChange), pos);
 		//	pTarget->SetPosition(posChange);
-		//	//posChange = posChange + XMStoreFloat3(&(temp),rotVecY);
+		//	
 		//}
 		isItem_ = true;
 	}
 	if (pTarget->GetObjectName() == "GoalFrag") {
-		
+
 		isGoal_ = true;//←isGoalをtrueにして取得
 	}
 	if (pTarget->GetObjectName() == "Enemy") {
@@ -348,5 +329,25 @@ void Player::Fall()
 	transform_.position_.y -= 10 * Time::DeltaTime();
 	fallTime -= Time::DeltaTime();
 }
+
+void Player::Draw()
+{
+	Model::SetTransform(hModel_, transform_);
+	Model::Draw(hModel_);
+
+	ImGui::Text("PositionX:%.3f", transform_.position_.x);
+	ImGui::Text("PositionY:%.3f", transform_.position_.y);
+	ImGui::Text("PositionZ:%.3f", transform_.position_.z);
+
+	//ImGui::Text("Item Y: %.3f", CarryItem->transform_.position_.y : 0.0f);
+}
+
+void Player::Release()
+{
+}
+
+
+
+
 
 

@@ -7,7 +7,8 @@ class Item :
     XMVECTOR front_;
 
     int hModel_;
-    XMMATRIX WorldItemMatrix;
+    XMMATRIX LocalMatrix = XMMatrixIdentity();
+    XMMATRIX WorldMatrix = XMMatrixIdentity();
 public:
 
     Item(GameObject* parent);
@@ -17,7 +18,9 @@ public:
     void Draw()override;
     void Release()override;
     void OnCollision(GameObject* pTarget)override;
-    void SetWorldMatrix(const XMMATRIX mat) { WorldItemMatrix = mat; }
-    const XMMATRIX& GetWorldMatrix()const { return WorldItemMatrix; }
+    void SetTransform(XMFLOAT3 position, XMFLOAT3 rotation) { 
+        transform_.position_ = position;
+        transform_.rotate_ = rotation;
+    }
 };
 

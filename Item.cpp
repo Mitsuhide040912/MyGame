@@ -5,6 +5,10 @@
 #include "Engine/SphereCollider.h"
 #include "Engine/BoxCollider.h"
 #include"Engine/SceneManager.h"
+
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
 Item::Item(GameObject* parent)
 	:GameObject(parent,"Item"),hModel_(-1)
 {
@@ -19,7 +23,7 @@ void Item::Initialize()
 	hModel_ = Model::Load("Model\\egg.fbx");
 	assert(hModel_ > 0);
 	transform_.position_.x = -79;
-	transform_.position_.y = -107;
+	//transform_.position_.y = -107;
 	transform_.position_.z = 210;
 	transform_.scale_ = { 0.5,0.5,0.5 };
 	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.2f);
@@ -30,18 +34,18 @@ void Item::Initialize()
 
 void Item::Update()
 {
-	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
-	XMVECTOR move   { 0,0,0,0 };
-	XMVECTOR rotVecY{ 0,0,0,0 };
-	XMVECTOR rotVecX{ 0,0,0,0 };
-	float dir = 0;
-	rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-	rotVecY = XMVector3TransformCoord(front_, rotY);
-	move = speed_ * rotVecY;
-	XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
-	pos = pos + dir * move;
-	XMStoreFloat3(&(transform_.position_), pos);
+	//XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	//XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+	//XMVECTOR move   { 0,0,0,0 };
+	//XMVECTOR rotVecY{ 0,0,0,0 };
+	//XMVECTOR rotVecX{ 0,0,0,0 };
+	//float dir = 0;
+	//rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	//rotVecY = XMVector3TransformCoord(front_, rotY);
+	//move = speed_ * rotVecY;
+	//XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
+	//pos = pos + dir * move;
+	//XMStoreFloat3(&(transform_.position_), pos);
 
 
 	//Å´ínñ Ç∆ÇÃîªíË
@@ -74,7 +78,7 @@ void Item::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
-
+	
 }
 
 void Item::Release()
