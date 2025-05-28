@@ -23,15 +23,12 @@
 #include "imgui/imgui_impl_win32.h"
 
 using namespace DirectX;
-//using namespace Time;
-
-int hModelanime_[2];
 
 //カメラの指定
 enum CAM_TYPE
 {
 	//FIXED_TYPE, //固定の視点
-	TPS_NORT_TYPE,//三人称回転なし
+	//TPS_NORT_TYPE,//三人称回転なし
 	TPS_TYPE,//三人称回転あり
 	FPS_TYPE,//一人称
 	MAX_TYPE//ここ、空出来たら終わり
@@ -51,7 +48,7 @@ Player::Player(GameObject* parent)
 	,hModel_(-1)
 	,speed_(0.05)
 	,front_({ 0,0,1,0 })
-	,camState_(CAM_TYPE::TPS_NORT_TYPE)
+	,camState_(CAM_TYPE::TPS_TYPE)
 	,isItem_(false)
 	,isGoal_(false),fall_(0),thisFall_(false),prevDist_(9999)
 {
@@ -69,7 +66,7 @@ void Player::Initialize()
 	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
 	hModel_ = hModelanime_[0];
 	speed_ = 0.2;
-	transform_.scale_ = { 3,3,3 };
+	transform_.scale_ = { 4,4,4 };
 	transform_.position_.x = -35;
 	transform_.position_.z = 30;
 
@@ -92,7 +89,7 @@ void Player::Update()
 {
 	//XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
-	XMVECTOR move   { 0,0,0,0 };
+	XMVECTOR move{ 0,0,0,0 };
 	XMVECTOR rotVecY{ 0,0,0,0 };
 	XMVECTOR rotVecX{ 0,0,0,0 };
 	XMFLOAT3 stickL = Input::GetPadStickL();
@@ -125,7 +122,7 @@ void Player::Update()
 		animType_ = ANM_TYPE::WAIT;
 	}
 	//後退
-	if (Input::IsKey(DIK_S) || stickL.y < - 0.3f)//コントローラーの実装もした
+	if (Input::IsKey(DIK_S) || stickL.y < -0.3f)//コントローラーの実装もした
 	{
 		animType_ = ANM_TYPE::RUN;
 		dir = -1.0;
@@ -136,7 +133,7 @@ void Player::Update()
 		animType_ = ANM_TYPE::PICK;
 	}
 	//左回転
-	if (Input::IsKey(DIK_A) || stickR.x < - 0.3)//コントローラーの実装もした
+	if (Input::IsKey(DIK_A) || stickR.x < -0.3)//コントローラーの実装もした
 	{
 		transform_.rotate_.y -= 2.0f;
 	}
@@ -215,28 +212,11 @@ void Player::Update()
 	if (Input::IsKeyDown(DIK_Z) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
 		camState_++;
-		if (camState_ == CAM_TYPE::MAX_TYPE)camState_ = CAM_TYPE::TPS_NORT_TYPE;
+		if (camState_ == CAM_TYPE::MAX_TYPE)camState_ = CAM_TYPE::TPS_TYPE;
 	}
 
 	switch (camState_)
 	{
-	//case CAM_TYPE::FIXED_TYPE://固定
-	//{
-	//	Camera::SetPosition(XMFLOAT3(0, 10, -120));
-	//	Camera::SetTarget(XMFLOAT3(0, -30, 0));
-	//	break;
-	//}
-
-	case CAM_TYPE::TPS_NORT_TYPE://若干上から見たついてくるカメラ
-	{
-		XMFLOAT3 camPos = transform_.position_;
-		camPos.y = transform_.position_.y + 15.0f;
-		camPos.z = transform_.position_.z - 10.0f;
-		Camera::SetPosition(camPos);
-		Camera::SetTarget(transform_.position_);
-		break;
-	}
-
 	case CAM_TYPE::TPS_TYPE://TPS視点
 	{
 		XMVECTOR camOff = { 0,4,3 };
@@ -246,7 +226,7 @@ void Player::Update()
 		XMStoreFloat3(&camtar, pos + camOff);
 		Camera::SetTarget(camtar);
 		XMFLOAT3 camPos = transform_.position_;
-		XMVECTOR vEye = { 0,4,-5 };
+		XMVECTOR vEye = { 0,5,-12 };
 		vEye = XMVector3TransformCoord(vEye, rotY);
 		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);
@@ -277,19 +257,21 @@ void Player::Update()
 		}
 	}
 
-	if (isItem_ && isGoal_){//←isItemを取得かつプレイヤーがゴールフラッグに触れるとクリア
+	if (isItem_ && isGoal_) {//←isItemを取得かつプレイヤーがゴールフラッグに触れるとクリア
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-        sm->ChangeScene(SCENE_ID_CLEAR);
+		sm->ChangeScene(SCENE_ID_CLEAR);
 	}
-	float heightOffset = 10.0f;
-	if (CarryItem) {
+	//float heightOffset = 10.0f;
+
+	if (CarryItem != nullptr) {
 		
 		XMFLOAT3 itemPos = { transform_.position_.x,
-			transform_.position_.y + heightOffset,
-			transform_.position_.z + 2.0f };
+			transform_.position_.y + 1.0f,
+			transform_.position_.z + 1.0f };
 		XMFLOAT3 itemRot = { transform_.rotate_.x,transform_.rotate_.y,transform_.rotate_.z };
 		CarryItem->SetTransform(itemPos, itemRot);
 	}
+
 }
 
 void Player::OnCollision(GameObject* pTarget)
@@ -325,7 +307,6 @@ void Player::OnCollision(GameObject* pTarget)
 
 void Player::Fall()
 {
-	//float fallTime;
 	transform_.position_.y -= 10 * Time::DeltaTime();
 	fallTime -= Time::DeltaTime();
 }
@@ -338,8 +319,6 @@ void Player::Draw()
 	ImGui::Text("PositionX:%.3f", transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", transform_.position_.z);
-
-	//ImGui::Text("Item Y: %.3f", CarryItem->transform_.position_.y : 0.0f);
 }
 
 void Player::Release()

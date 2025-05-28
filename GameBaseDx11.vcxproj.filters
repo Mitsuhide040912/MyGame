@@ -135,6 +135,7 @@
       <Filter>01Engine</Filter>
     </ClCompile>
     <ClCompile Include="EnemyAI.cpp" />
+    <ClCompile Include="Block.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -246,6 +247,7 @@
       <Filter>01Engine</Filter>
     </ClInclude>
     <ClInclude Include="EnemyAI.h" />
+    <ClInclude Include="Block.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

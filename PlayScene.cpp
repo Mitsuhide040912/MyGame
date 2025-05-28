@@ -5,6 +5,7 @@
 #include "Enemy.h"
 #include "GoalFrag.h"
 #include "Timer.h"
+#include "Block.h"
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
 
@@ -19,6 +20,7 @@ PlayScene::PlayScene(GameObject* parent)
 void PlayScene::Initialize()
 {
 	Instantiate<Field>(this);
+	Instantiate<Block>(this);
 	Instantiate<Player>(this);
 	Instantiate<Item>(this);
 	Instantiate<Enemy>(this);

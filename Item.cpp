@@ -34,43 +34,30 @@ void Item::Initialize()
 
 void Item::Update()
 {
-	//XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-	//XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
-	//XMVECTOR move   { 0,0,0,0 };
-	//XMVECTOR rotVecY{ 0,0,0,0 };
-	//XMVECTOR rotVecX{ 0,0,0,0 };
-	//float dir = 0;
-	//rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-	//rotVecY = XMVector3TransformCoord(front_, rotY);
-	//move = speed_ * rotVecY;
-	//XMVECTOR pos = XMLoadFloat3(&(transform_.position_));
-	//pos = pos + dir * move;
-	//XMStoreFloat3(&(transform_.position_), pos);
+	Player* iPlayer = (Player*)FindObject("Player");
+	if (!iPlayer->GetItemState()) {
+		//↓地面との判定
+		Field* pGround = (Field*)FindObject("Field");
+		int hGmodel = pGround->GetModelHandle();
+		//レイキャスト
+		RayCastData data;
+		data.start = transform_.position_;
+		data.start.y += 4;
+		data.dir = XMFLOAT3({ 0,-1,0 });
+		Model::RayCast(hGmodel, &data);
 
-
-	//↓地面との判定
-	Field* pGround = (Field*)FindObject("Field");
-	int hGmodel = pGround->GetModelHandle();
-	//レイキャスト
-	RayCastData data;
-	data.start = transform_.position_;
-	data.start.y += 4;
-	data.dir = XMFLOAT3({ 0,-1,0 });
-	Model::RayCast(hGmodel, &data);
-
-	if (data.hit)
-	{
-		transform_.position_.y -= data.dist - 4;
+		if (data.hit)
+		{
+			transform_.position_.y -= data.dist - 4;
+		}
 	}
+
 }
 
 void Item::OnCollision(GameObject* pTarget)
 {
 	//if (pTarget->GetObjectName() == "Player")
 	//{
-	//	SceneManager* cr = (SceneManager*)FindObject("SceneManager");
-	//	cr->ChangeScene(SCENE_ID_CLEAR);
-	//	KillMe();
 	//}
 }
 

@@ -42,5 +42,6 @@ public:
     void Release()override;
     void OnCollision(GameObject* pTarget)override;
     void Fall();
+    bool GetItemState() { return isItem_; }
 };
 

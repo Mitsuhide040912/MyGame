@@ -9,6 +9,7 @@ class Item :
     int hModel_;
     XMMATRIX LocalMatrix = XMMatrixIdentity();
     XMMATRIX WorldMatrix = XMMatrixIdentity();
+    Item* CarryItem = nullptr;//¡‚Á‚Ä‚éƒAƒCƒeƒ€
 public:
 
     Item(GameObject* parent);
