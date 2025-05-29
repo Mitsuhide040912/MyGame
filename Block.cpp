@@ -8,7 +8,7 @@ Block::Block(GameObject* parent)
 
 void Block::Initialize()
 {
-	hModel_=Model::Load("Model\\Block.fbx");
+	hModel_=Model::Load("Model\\Lava.fbx");
 	//assert(hModel_ >= 0);
 }
 

@@ -27,8 +27,6 @@ using namespace DirectX;
 //カメラの指定
 enum CAM_TYPE
 {
-	//FIXED_TYPE, //固定の視点
-	//TPS_NORT_TYPE,//三人称回転なし
 	TPS_TYPE,//三人称回転あり
 	FPS_TYPE,//一人称
 	MAX_TYPE//ここ、空出来たら終わり
@@ -151,11 +149,6 @@ void Player::Update()
 	{
 		CameraTransform_.rotate_.x -= 2.0f;
 	}
-	//何もキーが押されていなかったらWAITを呼ぶ
-	//else if (!Input::IsKey)
-	//{
-	//	animType_ = ANM_TYPE::WAIT;
-	//}
 
 	//回転行列Y
 	rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
@@ -271,7 +264,9 @@ void Player::Update()
 		XMFLOAT3 itemRot = { transform_.rotate_.x,transform_.rotate_.y,transform_.rotate_.z };
 		CarryItem->SetTransform(itemPos, itemRot);
 	}
-
+	if (transform_.position_.y < -150.0f) {
+		KillMe();
+	}
 }
 
 void Player::OnCollision(GameObject* pTarget)
