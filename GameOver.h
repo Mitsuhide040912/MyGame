@@ -1,17 +1,13 @@
 #pragma once
 #include "Engine/GameObject.h"
-class TitleScene :
+class GameOver :
     public GameObject
 {
 	int hImege_;
-	int select_;//選択
-	int prevUpKey_;//前フレームの上キー
-	int prevDownKey_;//前フレームの下キー
-
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
-	TitleScene(GameObject* parent);
+	GameOver(GameObject* parent);
 
 	//初期化
 	void Initialize() override;

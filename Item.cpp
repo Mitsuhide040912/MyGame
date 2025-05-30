@@ -22,10 +22,8 @@ void Item::Initialize()
 {
 	hModel_ = Model::Load("Model\\egg.fbx");
 	assert(hModel_ > 0);
-	transform_.position_.x = -79;
-	//transform_.position_.y = -107;
-	transform_.position_.z = 210;
-	transform_.scale_ = { 0.5,0.5,0.5 };
+	transform_.position_ = { -75.0,0,160.0 };
+	transform_.scale_ = { 0.8,0.8,0.8 };
 	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.2f);
 	//AddCollider(Collision);
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(2, 2, 2));
@@ -56,16 +54,17 @@ void Item::Update()
 
 void Item::OnCollision(GameObject* pTarget)
 {
-	//if (pTarget->GetObjectName() == "Player")
-	//{
-	//}
 }
 
 void Item::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
-	
+	static float pos[3] = { x,y,z };
+	if (ImGui::InputFloat3("ItemPos:%.3f", pos))
+	{
+		transform_.position_ = { pos[0], pos[1], pos[2] };
+	}
 }
 
 void Item::Release()

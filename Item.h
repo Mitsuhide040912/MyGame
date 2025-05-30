@@ -10,6 +10,7 @@ class Item :
     XMMATRIX LocalMatrix = XMMatrixIdentity();
     XMMATRIX WorldMatrix = XMMatrixIdentity();
     Item* CarryItem = nullptr;//¡‚Á‚Ä‚éƒAƒCƒeƒ€
+    float x, y, z;
 public:
 
     Item(GameObject* parent);

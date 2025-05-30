@@ -167,6 +167,7 @@
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="FieldTrees.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GoalFrag.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FieldTrees.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="GoalFrag.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />

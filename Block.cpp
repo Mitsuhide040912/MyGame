@@ -8,8 +8,8 @@ Block::Block(GameObject* parent)
 
 void Block::Initialize()
 {
-	hModel_=Model::Load("Model\\Lava.fbx");
-	//assert(hModel_ >= 0);
+	hModel_=Model::Load("Model\\wood.fbx");
+	assert(hModel_ >= 0);
 }
 
 void Block::Update()

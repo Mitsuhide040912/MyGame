@@ -3,13 +3,13 @@
 #include "Engine/Image.h"
 #include "Engine/SceneManager.h"
 TitleScene::TitleScene(GameObject* parent)
-	:GameObject(parent,"TitleScene"),hImege_(-1)
+	:GameObject(parent,"TitleScene"),hImege_(-1),select_(0),prevUpKey_(false),prevDownKey_(false)
 {
 }
 
 void TitleScene::Initialize()
 {
-	hImege_ = Image::Load("Model\\TITLE.png");
+	hImege_ = Image::Load("Model\\EggHunterGameTitle.png");
 	assert(hImege_ >= 0);
 }
 

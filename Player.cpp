@@ -60,16 +60,18 @@ Player::~Player()
 void Player::Initialize()
 {
 	hModelanime_[0] = Model::Load("Model\\Idle.fbx");
+	assert(hModelanime_[0] >= 0);
 	hModelanime_[1] = Model::Load("Model\\Running.fbx");
+	assert(hModelanime_[1] >= 1);
 	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
+	assert(hModelanime_[2] >= 2);
 	hModel_ = hModelanime_[0];
-	speed_ = 0.2;
-	transform_.scale_ = { 4,4,4 };
-	transform_.position_.x = -35;
-	transform_.position_.z = 30;
+	speed_ = 0.6;
+	transform_.scale_ = { 3.5,3.5,3.5 };
+	transform_.position_ = { -20,0,-50 };
 
 
-	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(1, 5, 1));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 3, 0), XMFLOAT3(1, 5, 1));
 	AddCollider(collision);
 
 
@@ -179,7 +181,7 @@ void Player::Update()
 			{
 				fallDist_ = data.dist - 4;
 				thisFall_ = true;
-				fallTime = fallDist_ / 10;
+				fallTime = fallDist_ / 15;
 			}
 			else
 			{
@@ -254,7 +256,6 @@ void Player::Update()
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 		sm->ChangeScene(SCENE_ID_CLEAR);
 	}
-	//float heightOffset = 10.0f;
 
 	if (CarryItem != nullptr) {
 		
@@ -264,8 +265,11 @@ void Player::Update()
 		XMFLOAT3 itemRot = { transform_.rotate_.x,transform_.rotate_.y,transform_.rotate_.z };
 		CarryItem->SetTransform(itemPos, itemRot);
 	}
+	//↓yが-150を超えた時点でゲームオーバー
 	if (transform_.position_.y < -150.0f) {
 		KillMe();
+		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
+		sm->ChangeScene(SCENE_ID_GAMEOVER);
 	}
 }
 
@@ -296,13 +300,13 @@ void Player::OnCollision(GameObject* pTarget)
 	}
 	if (pTarget->GetObjectName() == "Enemy") {
 		SceneManager* ov = (SceneManager*)FindObject("SceneManager");
-		ov->ChangeScene(SCENE_ID_CLEAR);
+		ov->ChangeScene(SCENE_ID_GAMEOVER);
 	}
 }
 
 void Player::Fall()
 {
-	transform_.position_.y -= 10 * Time::DeltaTime();
+	transform_.position_.y -= 15 * Time::DeltaTime();
 	fallTime -= Time::DeltaTime();
 }
 
