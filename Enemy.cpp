@@ -6,15 +6,19 @@
 #include "Engine/BoxCollider.h"
 
 #include "EnemyAI.h"
+#include <cmath>
 using namespace DirectX;
 
 enum ANM_TYPE
 {
 	WAIT = 0,
+	Walk,
 };
 
+
+
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent,"Enemy"),hModel_(-1)
+	:GameObject(parent, "Enemy"), hModel_(-1)
 {
 }
 
@@ -22,19 +26,20 @@ void Enemy::Initialize()
 {
 	//hModel_ = Model::Load("Model\\box.fbx");
 	hModelAnime_[0] = Model::Load("Model\\Boss Idle.fbx");
-	//assert(hModel_ > 0);
-	
+	//assert(hModel_ >= 0);
+
 	transform_.position_ = { EnemyPosX,EnemyPosY,EnemyPosZ };
 	transform_.scale_ = { 3,3,3 };
-	
+
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
 	AddCollider(collision);
 	//待機
 	Model::SetAnimFrame(hModelAnime_[0], 1, 242, 1);
 }
 
-void Enemy::Update()
+void Enemy::patrolUpdate(float deltaTime)
 {
+	patrolUpdate(deltaTime);
 	switch (animType_)
 	{
 	case ANM_TYPE::WAIT:
@@ -44,12 +49,17 @@ void Enemy::Update()
 		break;
 	}
 
-	// プレイヤーの位置を取得
+	XMMATRIX world = transform_.GetWorldMatrix();
+	XMVECTOR forwardVec = XMVector3Normalize(world.r[2]);
+	XMFLOAT3 enemyForward;
+	XMStoreFloat3(&enemyForward, forwardVec)
+		;
+	//// プレイヤーの位置を取得
 	Player* pPlayer = (Player*)FindObject("Player");  // プレイヤーオブジェクトを取得
 	if (!pPlayer) return;  // プレイヤーが見つからない場合は何もしない
 
 	XMFLOAT3 playerPos = pPlayer->GetPosition();  // プレイヤーの位置を取得
-	XMFLOAT3 enemyPos = transform_.position_;  // エネミーの位置を取得
+	//XMFLOAT3 enemyPos = transform_.position_;  // エネミーの位置を取得
 
 	Field* pField = (Field*)FindObject("Field");
 	int hFieldModel = pField->GetModelHandle();
@@ -64,31 +74,45 @@ void Enemy::Update()
 		transform_.position_.y -= data.dist - 4;
 	}
 
-	if (EnemyAI::IsEnemyTarget(transform_.position_, enemyForwad, playerPos, angle, maxDistance))
+	if (EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance))
 	{
+		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);
+		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
 
-		//// プレイヤーとエネミーの距離を計算
-		float dx = playerPos.x - enemyPos.x;
-		float dy = playerPos.y - enemyPos.y;
-		float dz = playerPos.z - enemyPos.z;
-		float distance = sqrt(dx * dx + dy * dy + dz * dz);
+		XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
+		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
+		enemyPos = XMVectorAdd(enemyPos, move);
+		XMStoreFloat3(&transform_.position_, enemyPos);
 
-		// プレイヤーが半径3メートル以内にいる場合、追尾する
-		if (distance <= 20.0f)
-		{
-			// 追尾方向を計算
-			XMVECTOR dir = XMVectorSet(dx, dy, dz, 0);  // プレイヤー方向ベクトル
-			dir = XMVector3Normalize(dir);  // 正規化して単位ベクトルにする
 
-			// 1フレーム分だけ進む
-			float speed = 0.15f;  // 1フレーム分の進行距離（調整可能）
-			XMVECTOR move = dir * speed;  // 移動量を計算
+		//	//// プレイヤーとエネミーの距離を計算
+		//	float dx = playerPos.x - enemyPos.x;
+		//	float dy = playerPos.y - enemyPos.y;
+		//	float dz = playerPos.z - enemyPos.z;
+		//	float distance = sqrt(dx * dx + dy * dy + dz * dz);
 
-			// エネミーの位置を更新
-			XMVECTOR newPos = XMLoadFloat3(&enemyPos) + move;
-			XMStoreFloat3(&transform_.position_, newPos);  // 新しい位置をセット
-		}
+		//	// プレイヤーが半径3メートル以内にいる場合、追尾する
+		//	if (distance <= 20.0f)
+		//	{
+		//		// 追尾方向を計算
+		//		XMVECTOR dir = XMVectorSet(dx, dy, dz, 0);  // プレイヤー方向ベクトル
+		//		dir = XMVector3Normalize(dir);  // 正規化して単位ベクトルにする
+
+		//		// 1フレーム分だけ進む
+		//		float speed = 0.15f;  // 1フレーム分の進行距離（調整可能）
+		//		XMVECTOR move = dir * speed;  // 移動量を計算
+
+		//		// エネミーの位置を更新
+		//		XMVECTOR newPos = XMLoadFloat3(&enemyPos) + move;
+		//		XMStoreFloat3(&transform_.position_, newPos);  // 新しい位置をセット
+		//	}
+		//}
 	}
+}
+
+void Enemy::Update()
+{
+	
 }
 
 void Enemy::Draw()
@@ -100,3 +124,9 @@ void Enemy::Draw()
 void Enemy::Release()
 {
 }
+
+void Enemy::AddPatrolPoint(const DirectX::XMFLOAT3& point)
+{
+	em.AddPatrolPoint(point);
+}
+

@@ -66,7 +66,7 @@ void Player::Initialize()
 	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
 	assert(hModelanime_[2] >= 2);
 	hModel_ = hModelanime_[0];
-	speed_ = 0.6;
+	speed_ = 0.3;
 	transform_.scale_ = { 3.5,3.5,3.5 };
 	transform_.position_ = { -20,0,-50 };
 

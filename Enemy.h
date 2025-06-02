@@ -1,7 +1,10 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "EnemyAI.h"
+#include <DirectXMath.h>
+#include <vector>
 class Enemy :
-    public GameObject
+	public GameObject
 {
 	int hModel_;
 	int hModelAnime_[1];
@@ -9,16 +12,17 @@ class Enemy :
 	bool hModelAnim_;
 	bool nextAnimState_;
 
-
+	float bossSpeed_ = 0.5f;
 	float EnemyPosX = 105;
 	float EnemyPosY = -140;
-	float EnemyPosZ = -10;
+	float EnemyPosZ = -50;
 
-	DirectX::XMFLOAT3 enemyForwad{ 0.0f,0.0f,1.0f };
-	float angle = 90.0f;
-	float maxDistance = 10.0f;
+	//DirectX::XMFLOAT3 enemyForwad{ 0.0f,0.0f,1.0f };
+	float angle = 150.0f;
+	float maxDistance = 30.0f;
 
-
+	EnemyAI em;
+	void patrolUpdate(float deltaTime);
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
@@ -35,5 +39,7 @@ public:
 
 	//開放
 	void Release() override;
+
+	void AddPatrolPoint(const DirectX::XMFLOAT3& point);
 };
 
