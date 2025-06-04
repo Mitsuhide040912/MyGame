@@ -266,7 +266,7 @@ void Player::Update()
 		CarryItem->SetTransform(itemPos, itemRot);
 	}
 	//↓yが-150を超えた時点でゲームオーバー
-	if (transform_.position_.y < -150.0f) {
+	if (transform_.position_.y < -157.0f) {
 		KillMe();
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 		sm->ChangeScene(SCENE_ID_GAMEOVER);

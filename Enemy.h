@@ -13,16 +13,21 @@ class Enemy :
 	bool nextAnimState_;
 
 	float bossSpeed_ = 0.5f;
-	float EnemyPosX = 105;
-	float EnemyPosY = -140;
-	float EnemyPosZ = -50;
+	float EnemyPosX = -11;
+	//float EnemyPosY = -140;
+	float EnemyPosZ = 54;
 
 	//DirectX::XMFLOAT3 enemyForwad{ 0.0f,0.0f,1.0f };
 	float angle = 150.0f;
 	float maxDistance = 30.0f;
 
 	EnemyAI em;
-	void patrolUpdate(float deltaTime);
+
+	float bossRotation = 0.0f;
+	float rotationSpeed = XMConvertToRadians(45.0f);
+	float maxRotation = XMConvertToRadians(45.0f);
+	bool rotateForward = true;
+	
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
