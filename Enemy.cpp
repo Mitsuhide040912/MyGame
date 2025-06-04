@@ -27,7 +27,7 @@ void Enemy::Initialize()
 {
 	//hModel_ = Model::Load("Model\\box.fbx");
 	hModelAnime_[0] = Model::Load("Model\\BossIdle.fbx");
-	hModelAnime_[1] = Model::Load("Model\\BossWalking.fbx");
+	//hModelAnime_[1] = Model::Load("Model\\BossWalking.fbx");
 	assert(hModelAnime_[0] >= 0);
 	transform_.rotate_.y = 180;
 	transform_.position_ = { EnemyPosX,0,EnemyPosZ };
