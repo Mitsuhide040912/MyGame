@@ -50,7 +50,6 @@ Player::Player(GameObject* parent)
 	,isItem_(false)
 	,isGoal_(false),fall_(0),thisFall_(false),prevDist_(9999)
 {
-	
 }
 
 Player::~Player()
@@ -65,7 +64,6 @@ void Player::Initialize()
 	assert(hModelanime_[1] >= 1);
 	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
 	assert(hModelanime_[2] >= 2);
-	hModel_ = hModelanime_[0];
 	speed_ = 0.3;
 	transform_.scale_ = { 3.5,3.5,3.5 };
 	transform_.position_ = { -20,0,-50 };

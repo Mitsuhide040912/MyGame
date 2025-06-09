@@ -14,12 +14,13 @@ enum ANM_TYPE
 {
 	WAIT = 0,
 	Walk,
+	MAX
 };
 
 
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent, "Enemy"), hModel_(-1)
+	:GameObject(parent, "Enemy"), hModel_(-1),hModelAnime_(-1),bossMove_(false)
 {
 }
 
@@ -27,8 +28,9 @@ void Enemy::Initialize()
 {
 	//hModel_ = Model::Load("Model\\box.fbx");
 	hModelAnime_[0] = Model::Load("Model\\BossIdle.fbx");
-	//hModelAnime_[1] = Model::Load("Model\\BossWalking.fbx");
 	assert(hModelAnime_[0] >= 0);
+	//hModelAnime_[1] = Model::Load("Model\\BossWalking.fbx");
+	//assert(hModelAnime_[1] >= 0);
 	transform_.rotate_.y = 180;
 	transform_.position_ = { EnemyPosX,0,EnemyPosZ };
 	transform_.scale_ = { 2.5,2.5,2.5 };
@@ -49,6 +51,7 @@ void Enemy::Update()
 		break;
 	case ANM_TYPE::Walk:
 		hModel_ = hModelAnime_[1];
+		break;
 	default:
 		break;
 	}
@@ -82,6 +85,11 @@ void Enemy::Update()
 
 	if (EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance))
 	{
+		//if (bossMove_)
+		//{
+		//	animType_ = ANM_TYPE::Walk;
+		//}
+
 		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);
 		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
 
@@ -89,6 +97,8 @@ void Enemy::Update()
 		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
 		enemyPos = XMVectorAdd(enemyPos, move);
 		XMStoreFloat3(&transform_.position_, enemyPos);
+
+		//bossMove_ = true;
 	}
 
 	//if (rotateForward)

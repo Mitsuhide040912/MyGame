@@ -7,7 +7,7 @@ class Enemy :
 	public GameObject
 {
 	int hModel_;
-	int hModelAnime_[1];
+	int hModelAnime_[2];
 	int animType_;
 	bool hModelAnim_;
 	bool nextAnimState_;
@@ -28,6 +28,7 @@ class Enemy :
 	float maxRotation = XMConvertToRadians(45.0f);
 	bool rotateForward = true;
 	
+	bool bossMove_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
