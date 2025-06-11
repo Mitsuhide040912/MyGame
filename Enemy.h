@@ -12,7 +12,7 @@ class Enemy :
 	bool hModelAnim_;
 	bool nextAnimState_;
 
-	float bossSpeed_ = 0.5f;
+	float bossSpeed_ = 0.1f;
 	float EnemyPosX = -11;
 	//float EnemyPosY = -140;
 	float EnemyPosZ = 54;

@@ -17,8 +17,6 @@ enum ANM_TYPE
 	MAX
 };
 
-
-
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent, "Enemy"), hModel_(-1),hModelAnime_(-1),bossMove_(false)
 {
@@ -26,24 +24,22 @@ Enemy::Enemy(GameObject* parent)
 
 void Enemy::Initialize()
 {
-	//hModel_ = Model::Load("Model\\box.fbx");
-	hModelAnime_[0] = Model::Load("Model\\BossIdle.fbx");
+	hModelAnime_[0] = Model::Load("Model\\BossIdle.fbx");//©‘Ò‹@
 	assert(hModelAnime_[0] >= 0);
-	//hModelAnime_[1] = Model::Load("Model\\BossWalking.fbx");
-	//assert(hModelAnime_[1] >= 0);
+	hModelAnime_[1] = Model::Load("Model\\BossWalking.fbx");//©•à‚­
+	assert(hModelAnime_[1] >= 0);
+
 	transform_.rotate_.y = 180;
 	transform_.position_ = { EnemyPosX,0,EnemyPosZ };
 	transform_.scale_ = { 2.5,2.5,2.5 };
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
 	AddCollider(collision);
-	//‘Ò‹@
-	Model::SetAnimFrame(hModelAnime_[0], 1, 242, 1);
+	animType_ = ANM_TYPE::WAIT;
 }
 
 void Enemy::Update()
 {
-	//patrolUpdate(deltaTime);
 	switch (animType_)
 	{
 	case ANM_TYPE::WAIT:
@@ -82,14 +78,12 @@ void Enemy::Update()
 	}
 
 
-
-	if (EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance))
-	{
-		//if (bossMove_)
-		//{
-		//	animType_ = ANM_TYPE::Walk;
-		//}
-
+	bool isPlayerInRange = EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance);
+	if (isPlayerInRange) {
+		if (animType_ != ANM_TYPE::Walk) {
+			animType_ = ANM_TYPE::Walk;
+			Model::SetAnimFrame(hModelAnime_[1], 1, 86, 1);
+		}
 		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);
 		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
 
@@ -97,9 +91,27 @@ void Enemy::Update()
 		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
 		enemyPos = XMVectorAdd(enemyPos, move);
 		XMStoreFloat3(&transform_.position_, enemyPos);
-
-		//bossMove_ = true;
 	}
+
+	else
+	{
+		if (animType_ != ANM_TYPE::WAIT) {
+			animType_ = ANM_TYPE::WAIT;
+			Model::SetAnimFrame(hModelAnime_[0], 1, 242, 1);
+		}
+	}
+
+
+	//if (EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance))
+	//{
+	//	XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);
+	//	XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
+
+	//	XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
+	//	XMVECTOR move = XMVectorScale(direction, bossSpeed_);
+	//	enemyPos = XMVectorAdd(enemyPos, move);
+	//	XMStoreFloat3(&transform_.position_, enemyPos);
+	//}
 
 	//if (rotateForward)
 	//{
