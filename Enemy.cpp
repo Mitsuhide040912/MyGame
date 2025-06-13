@@ -17,25 +17,47 @@ enum ANM_TYPE
 	MAX
 };
 
+enum Gob_ANM_TYPE
+{
+	GobWAIT = 0,
+	GobWalk,
+	GobMAX
+};
+
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent, "Enemy"), hModel_(-1),hModelAnime_(-1),bossMove_(false)
+	:GameObject(parent, "Enemy"), hModel_(-1), hModelAnimeBoss_(-1), hModelAnimeGob_(-1),bossMove_(false)
 {
 }
 
 void Enemy::Initialize()
 {
-	hModelAnime_[0] = Model::Load("Model\\BossIdle.fbx");//Å©ë“ã@
-	assert(hModelAnime_[0] >= 0);
-	hModelAnime_[1] = Model::Load("Model\\BossWalking.fbx");//Å©ï‡Ç≠
-	assert(hModelAnime_[1] >= 0);
+	hModelAnimeBoss_[0] = Model::Load("Model\\BossIdle.fbx");//Å©ë“ã@
+	assert(hModelAnimeBoss_[0] >= 0);
+	hModelAnimeBoss_[1] = Model::Load("Model\\BossWalking.fbx");//Å©ï‡Ç≠
+	assert(hModelAnimeBoss_[1] >= 0);
 
+	hModelAnimeGob_[0] = Model::Load("Model\\GoblinIdle.fbx");//Å©ë“ã@
+	assert(hModelAnimeGob_[0] >= 0);
+	hModelAnimeGob_[1] = Model::Load("Model\\GoblinRun.fbx");//Å©ï‡Ç≠
+	assert(hModelAnimeGob_[1] >= 0);
+	
 	transform_.rotate_.y = 180;
-	transform_.position_ = { EnemyPosX,0,EnemyPosZ };
+	transform_.position_ = { EnemyBossPosX,0,EnemyBossPosZ };
+
 	transform_.scale_ = { 2.5,2.5,2.5 };
+	Gobtrs.position_ = { EnemyGobPosX ,0,EnemyGobPosZ };
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
 	AddCollider(collision);
+
 	animType_ = ANM_TYPE::WAIT;
+	hModel_ = hModelAnimeBoss_[0];
+	Model::SetAnimFrame(hModel_, 1, 242, 1);
+
+	animType_ = Gob_ANM_TYPE::GobWAIT;
+	hGobModel_ = hModelAnimeGob_[0];
+	Model::SetAnimFrame(hGobModel_, 1, 183, 1);
+
 }
 
 void Enemy::Update()
@@ -43,10 +65,22 @@ void Enemy::Update()
 	switch (animType_)
 	{
 	case ANM_TYPE::WAIT:
-		hModel_ = hModelAnime_[0];
+		hModel_ = hModelAnimeBoss_[0];
 		break;
 	case ANM_TYPE::Walk:
-		hModel_ = hModelAnime_[1];
+		hModel_ = hModelAnimeBoss_[1];
+		break;
+	default:
+		break;
+	}
+
+	switch (animType_)
+	{
+	case Gob_ANM_TYPE::GobWAIT:
+		hGobModel_ = hModelAnimeGob_[0];
+		break;
+	case Gob_ANM_TYPE::GobWalk:
+		hGobModel_ = hModelAnimeGob_[1];
 		break;
 	default:
 		break;
@@ -78,26 +112,48 @@ void Enemy::Update()
 	}
 
 
-	bool isPlayerInRange = EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance);
-	if (isPlayerInRange) {
+	bool isPlayerInRangeBoss = EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance);
+	if (isPlayerInRangeBoss) {
 		if (animType_ != ANM_TYPE::Walk) {
 			animType_ = ANM_TYPE::Walk;
-			Model::SetAnimFrame(hModelAnime_[1], 1, 86, 1);
+			Model::SetAnimFrame(hModelAnimeBoss_[1], 1, 86, 1);
 		}
-		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);
+		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);//Å´ìGÇÃçıìG
 		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
 
 		XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
 		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
 		enemyPos = XMVectorAdd(enemyPos, move);
-		XMStoreFloat3(&transform_.position_, enemyPos);
+		XMStoreFloat3(&transform_.position_, enemyPos);//Å™
 	}
-
 	else
 	{
 		if (animType_ != ANM_TYPE::WAIT) {
 			animType_ = ANM_TYPE::WAIT;
-			Model::SetAnimFrame(hModelAnime_[0], 1, 242, 1);
+			Model::SetAnimFrame(hModelAnimeBoss_[0], 1, 242, 1);
+		}
+	}
+
+	bool isPlayerInRangeGoblin = EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance);
+	if (isPlayerInRangeGoblin) {
+		if (animType_ != Gob_ANM_TYPE::GobWAIT) {
+			animType_ = Gob_ANM_TYPE::GobWAIT;
+			Model::SetAnimFrame(hModelAnimeGob_[1], 1, 24, 1);
+		}
+
+		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);//Å´ìGÇÃçıìG
+		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
+
+		XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
+		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
+		enemyPos = XMVectorAdd(enemyPos, move);
+		XMStoreFloat3(&transform_.position_, enemyPos);//Å™
+	}
+	else
+	{
+		if (animType_ != Gob_ANM_TYPE::GobWAIT) {
+			animType_ = Gob_ANM_TYPE::GobWAIT;
+			Model::SetAnimFrame(hModelAnimeGob_[0], 1, 183, 1);
 		}
 	}
 
@@ -137,6 +193,9 @@ void Enemy::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
+
+	Model::SetTransform(hGobModel_, Gobtrs);
+	Model::Draw(hGobModel_);
 }
 
 void Enemy::Release()

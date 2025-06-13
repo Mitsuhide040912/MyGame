@@ -7,15 +7,21 @@ class Enemy :
 	public GameObject
 {
 	int hModel_;
-	int hModelAnime_[2];
+	int hGobModel_;
+	int hModelAnimeBoss_[2];
+	int hModelAnimeGob_[2];
 	int animType_;
 	bool hModelAnim_;
 	bool nextAnimState_;
 
 	float bossSpeed_ = 0.1f;
-	float EnemyPosX = -11;
-	//float EnemyPosY = -140;
-	float EnemyPosZ = 54;
+	float EnemyBossPosX = -11;
+	float EnemyBossPosZ = 54;
+
+
+	float EnemyGobPosX = -20;
+	float EnemyGobPosZ = 70;
+	Transform Gobtrs;
 
 	//DirectX::XMFLOAT3 enemyForwad{ 0.0f,0.0f,1.0f };
 	float angle = 150.0f;
