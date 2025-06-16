@@ -6,6 +6,7 @@
 #include "GoalFrag.h"
 #include "Timer.h"
 #include "Block.h"
+#include "Goblin.h"
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
 
@@ -24,6 +25,7 @@ void PlayScene::Initialize()
 	Instantiate<Player>(this);
 	Instantiate<Item>(this);
 	Instantiate<Enemy>(this);
+	Instantiate<Goblin>(this);
 	//Instantiate<GoalFrag>(this);
 	Instantiate<Timer>(this);
 }

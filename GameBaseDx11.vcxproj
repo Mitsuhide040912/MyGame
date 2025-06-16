@@ -169,6 +169,7 @@
     <ClCompile Include="FieldTrees.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GoalFrag.cpp" />
+    <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="FieldTrees.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="GoalFrag.h" />
+    <ClInclude Include="Goblin.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
