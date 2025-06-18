@@ -65,7 +65,8 @@ void Player::Initialize()
 	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
 	assert(hModelanime_[2] >= 2);
 	speed_ = 0.3;
-	transform_.scale_ = { 3.5,3.5,3.5 };
+	//transform_.rotate_.y = 90;
+	transform_.scale_ = { 3,3,3 };
 	transform_.position_ = { -20,0,-50 };
 
 
@@ -92,7 +93,11 @@ void Player::Update()
 	XMVECTOR rotVecX{ 0,0,0,0 };
 	XMFLOAT3 stickL = Input::GetPadStickL();
 	XMFLOAT3 stickR = Input::GetPadStickR();
-	float dir = 0;
+	const int SPEED = 60;
+	float dir;
+	dir = 0.0f;
+
+	dir += (float) dir/1000.0f * (speed_ * Time::DeltaTime());
 
 	switch (animType_)
 	{
@@ -113,7 +118,8 @@ void Player::Update()
 	if (Input::IsKey(DIK_W) || stickL.y > 0.3f)//コントローラーの実装もした
 	{
 		animType_ = ANM_TYPE::RUN;
-		dir = 1.0;
+		dir = SPEED * Time::DeltaTime();
+		//dir = 1.0;
 	}
 	else
 	{
@@ -123,7 +129,8 @@ void Player::Update()
 	if (Input::IsKey(DIK_S) || stickL.y < -0.3f)//コントローラーの実装もした
 	{
 		animType_ = ANM_TYPE::RUN;
-		dir = -1.0;
+		dir = -SPEED * Time::DeltaTime();
+		//dir = -1.0;
 	}
 	//物をとるアニメーション
 	if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
@@ -258,8 +265,8 @@ void Player::Update()
 	if (CarryItem != nullptr) {
 		
 		XMFLOAT3 itemPos = { transform_.position_.x,
-			transform_.position_.y + 1.0f,
-			transform_.position_.z + 1.0f };
+			transform_.position_.y + 5.0f,
+			transform_.position_.z + 0.0f };
 		XMFLOAT3 itemRot = { transform_.rotate_.x,transform_.rotate_.y,transform_.rotate_.z };
 		CarryItem->SetTransform(itemPos, itemRot);
 	}

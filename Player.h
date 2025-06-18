@@ -7,6 +7,7 @@ class Player :
     int hModel_;
     int hModelanime_[3];
     int fall_;
+    bool canMove_;
     bool hModelanim_;
     bool nextAnimState_;
     float prevDist_;
@@ -14,7 +15,7 @@ class Player :
     bool thisFall_;
     float fallTime;
     XMVECTOR front_;
-    float speed_;
+    float speed_ = 50;
     int camState_;//カメラタイプの指定
     int animType_;//アニメーションのタイプの指定
     //XMFLOAT3 f;

@@ -136,7 +136,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="CLEAR.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -166,7 +165,6 @@
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Field.cpp" />
-    <ClCompile Include="FieldTrees.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GoalFrag.cpp" />
     <ClCompile Include="Goblin.cpp" />
@@ -185,7 +183,6 @@
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animator.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="CLEAR.h" />
     <ClInclude Include="Enemy.h" />
@@ -215,7 +212,6 @@
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Field.h" />
-    <ClInclude Include="FieldTrees.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="GoalFrag.h" />
     <ClInclude Include="Goblin.h" />

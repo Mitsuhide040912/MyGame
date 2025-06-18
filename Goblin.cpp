@@ -28,7 +28,7 @@ void Goblin::Initialize()
 	hModelAnimeGob_[1] = Model::Load("Model\\GoblinRun.fbx");//©•à‚­
 	assert(hModelAnimeGob_[1] >= 0);
 	transform_.position_ = { EnemyGobPosX ,0,EnemyGobPosZ };
-	transform_.scale_ = { 1.5,1.5,1.5 };
+	transform_.scale_ = { 1.0,1.0,1.0 };
 
 	animType_ = Gob_ANM_TYPE::GobWAIT;
 	hModel_ = hModelAnimeGob_[0];
@@ -97,10 +97,13 @@ void Goblin::Update()
 
 }
 
+
+
 void Goblin::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
+
 }
 
 void Goblin::Release()

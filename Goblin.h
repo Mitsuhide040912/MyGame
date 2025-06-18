@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include <vector>
+
 class Goblin :
     public GameObject
 {
@@ -15,6 +17,9 @@ class Goblin :
 
 	float angle = 150.0f;
 	float maxDistance = 30.0f;
+
+	
+	std::vector<Goblin*>childGoblin_;
 public:
 	Goblin(GameObject* parent);
 
@@ -26,6 +31,8 @@ public:
 
 	//•`‰æ
 	void Draw() override;
+
+
 
 	//ŠJ•ú
 	void Release() override;

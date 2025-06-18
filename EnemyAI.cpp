@@ -42,12 +42,12 @@ bool EnemyAI::IsEnemyTarget(const DirectX::XMFLOAT3& enemyPosition, const Direct
 	//‹——£‚ðŒvŽZ
 	float distance = XMVectorGetX(XMVector3Length(toTarget));
 	//‹——£‚ð”»’è
-	if (distance > maxViewDistance + 5.0f)
+	if (distance > maxViewDistance + 10.0f)
 		return false;
 	toTarget = XMVector3Normalize(toTarget);
 	float dot = XMVectorGetX(XMVector3Dot(dirEnemy, toTarget));
 
-	float cosThereshold = cosf(XMConvertToRadians(Degrees / 5.0f));
+	float cosThereshold = cosf(XMConvertToRadians(Degrees / 2.0f));
 	return dot >= cosThereshold;
 }
 

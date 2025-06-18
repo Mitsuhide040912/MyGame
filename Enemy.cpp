@@ -105,37 +105,6 @@ void Enemy::Update()
 			Model::SetAnimFrame(hModelAnimeBoss_[0], 1, 242, 1);
 		}
 	}
-
-
-	//if (EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance))
-	//{
-	//	XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);
-	//	XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
-
-	//	XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
-	//	XMVECTOR move = XMVectorScale(direction, bossSpeed_);
-	//	enemyPos = XMVectorAdd(enemyPos, move);
-	//	XMStoreFloat3(&transform_.position_, enemyPos);
-	//}
-
-	//if (rotateForward)
-	//{
-	//	bossRotation += rotationSpeed * Time::DeltaTime();
-	//	if (bossRotation >= maxRotation)
-	//	{
-	//		bossRotation = maxRotation;
-	//		rotateForward = false;
-	//	}
-	//}
-	//else
-	//{
-	//	bossRotation -= rotationSpeed * Time::DeltaTime();
-	//	if (bossRotation <= 0.0f)
-	//	{
-	//		bossRotation = 0.0f;
-	//		rotateForward = true;
-	//	}
-	//}
 }
 
 void Enemy::Draw()
