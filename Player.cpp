@@ -97,6 +97,7 @@ void Player::Update()
 	float dir;
 	dir = 0.0f;
 
+
 	dir += (float) dir/1000.0f * (speed_ * Time::DeltaTime());
 
 	switch (animType_)
