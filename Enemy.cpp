@@ -32,7 +32,7 @@ void Enemy::Initialize()
 	transform_.rotate_.y = 180;
 	transform_.position_ = { EnemyBossPosX,0,EnemyBossPosZ };
 
-	transform_.scale_ = { 2.5,2.5,2.5 };
+	transform_.scale_ = { 3,3,3 };
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
 	AddCollider(collision);

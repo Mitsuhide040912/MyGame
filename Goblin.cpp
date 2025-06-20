@@ -28,7 +28,7 @@ void Goblin::Initialize()
 	hModelAnimeGob_[1] = Model::Load("Model\\GoblinRun.fbx");//←歩く
 	assert(hModelAnimeGob_[1] >= 0);
 	transform_.position_ = { EnemyGobPosX ,0,EnemyGobPosZ };
-	transform_.scale_ = { 1.0,1.0,1.0 };
+	transform_.scale_ = { 2.0,2.0,2.0 };
 
 	animType_ = Gob_ANM_TYPE::GobWAIT;
 	hModel_ = hModelAnimeGob_[0];
@@ -53,7 +53,7 @@ void Goblin::Update()
 	XMVECTOR forwardVec = XMVector3Normalize(world.r[2]);
 	XMFLOAT3 enemyForward;
 	XMStoreFloat3(&enemyForward, forwardVec);
-	//// プレイヤーの位置を取得
+	// プレイヤーの位置を取得
 	Player* pPlayer = (Player*)FindObject("Player");  // プレイヤーオブジェクトを取得
 	if (!pPlayer) return;  // プレイヤーが見つからない場合は何もしない
 
@@ -78,11 +78,11 @@ void Goblin::Update()
 			animType_ = Gob_ANM_TYPE::GobWalk;
 			Model::SetAnimFrame(hModelAnimeGob_[1], 1, 48, 1);
 		}
-
 		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);//↓敵の索敵
 		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
 
 		XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
+
 		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
 		enemyPos = XMVectorAdd(enemyPos, move);
 		XMStoreFloat3(&transform_.position_, enemyPos);//↑
@@ -101,6 +101,8 @@ void Goblin::Update()
 
 void Goblin::Draw()
 {
+
+
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 

@@ -28,7 +28,6 @@ using namespace DirectX;
 enum CAM_TYPE
 {
 	TPS_TYPE,//三人称回転あり
-	FPS_TYPE,//一人称
 	MAX_TYPE//ここ、空出来たら終わり
 };
 
@@ -48,7 +47,7 @@ Player::Player(GameObject* parent)
 	,front_({ 0,0,1,0 })
 	,camState_(CAM_TYPE::TPS_TYPE)
 	,isItem_(false)
-	,isGoal_(false),fall_(0),thisFall_(false),prevDist_(9999)
+	,isGoal_(false),fall_(0),thisFall_(false),prevDist_(9999),canMove_(false)
 {
 }
 
@@ -66,7 +65,7 @@ void Player::Initialize()
 	assert(hModelanime_[2] >= 2);
 	speed_ = 0.3;
 	//transform_.rotate_.y = 90;
-	transform_.scale_ = { 3,3,3 };
+	transform_.scale_ = { 3.5,3.5,3.5 };
 	transform_.position_ = { -20,0,-50 };
 
 
@@ -115,23 +114,29 @@ void Player::Update()
 		break;
 	}
 
-	//前進
-	if (Input::IsKey(DIK_W) || stickL.y > 0.3f)//コントローラーの実装もした
-	{
-		animType_ = ANM_TYPE::RUN;
-		dir = SPEED * Time::DeltaTime();
-		//dir = 1.0;
+	if (thisFall_ != true) {
+		//前進
+		if (Input::IsKey(DIK_W) || stickL.y > 0.3f)//コントローラーの実装もした
+		{
+			animType_ = ANM_TYPE::RUN;
+			dir = SPEED * Time::DeltaTime();
+			//dir = 1.0;
+		}
+		else
+		{
+			animType_ = ANM_TYPE::WAIT;
+		}
+		//後退
+		if (Input::IsKey(DIK_S) || stickL.y < -0.3f)//コントローラーの実装もした
+		{
+			animType_ = ANM_TYPE::RUN;
+			dir = -SPEED * Time::DeltaTime();
+			//dir = -1.0;
+		}
 	}
 	else
 	{
 		animType_ = ANM_TYPE::WAIT;
-	}
-	//後退
-	if (Input::IsKey(DIK_S) || stickL.y < -0.3f)//コントローラーの実装もした
-	{
-		animType_ = ANM_TYPE::RUN;
-		dir = -SPEED * Time::DeltaTime();
-		//dir = -1.0;
 	}
 	//物をとるアニメーション
 	if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
@@ -147,15 +152,6 @@ void Player::Update()
 	if (Input::IsKey(DIK_D) || stickR.x > 0.3f)//コントローラーの実装もした
 	{
 		transform_.rotate_.y += 2.0f;
-	}
-	if (Input::IsKey(DIK_UP))
-	{
-		CameraTransform_.rotate_.x += 2.0f;
-	}
-
-	if (Input::IsKey(DIK_DOWN))
-	{
-		CameraTransform_.rotate_.x -= 2.0f;
 	}
 
 	//回転行列Y
@@ -231,17 +227,6 @@ void Player::Update()
 		vEye = XMVector3TransformCoord(vEye, rotY);
 		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);
-		break;
-	}
-
-	case CAM_TYPE::FPS_TYPE://１人称視点
-	{
-		XMFLOAT3 fpspos = { transform_.position_.x,transform_.position_.y + 4,transform_.position_.z };
-		Camera::SetPosition(fpspos);
-		XMFLOAT3 camTarget;
-		XMVECTOR campos = XMLoadFloat3(&fpspos);
-		XMStoreFloat3(&camTarget, campos + move);
-		Camera::SetTarget(camTarget);
 		break;
 	}
 	default:
