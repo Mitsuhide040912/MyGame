@@ -223,7 +223,7 @@ void Player::Update()
 		XMStoreFloat3(&camtar, pos + camOff);
 		Camera::SetTarget(camtar);
 		XMFLOAT3 camPos = transform_.position_;
-		XMVECTOR vEye = { 0,5,-12 };
+		XMVECTOR vEye = { 0,4,-12 };
 		vEye = XMVector3TransformCoord(vEye, rotY);
 		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);

@@ -59,6 +59,7 @@ void Goblin::Update()
 
 	XMFLOAT3 playerPos = pPlayer->GetPosition();  // プレイヤーの位置を取得
 
+
 	Field* pField = (Field*)FindObject("Field");
 	int hFieldModel = pField->GetModelHandle();
 	RayCastData data;
@@ -86,6 +87,8 @@ void Goblin::Update()
 		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
 		enemyPos = XMVectorAdd(enemyPos, move);
 		XMStoreFloat3(&transform_.position_, enemyPos);//↑
+
+		
 	}
 	else
 	{
@@ -94,6 +97,8 @@ void Goblin::Update()
 			Model::SetAnimFrame(hModelAnimeGob_[0], 1, 183, 1);
 		}
 	}
+
+
 
 }
 
