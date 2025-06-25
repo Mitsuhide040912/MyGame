@@ -10,12 +10,12 @@ class Goblin :
 	int hModelAnimeGob_[2];
 	int animType_;
 
-	float bossSpeed_ = 0.1f;
+	float bossSpeed_ = 0.05f;
 
 	float EnemyGobPosX = 10;
 	float EnemyGobPosZ = -48;
 
-	float angle = 150.0f;
+	float angle = 140.0f;
 	float maxDistance = 30.0f;
 
 	

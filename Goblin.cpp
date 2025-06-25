@@ -1,4 +1,4 @@
-#include "Goblin.h"
+Ôªø#include "Goblin.h"
 #include "Field.h"
 #include "Engine/Model.h"
 
@@ -8,6 +8,8 @@
 
 #include "EnemyAI.h"
 #include <cmath>
+#include"Engine/Debug.h"
+using namespace DirectX;
 
 enum Gob_ANM_TYPE
 {
@@ -23,13 +25,15 @@ Goblin::Goblin(GameObject* parent)
 
 void Goblin::Initialize()
 {
-	hModelAnimeGob_[0] = Model::Load("Model\\GoblinIdle.fbx");//Å©ë“ã@
+	hModelAnimeGob_[0] = Model::Load("Model\\GoblinIdle.fbx");//‚ÜêÂæÖÊ©ü
 	assert(hModelAnimeGob_[0] >= 0);
-	hModelAnimeGob_[1] = Model::Load("Model\\GoblinRun.fbx");//Å©ï‡Ç≠
+	hModelAnimeGob_[1] = Model::Load("Model\\GoblinRun.fbx");//‚ÜêÊ≠©„Åè
 	assert(hModelAnimeGob_[1] >= 0);
 	transform_.position_ = { EnemyGobPosX ,0,EnemyGobPosZ };
+	transform_.rotate_.y = 180.0;
 	transform_.scale_ = { 2.0,2.0,2.0 };
 
+	
 	animType_ = Gob_ANM_TYPE::GobWAIT;
 	hModel_ = hModelAnimeGob_[0];
 	Model::SetAnimFrame(hModel_, 1, 183, 1);
@@ -49,15 +53,70 @@ void Goblin::Update()
 		break;
 	}
 
+
+
+	// „Éó„É¨„Ç§„É§„Éº„ÅÆ‰ΩçÁΩÆ„ÇíÂèñÂæó
+	Player* pPlayer = (Player*)FindObject("Player");  // „Éó„É¨„Ç§„É§„Éº„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„ÇíÂèñÂæó
+	if (!pPlayer) return;  // „Éó„É¨„Ç§„É§„Éº„ÅåË¶ã„Å§„Åã„Çâ„Å™„ÅÑÂ†¥Âêà„ÅØ‰Ωï„ÇÇ„Åó„Å™„ÅÑ
+	XMFLOAT3 playerPos = pPlayer->GetPosition();  // „Éó„É¨„Ç§„É§„Éº„ÅÆ‰ΩçÁΩÆ„ÇíÂèñÂæó
+	//transform_.rotate_ = { 0.0f,yaw + XMConvertToRadians(90 * (3.14 / 180.0) ),0.0f };
+
+
+
+	//transform_.rotate_.y += 1.0f;
 	XMMATRIX world = transform_.GetWorldMatrix();
 	XMVECTOR forwardVec = XMVector3Normalize(world.r[2]);
 	XMFLOAT3 enemyForward;
 	XMStoreFloat3(&enemyForward, forwardVec);
-	// ÉvÉåÉCÉÑÅ[ÇÃà íuÇéÊìæ
-	Player* pPlayer = (Player*)FindObject("Player");  // ÉvÉåÉCÉÑÅ[ÉIÉuÉWÉFÉNÉgÇéÊìæ
-	if (!pPlayer) return;  // ÉvÉåÉCÉÑÅ[Ç™å©Ç¬Ç©ÇÁÇ»Ç¢èÍçáÇÕâΩÇ‡ÇµÇ»Ç¢
 
-	XMFLOAT3 playerPos = pPlayer->GetPosition();  // ÉvÉåÉCÉÑÅ[ÇÃà íuÇéÊìæ
+	bool isPlayerInRangeGoblin = EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance);
+	if (isPlayerInRangeGoblin) {
+		if (animType_ != Gob_ANM_TYPE::GobWalk) {
+			animType_ = Gob_ANM_TYPE::GobWalk;
+			Model::SetAnimFrame(hModelAnimeGob_[1], 1, 48, 1);
+		}
+
+		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);//‚ÜìÊïµ„ÅÆÁ¥¢Êïµ
+		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
+		XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
+
+		float angle = atan2(playerPos.z - EnemyGobPosZ, playerPos.x - EnemyGobPosX);
+		float degree = angle * (180.0 / XM_PI);
+		float correction = 90.0f;
+		transform_.rotate_.y = degree;
+		//Debug::Log(angle, true);
+		Debug::Log(degree, true);
+
+		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
+		enemyPos = XMVectorAdd(enemyPos, move);
+		XMStoreFloat3(&transform_.position_, enemyPos);
+
+		//XMVECTOR enemyPosVec = XMLoadFloat3(&transform_.position_);
+		//XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
+		//// ÊñπÂêë„Éô„ÇØ„Éà„É´ÔºàXZÔºâ
+		//XMVECTOR dirVec = XMVectorSubtract(playerPosVec, enemyPosVec);
+		//dirVec = XMVector3Normalize(dirVec);
+		//// atan2 ‚Üí „É©„Ç∏„Ç¢„É≥ ‚Üí Â∫¶Êï∞„Å∏Â§âÊèõ
+		//XMFLOAT3 dirFlat;
+		//XMStoreFloat3(&dirFlat, dirVec);
+		//float angle = atan2f(dirFlat.x, dirFlat.z);
+		//float degree = XMConvertToDegrees(angle);
+		//// MayaË£úÊ≠£ÔºàZ‚àíÂâçÊèê„Å™„Çâ180Â∫¶Ôºâ
+		//transform_.rotate_.y = degree - 90.0f;
+		//// ÁßªÂãï
+		//XMVECTOR move = XMVectorScale(dirVec, bossSpeed_);
+		//enemyPosVec = XMVectorAdd(enemyPosVec, move);
+		//XMStoreFloat3(&transform_.position_, enemyPosVec);
+
+	}
+	else
+	{
+		if (animType_ != Gob_ANM_TYPE::GobWAIT) {
+			animType_ = Gob_ANM_TYPE::GobWAIT;
+			Model::SetAnimFrame(hModelAnimeGob_[0], 1, 183, 1);
+		}
+	}
+
 
 
 	Field* pField = (Field*)FindObject("Field");
@@ -72,45 +131,16 @@ void Goblin::Update()
 	{
 		transform_.position_.y -= data.dist - 4;
 	}
-
-	bool isPlayerInRangeGoblin = EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance);
-	if (isPlayerInRangeGoblin) {
-		if (animType_ != Gob_ANM_TYPE::GobWalk) {
-			animType_ = Gob_ANM_TYPE::GobWalk;
-			Model::SetAnimFrame(hModelAnimeGob_[1], 1, 48, 1);
-		}
-		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);//Å´ìGÇÃçıìG
-		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
-
-		XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
-
-		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
-		enemyPos = XMVectorAdd(enemyPos, move);
-		XMStoreFloat3(&transform_.position_, enemyPos);//Å™
-
-		
-	}
-	else
-	{
-		if (animType_ != Gob_ANM_TYPE::GobWAIT) {
-			animType_ = Gob_ANM_TYPE::GobWAIT;
-			Model::SetAnimFrame(hModelAnimeGob_[0], 1, 183, 1);
-		}
-	}
-
-
-
 }
 
 
 
 void Goblin::Draw()
 {
-
-
-	Model::SetTransform(hModel_, transform_);
+	Model::SetTransform(hModel_,transform_);
 	Model::Draw(hModel_);
 
+	
 }
 
 void Goblin::Release()

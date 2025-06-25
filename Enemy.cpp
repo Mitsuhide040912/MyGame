@@ -29,7 +29,7 @@ void Enemy::Initialize()
 	hModelAnimeBoss_[1] = Model::Load("Model\\BossWalking.fbx");//Å©ï‡Ç≠
 	assert(hModelAnimeBoss_[1] >= 0);
 	
-	transform_.rotate_.y = 180;
+	transform_.rotate_.y = 90;
 	transform_.position_ = { EnemyBossPosX,0,EnemyBossPosZ };
 
 	transform_.scale_ = { 3,3,3 };
@@ -94,6 +94,11 @@ void Enemy::Update()
 		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
 
 		XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
+
+		//float angle = atan2(playerPos.z - EnemyBossPosZ, playerPos.x - EnemyBossPosX);
+		//float degree = angle * (180.0 / XM_PI);
+		//transform_.rotate_.y += degree;
+
 		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
 		enemyPos = XMVectorAdd(enemyPos, move);
 		XMStoreFloat3(&transform_.position_, enemyPos);//Å™

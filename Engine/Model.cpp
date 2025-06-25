@@ -166,7 +166,7 @@ namespace Model
 		{
 			return;
 		}
-
+		transform.Calclation();
 		_datas[handle]->transform = transform;
 	}
 

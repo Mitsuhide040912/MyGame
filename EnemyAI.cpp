@@ -42,7 +42,7 @@ bool EnemyAI::IsEnemyTarget(const DirectX::XMFLOAT3& enemyPosition, const Direct
 	//‹——£‚ðŒvŽZ
 	float distance = XMVectorGetX(XMVector3Length(toTarget));
 	//‹——£‚ð”»’è
-	if (distance > maxViewDistance + 10.0f)
+	if (distance > maxViewDistance)
 		return false;
 	toTarget = XMVector3Normalize(toTarget);
 	float dot = XMVectorGetX(XMVector3Dot(dirEnemy, toTarget));
@@ -55,11 +55,11 @@ void EnemyAI::Update()
 {
 }
 
-void EnemyAI::Draw()
+void EnemyAI::Initialize()
 {
 }
 
-void EnemyAI::Initialize()
+void EnemyAI::Draw()
 {
 }
 
