@@ -63,7 +63,7 @@ void Enemy::Update()
 	XMVECTOR forwardVec = XMVector3Normalize(world.r[2]);
 	XMFLOAT3 enemyForward;
 	XMStoreFloat3(&enemyForward, forwardVec);
-	//// プレイヤーの位置を取得
+	// プレイヤーの位置を取得
 	Player* pPlayer = (Player*)FindObject("Player");  // プレイヤーオブジェクトを取得
 	if (!pPlayer) return;  // プレイヤーが見つからない場合は何もしない
 
@@ -90,18 +90,22 @@ void Enemy::Update()
 			animType_ = ANM_TYPE::Walk;
 			Model::SetAnimFrame(hModelAnimeBoss_[1], 1, 86, 1);
 		}
-		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);//↓敵の索敵
+		XMVECTOR enemyPosVec = XMLoadFloat3(&transform_.position_);
 		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
-
-		XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
-
-		//float angle = atan2(playerPos.z - EnemyBossPosZ, playerPos.x - EnemyBossPosX);
-		//float degree = angle * (180.0 / XM_PI);
-		//transform_.rotate_.y += degree;
-
-		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
-		enemyPos = XMVectorAdd(enemyPos, move);
-		XMStoreFloat3(&transform_.position_, enemyPos);//↑
+		// 方向ベクトル（XZ）
+		XMVECTOR dirVec = XMVectorSubtract(playerPosVec, enemyPosVec);
+		dirVec = XMVector3Normalize(dirVec);
+		// atan2 → ラジアン → 度数へ変換
+		XMFLOAT3 dirFlat;
+		XMStoreFloat3(&dirFlat, dirVec);
+		float angle = atan2f(dirFlat.x, dirFlat.z);
+		float degree = XMConvertToDegrees(angle);
+		// Maya補正（Z?前提なら180度）
+		transform_.rotate_.y = degree - 5.0f;
+		// 移動
+		XMVECTOR move = XMVectorScale(dirVec, bossSpeed_);
+		enemyPosVec = XMVectorAdd(enemyPosVec, move);
+		XMStoreFloat3(&transform_.position_, enemyPosVec);
 	}
 	else
 	{

@@ -30,7 +30,7 @@ void Goblin::Initialize()
 	hModelAnimeGob_[1] = Model::Load("Model\\GoblinRun.fbx");//←歩く
 	assert(hModelAnimeGob_[1] >= 0);
 	transform_.position_ = { EnemyGobPosX ,0,EnemyGobPosZ };
-	transform_.rotate_.y = 180.0;
+	transform_.rotate_.y = 90.0;
 	transform_.scale_ = { 2.0,2.0,2.0 };
 
 	
@@ -59,11 +59,7 @@ void Goblin::Update()
 	Player* pPlayer = (Player*)FindObject("Player");  // プレイヤーオブジェクトを取得
 	if (!pPlayer) return;  // プレイヤーが見つからない場合は何もしない
 	XMFLOAT3 playerPos = pPlayer->GetPosition();  // プレイヤーの位置を取得
-	//transform_.rotate_ = { 0.0f,yaw + XMConvertToRadians(90 * (3.14 / 180.0) ),0.0f };
-
-
-
-	//transform_.rotate_.y += 1.0f;
+	//transform_.rotate_.y += 0.5f;
 	XMMATRIX world = transform_.GetWorldMatrix();
 	XMVECTOR forwardVec = XMVector3Normalize(world.r[2]);
 	XMFLOAT3 enemyForward;
@@ -76,37 +72,37 @@ void Goblin::Update()
 			Model::SetAnimFrame(hModelAnimeGob_[1], 1, 48, 1);
 		}
 
-		XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);//↓敵の索敵
-		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
-		XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
-
-		float angle = atan2(playerPos.z - EnemyGobPosZ, playerPos.x - EnemyGobPosX);
-		float degree = angle * (180.0 / XM_PI);
-		float correction = 90.0f;
-		transform_.rotate_.y = degree;
-		//Debug::Log(angle, true);
-		Debug::Log(degree, true);
-
-		XMVECTOR move = XMVectorScale(direction, bossSpeed_);
-		enemyPos = XMVectorAdd(enemyPos, move);
-		XMStoreFloat3(&transform_.position_, enemyPos);
-
-		//XMVECTOR enemyPosVec = XMLoadFloat3(&transform_.position_);
+		//XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);//↓敵の索敵
 		//XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
-		//// 方向ベクトル（XZ）
-		//XMVECTOR dirVec = XMVectorSubtract(playerPosVec, enemyPosVec);
-		//dirVec = XMVector3Normalize(dirVec);
-		//// atan2 → ラジアン → 度数へ変換
-		//XMFLOAT3 dirFlat;
-		//XMStoreFloat3(&dirFlat, dirVec);
-		//float angle = atan2f(dirFlat.x, dirFlat.z);
-		//float degree = XMConvertToDegrees(angle);
-		//// Maya補正（Z−前提なら180度）
-		//transform_.rotate_.y = degree - 90.0f;
-		//// 移動
-		//XMVECTOR move = XMVectorScale(dirVec, bossSpeed_);
-		//enemyPosVec = XMVectorAdd(enemyPosVec, move);
-		//XMStoreFloat3(&transform_.position_, enemyPosVec);
+		//XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
+
+		//float angle = atan2(playerPos.z - EnemyGobPosZ, playerPos.x - EnemyGobPosX);
+		//float degree = angle * (180.0 / XM_PI);
+		//float correction = 90.0f;
+		//transform_.rotate_.y = degree;
+		////Debug::Log(angle, true);
+		//Debug::Log(degree, true);
+
+		//XMVECTOR move = XMVectorScale(direction, bossSpeed_);
+		//enemyPos = XMVectorAdd(enemyPos, move);
+		//XMStoreFloat3(&transform_.position_, enemyPos);
+
+		XMVECTOR enemyPosVec = XMLoadFloat3(&transform_.position_);
+		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
+		// 方向ベクトル（XZ）
+		XMVECTOR dirVec = XMVectorSubtract(playerPosVec, enemyPosVec);
+		dirVec = XMVector3Normalize(dirVec);
+		// atan2 → ラジアン → 度数へ変換
+		XMFLOAT3 dirFlat;
+		XMStoreFloat3(&dirFlat, dirVec);
+		float angle = atan2f(dirFlat.x, dirFlat.z);
+		float degree = XMConvertToDegrees(angle);
+		// Maya補正（Z−前提なら180度）
+		transform_.rotate_.y = degree - 5.0f;
+		// 移動
+		XMVECTOR move = XMVectorScale(dirVec, bossSpeed_);
+		enemyPosVec = XMVectorAdd(enemyPosVec, move);
+		XMStoreFloat3(&transform_.position_, enemyPosVec);
 
 	}
 	else
@@ -116,9 +112,6 @@ void Goblin::Update()
 			Model::SetAnimFrame(hModelAnimeGob_[0], 1, 183, 1);
 		}
 	}
-
-
-
 	Field* pField = (Field*)FindObject("Field");
 	int hFieldModel = pField->GetModelHandle();
 	RayCastData data;
@@ -139,8 +132,6 @@ void Goblin::Draw()
 {
 	Model::SetTransform(hModel_,transform_);
 	Model::Draw(hModel_);
-
-	
 }
 
 void Goblin::Release()
