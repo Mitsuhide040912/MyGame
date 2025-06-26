@@ -1,5 +1,8 @@
 #define NOMINMAX
 #include <Windows.h>
+#include <DirectXMath.h>
+#include <algorithm>
+#include <cmath>
 #include "Player.h"
 #include "Engine/Model.h"
 #include "Engine/Input.h"
@@ -12,9 +15,7 @@
 #include "Engine/SceneManager.h"
 #include "GoalFrag.h"
 #include "Enemy.h"
-#include <DirectXMath.h>
-#include <algorithm>
-#include <cmath>
+
 #include "Engine/time.h"
 
 
@@ -64,9 +65,9 @@ void Player::Initialize()
 	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
 	assert(hModelanime_[2] >= 2);
 	speed_ = 0.3;
-	//transform_.rotate_.y = 90;
+	transform_.rotate_.y = 180;
 	transform_.scale_ = { 3.5,3.5,3.5 };
-	transform_.position_ = { -20,0,-50 };
+	transform_.position_ = { -75,0,-20 };
 
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 3, 0), XMFLOAT3(1, 5, 1));
@@ -120,7 +121,6 @@ void Player::Update()
 		{
 			animType_ = ANM_TYPE::RUN;
 			dir = SPEED * Time::DeltaTime();
-			//dir = 1.0;
 		}
 		else
 		{
@@ -131,7 +131,6 @@ void Player::Update()
 		{
 			animType_ = ANM_TYPE::RUN;
 			dir = -SPEED * Time::DeltaTime();
-			//dir = -1.0;
 		}
 	}
 	else
@@ -164,8 +163,8 @@ void Player::Update()
 
 	XMStoreFloat3(&(transform_.position_), pos);
 
-	transform_.position_.x = std::clamp(transform_.position_.x, -300.0f, 300.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
-	transform_.position_.z = std::clamp(transform_.position_.z, -300.0f, 300.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
+	transform_.position_.x = std::clamp(transform_.position_.x, -110.0f, 235.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
+	transform_.position_.z = std::clamp(transform_.position_.z, -190.0f, 190.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
 	//↓いちおう地面との当たり判定
 	Field* pGround = (Field*)FindObject("Field");
 	int hGmodel = pGround->GetModelHandle();
@@ -205,6 +204,78 @@ void Player::Update()
 		}
 	}
 
+	RayCastData frontDataZ;
+	frontDataZ.start = transform_.position_;
+	frontDataZ.start.z += 0.2;
+	frontDataZ.dir = XMFLOAT3({ 0,0,-1 });
+	Model::RayCast(hGmodel, &frontDataZ);
+
+	if (frontDataZ.hit)
+	{
+		if (frontRayDist_ < frontDataZ.dist - 0.2)
+		{
+			wallDist_ = frontDataZ.dist - 0.2;
+		}
+		else
+		{
+			transform_.position_.z -= frontDataZ.dist - 0.2;
+		}
+	}
+
+	//RayCastData frontDataZL;
+	//frontDataZL.start = transform_.position_;
+	//frontDataZL.start.z += 0.2;
+	//frontDataZL.dir = XMFLOAT3({ 0,0,-1 });
+	//Model::RayCast(hGmodel, &frontDataZL);
+
+	//if (frontDataZL.hit)
+	//{
+	//	if (frontRayDist_ < frontDataZL.dist - 0.2)
+	//	{
+	//		wallDist_ = frontDataZL.dist - 0.2;
+	//	}
+	//	else
+	//	{
+	//		transform_.position_.z -= frontDataZ.dist - 0.2;
+	//	}
+	//}
+
+	//RayCastData frontDataX;
+	//frontDataX.start = transform_.position_;
+	//frontDataX.start.x += 0.4;
+	//frontDataX.dir = XMFLOAT3({ 1,0,0 });
+	//Model::RayCast(hGmodel, &frontDataX);
+
+	//if (frontDataX.hit)
+	//{
+	//	if (frontRayDist_ < frontDataX.dist - 0.4)
+	//	{
+	//		wallDist_ = frontDataX.dist - 0.4;
+	//	}
+	//	else
+	//	{
+	//		transform_.position_.x -= frontDataX.dist - 0.4;
+	//	}
+	//}
+
+	//RayCastData frontDataXL;
+	//frontDataXL.start = transform_.position_;
+	//frontDataXL.start.x += 0.4;
+	//frontDataXL.dir = XMFLOAT3({ -1,0,0 });
+	//Model::RayCast(hGmodel, &frontDataXL);
+
+	//if (frontDataXL.hit)
+	//{
+	//	if (frontRayDist_ < frontDataXL.dist - 0.4)
+	//	{
+	//		wallDist_ = frontDataXL.dist - 0.4;
+	//	}
+	//	else
+	//	{
+	//		transform_.position_.x -= frontDataXL.dist - 0.4;
+	//	}
+	//}
+
 	//カメラの表示変更
 	if (Input::IsKeyDown(DIK_Z) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
@@ -223,8 +294,9 @@ void Player::Update()
 		XMStoreFloat3(&camtar, pos + camOff);
 		Camera::SetTarget(camtar);
 		XMFLOAT3 camPos = transform_.position_;
-		XMVECTOR vEye = { 0,4,-12 };
+		XMVECTOR vEye = { 0,6,-12 };
 		vEye = XMVector3TransformCoord(vEye, rotY);
+
 		XMStoreFloat3(&camPos, pos + vEye);
 		Camera::SetPosition(camPos);
 		break;
@@ -269,20 +341,6 @@ void Player::OnCollision(GameObject* pTarget)
 
 	if (pTarget->GetObjectName() == "Item") {
 		CarryItem = dynamic_cast<Item*>(pTarget);
-		//XMFLOAT3 posChange = transform_.position_;
-		//posChange.y = transform_.position_.y + 3.0f;
-		//posChange.z = transform_.position_.z + 1.0f;
-		//if (isItem_) {
-		//	XMVECTOR rotVecY = XMVector3TransformCoord(front_, rotY);
-		//	XMVECTOR pos = XMLoadFloat3(&(posChange));
-		//	
-		//	XMVECTOR move = speed_ * rotVecY;
-		//	pos = pos + itemDir * move;
-
-		//	XMStoreFloat3(&(posChange), pos);
-		//	pTarget->SetPosition(posChange);
-		//	
-		//}
 		isItem_ = true;
 	}
 	if (pTarget->GetObjectName() == "GoalFrag") {

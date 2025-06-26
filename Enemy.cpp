@@ -100,7 +100,7 @@ void Enemy::Update()
 		XMStoreFloat3(&dirFlat, dirVec);
 		float angle = atan2f(dirFlat.x, dirFlat.z);
 		float degree = XMConvertToDegrees(angle);
-		// Maya補正（Z?前提なら180度）
+		// Maya補正
 		transform_.rotate_.y = degree - 5.0f;
 		// 移動
 		XMVECTOR move = XMVectorScale(dirVec, bossSpeed_);

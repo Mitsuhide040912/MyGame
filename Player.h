@@ -15,6 +15,10 @@ class Player :
     bool thisFall_;
     float fallTime;
     XMVECTOR front_;
+
+    float frontRayDist_;
+    float wallDist_;
+
     float speed_ = 50;
     int camState_;//カメラタイプの指定
     int animType_;//アニメーションのタイプの指定
