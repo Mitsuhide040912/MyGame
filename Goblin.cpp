@@ -9,6 +9,7 @@
 #include "EnemyAI.h"
 #include <cmath>
 #include"Engine/Debug.h"
+
 using namespace DirectX;
 
 enum Gob_ANM_TYPE
@@ -31,9 +32,11 @@ void Goblin::Initialize()
 	assert(hModelAnimeGob_[1] >= 0);
 	transform_.position_ = { EnemyGobPosX ,0,EnemyGobPosZ };
 	transform_.rotate_.y = 90.0;
-	transform_.scale_ = { 2.0,2.0,2.0 };
+	transform_.scale_ = { 2.5,2.5,2.5 };
 
-	
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
+	AddCollider(collision);
+
 	animType_ = Gob_ANM_TYPE::GobWAIT;
 	hModel_ = hModelAnimeGob_[0];
 	Model::SetAnimFrame(hModel_, 1, 183, 1);
@@ -41,6 +44,7 @@ void Goblin::Initialize()
 
 void Goblin::Update()
 {
+	transform_.rotate_.y += 1.0f;
 	switch (animType_)
 	{
 	case Gob_ANM_TYPE::GobWAIT:
@@ -52,14 +56,10 @@ void Goblin::Update()
 	default:
 		break;
 	}
-
-
-
 	// プレイヤーの位置を取得
 	Player* pPlayer = (Player*)FindObject("Player");  // プレイヤーオブジェクトを取得
 	if (!pPlayer) return;  // プレイヤーが見つからない場合は何もしない
 	XMFLOAT3 playerPos = pPlayer->GetPosition();  // プレイヤーの位置を取得
-	//transform_.rotate_.y += 0.5f;
 	XMMATRIX world = transform_.GetWorldMatrix();
 	XMVECTOR forwardVec = XMVector3Normalize(world.r[2]);
 	XMFLOAT3 enemyForward;
@@ -71,22 +71,6 @@ void Goblin::Update()
 			animType_ = Gob_ANM_TYPE::GobWalk;
 			Model::SetAnimFrame(hModelAnimeGob_[1], 1, 48, 1);
 		}
-
-		//XMVECTOR enemyPos = XMLoadFloat3(&transform_.position_);//↓敵の索敵
-		//XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
-		//XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(playerPosVec, enemyPos));
-
-		//float angle = atan2(playerPos.z - EnemyGobPosZ, playerPos.x - EnemyGobPosX);
-		//float degree = angle * (180.0 / XM_PI);
-		//float correction = 90.0f;
-		//transform_.rotate_.y = degree;
-		////Debug::Log(angle, true);
-		//Debug::Log(degree, true);
-
-		//XMVECTOR move = XMVectorScale(direction, bossSpeed_);
-		//enemyPos = XMVectorAdd(enemyPos, move);
-		//XMStoreFloat3(&transform_.position_, enemyPos);
-
 		XMVECTOR enemyPosVec = XMLoadFloat3(&transform_.position_);
 		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
 		// 方向ベクトル（XZ）
@@ -97,13 +81,12 @@ void Goblin::Update()
 		XMStoreFloat3(&dirFlat, dirVec);
 		float angle = atan2f(dirFlat.x, dirFlat.z);
 		float degree = XMConvertToDegrees(angle);
-		// Maya補正（Z−前提なら180度）
+		// Maya補正
 		transform_.rotate_.y = degree - 5.0f;
 		// 移動
 		XMVECTOR move = XMVectorScale(dirVec, bossSpeed_);
 		enemyPosVec = XMVectorAdd(enemyPosVec, move);
 		XMStoreFloat3(&transform_.position_, enemyPosVec);
-
 	}
 	else
 	{
@@ -135,5 +118,9 @@ void Goblin::Draw()
 }
 
 void Goblin::Release()
+{
+}
+
+void Goblin::SetPosition(const XMFLOAT3& pos)
 {
 }

@@ -5,12 +5,18 @@
 class Goblin :
     public GameObject
 {
+	//struct GoblinUnit
+	//{
+	//	Transform transform;
+	//	Gob_ANM_TYPE animType;
+	//	float animFrame;
+	//};
 	int hModel_;
 
 	int hModelAnimeGob_[2];
 	int animType_;
 
-	float bossSpeed_ = 0.05f;
+	float bossSpeed_ = 0.1f;
 
 	float EnemyGobPosX = 10;
 	float EnemyGobPosZ = -48;
@@ -19,7 +25,12 @@ class Goblin :
 	float maxDistance = 30.0f;
 
 	
-	std::vector<Goblin*>childGoblin_;
+	//std::vector<GoblinUnit>Goblins_;
+
+
+
+	static int gModelIdle_;
+	static int gModelRun_;
 public:
 	Goblin(GameObject* parent);
 
@@ -30,11 +41,13 @@ public:
 	void Update() override;
 
 	//•`‰æ
-	void Draw() override;
+	void Draw()override;
 
 
 
 	//ŠJ•ú
 	void Release() override;
+
+	void SetPosition(const XMFLOAT3& pos);
 };
 

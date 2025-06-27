@@ -13,23 +13,14 @@ class Enemy :
 	bool hModelAnim_;
 	bool nextAnimState_;
 
-	float bossSpeed_ = 0.1f;
+	float bossSpeed_ = 0.5f;
 	float EnemyBossPosX = -11;
 	float EnemyBossPosZ = 54;
 
-
-	//DirectX::XMFLOAT3 enemyForwad{ 0.0f,0.0f,1.0f };
-	float angle = 150.0f;
-	float maxDistance = 30.0f;
+	float angle = 180.0f;
+	float maxDistance = 50.0f;
 
 	EnemyAI em;
-
-	//float bossRotation = 0.0f;
-	//float rotationSpeed = XMConvertToRadians(45.0f);
-	//float maxRotation = XMConvertToRadians(45.0f);
-	//bool rotateForward = true;
-	//
-	//bool bossMove_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

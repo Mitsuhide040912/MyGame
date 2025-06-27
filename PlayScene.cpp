@@ -9,12 +9,13 @@
 #include "Goblin.h"
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
+#include "Engine/Model.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 PlayScene::PlayScene(GameObject* parent)
-	:GameObject(parent,"PlayScene")//,timer_(300.0f),isTimeUp_(false)
+	:GameObject(parent,"PlayScene")
 {
 }
 
@@ -25,33 +26,41 @@ void PlayScene::Initialize()
 	Instantiate<Player>(this);
 	Instantiate<Item>(this);
 	Instantiate<Enemy>(this);
-	Instantiate<Goblin>(this);
-	//Instantiate<GoalFrag>(this);
+
+
+
+	std::vector<Goblin*>goblins;
+	for (int i = 0;i < 15; i++)
+	{
+		GameObject* goblin = Instantiate<Goblin>(this);
+		float x = -(rand() %  14)+18;
+		float y = goblin->GetPosition().y;
+		float z = -(rand() % 107)-6;
+		goblin->SetPosition({ x,y,z });
+		//goblins.push_back(goblin);
+	}
+
+	//for (int j = 0;j < 15;j++)
+	//{
+	//	GameObject* goblin = Instantiate<Goblin>(this);
+	//	float x = rand() % 266 - 70;
+	//	float y = goblin->GetPosition().y;
+	//	float z = -(rand() % 126) - 4;
+	//	goblin->SetPosition({ x,y,z });
+	//}
+
+
+
 	Instantiate<Timer>(this);
 }
 
 void PlayScene::Update()
 {
-	//if (Input::IsKey(DIK_SPACE))
-	//	if (!isTimeUp_)
-	//	{
-	//		timer_ -= 1.0f / 60.0f;
-	//		if (timer_ <= 0)
-	//		{
-	//			timer_ = 0;
-	//			isTimeUp_ = true;
-	//		}
-	//		if (timer_ == 0)
-	//		{
-	//			SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-	//			sm->ChangeScene(SCENE_ID_CLEAR);
-	//		}
 
 }
 
 void PlayScene::Draw()
 {
-	//ImGui::Text("Timer:%.3f", timer_);
 }
 
 void PlayScene::Release()

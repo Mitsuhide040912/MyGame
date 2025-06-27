@@ -32,9 +32,9 @@ void Enemy::Initialize()
 	transform_.rotate_.y = 90;
 	transform_.position_ = { EnemyBossPosX,0,EnemyBossPosZ };
 
-	transform_.scale_ = { 3,3,3 };
+	transform_.scale_ = { 4.5,4.5,4.5 };
 
-	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(10, 10, 10));
 	AddCollider(collision);
 
 	animType_ = ANM_TYPE::WAIT;

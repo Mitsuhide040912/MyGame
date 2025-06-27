@@ -1,10 +1,10 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Engine/Model.h"
 class PlayScene :
     public GameObject
 {
-	float timer_;//←制限時間
-	bool isTimeUp_;//←時間切れかどうか判断
+	bool thisRay_ = true;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

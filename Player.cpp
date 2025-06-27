@@ -204,23 +204,23 @@ void Player::Update()
 		}
 	}
 
-	RayCastData frontDataZ;
-	frontDataZ.start = transform_.position_;
-	frontDataZ.start.z += 0.2;
-	frontDataZ.dir = XMFLOAT3({ 0,0,-1 });
-	Model::RayCast(hGmodel, &frontDataZ);
+	//RayCastData frontDataZ;
+	//frontDataZ.start = transform_.position_;
+	//frontDataZ.start.z += 0.2;
+	//frontDataZ.dir = XMFLOAT3({ 0,0,-1 });
+	//Model::RayCast(hGmodel, &frontDataZ);
 
-	if (frontDataZ.hit)
-	{
-		if (frontRayDist_ < frontDataZ.dist - 0.2)
-		{
-			wallDist_ = frontDataZ.dist - 0.2;
-		}
-		else
-		{
-			transform_.position_.z -= frontDataZ.dist - 0.2;
-		}
-	}
+	//if (frontDataZ.hit)
+	//{
+	//	if (frontRayDist_ < frontDataZ.dist - 0.2)
+	//	{
+	//		wallDist_ = frontDataZ.dist - 0.2;
+	//	}
+	//	else
+	//	{
+	//		transform_.position_.z -= frontDataZ.dist - 0.2;
+	//	}
+	//}
 
 	//RayCastData frontDataZL;
 	//frontDataZL.start = transform_.position_;
