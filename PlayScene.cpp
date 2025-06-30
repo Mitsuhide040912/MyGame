@@ -30,12 +30,12 @@ void PlayScene::Initialize()
 
 
 	std::vector<Goblin*>goblins;
-	for (int i = 0;i < 15; i++)
+	for (int i = 0;i < 20; i++)
 	{
 		GameObject* goblin = Instantiate<Goblin>(this);
-		float x = -(rand() %  14)+18;
+		float x = (rand() %  141)-18;
 		float y = goblin->GetPosition().y;
-		float z = -(rand() % 107)-6;
+		float z = (rand() % 96)-68;
 		goblin->SetPosition({ x,y,z });
 		//goblins.push_back(goblin);
 	}

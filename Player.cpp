@@ -15,6 +15,7 @@
 #include "Engine/SceneManager.h"
 #include "GoalFrag.h"
 #include "Enemy.h"
+#include "Goblin.h"
 
 #include "Engine/time.h"
 
@@ -328,7 +329,7 @@ void Player::Update()
 		XMFLOAT3 itemRot = { transform_.rotate_.x,transform_.rotate_.y,transform_.rotate_.z };
 		CarryItem->SetTransform(itemPos, itemRot);
 	}
-	//↓yが-150を超えた時点でゲームオーバー
+	//↓yが-157を超えた時点でゲームオーバー
 	if (transform_.position_.y < -157.0f) {
 		KillMe();
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
@@ -348,6 +349,11 @@ void Player::OnCollision(GameObject* pTarget)
 		isGoal_ = true;//←isGoalをtrueにして取得
 	}
 	if (pTarget->GetObjectName() == "Enemy") {
+		SceneManager* ov = (SceneManager*)FindObject("SceneManager");
+		ov->ChangeScene(SCENE_ID_GAMEOVER);
+	}
+
+	if (pTarget->GetObjectName() == "Goblin") {
 		SceneManager* ov = (SceneManager*)FindObject("SceneManager");
 		ov->ChangeScene(SCENE_ID_GAMEOVER);
 	}
