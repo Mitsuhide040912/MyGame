@@ -17,8 +17,8 @@ class Enemy :
 	float EnemyBossPosX = -11;
 	float EnemyBossPosZ = 54;
 
-	float angle = 180.0f;
-	float maxDistance = 50.0f;
+	float angle = 170.0f;
+	float maxDistance = 35.0f;
 
 	EnemyAI em;
 public:
