@@ -3,10 +3,10 @@
 #include "Engine/BoxCollider.h"
 #include "Field.h"
 #include "Player.h"
-
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
+//
+//#include "imgui/imgui.h"
+//#include "imgui/imgui_impl_dx11.h"
+//#include "imgui/imgui_impl_win32.h"
 
 GoalFrag::GoalFrag(GameObject* parent)
 	:GameObject(parent,"GoalFrag"),hModel_(-1),x(0),y(0),z(0)
@@ -48,11 +48,11 @@ void GoalFrag::Draw()
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 
-	static float pos[3] = { x,y,z };
-	if (ImGui::InputFloat3("GoalFragPos:%.3f", pos))
-	{
-		transform_.position_ = { pos[0], pos[1], pos[2] };
-	}
+	//static float pos[3] = { x,y,z };
+	//if (ImGui::InputFloat3("GoalFragPos:%.3f", pos))
+	//{
+	//	transform_.position_ = { pos[0], pos[1], pos[2] };
+	//}
 }
 
 void GoalFrag::Release()

@@ -107,6 +107,11 @@ void Goblin::Update()
 	{
 		transform_.position_.y -= data.dist - 4;
 	}
+
+	//↓yが-157を超えた時点でゴブリン死滅
+	if (transform_.position_.y < -157.0f) {
+		KillMe();
+	}
 }
 
 

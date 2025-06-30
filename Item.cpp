@@ -6,9 +6,9 @@
 #include "Engine/BoxCollider.h"
 #include"Engine/SceneManager.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
+//#include "imgui/imgui.h"
+//#include "imgui/imgui_impl_dx11.h"
+//#include "imgui/imgui_impl_win32.h"
 Item::Item(GameObject* parent)
 	:GameObject(parent,"Item"),hModel_(-1)
 {
@@ -61,10 +61,10 @@ void Item::Draw()
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 	static float pos[3] = { x,y,z };
-	if (ImGui::InputFloat3("ItemPos:%.3f", pos))
-	{
-		transform_.position_ = { pos[0], pos[1], pos[2] };
-	}
+	//if (ImGui::InputFloat3("ItemPos:%.3f", pos))
+	//{
+	//	transform_.position_ = { pos[0], pos[1], pos[2] };
+	//}
 }
 
 void Item::Release()

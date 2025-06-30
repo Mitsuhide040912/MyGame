@@ -3,9 +3,9 @@
 #include "Engine/Image.h"
 #include "Engine/time.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
+//#include "imgui/imgui.h"
+//#include "imgui/imgui_impl_dx11.h"
+//#include "imgui/imgui_impl_win32.h"
 
 Timer::Timer(GameObject* parent)
 	:GameObject(parent,"Timer")
@@ -80,13 +80,13 @@ void Timer::Draw()
 	Image::SetRect(hImage_, IMAGE_WIDTH * sec_, 30, 50, 90);
 	Image::Draw(hImage_);
 
-	static float pos[3] = { x,y,z };
-	if (ImGui::InputFloat3("UI:%.3f", pos))
-	{
-		transform_.position_ = { pos[0], pos[1], pos[2] };
-	}
-	ImGui::Text("Timer:%.3f", timer_);
-	ImGui::Text("TimerPos:%.3f", transform_.position_.x);
+	//static float pos[3] = { x,y,z };
+	//if (ImGui::InputFloat3("UI:%.3f", pos))
+	//{
+	//	transform_.position_ = { pos[0], pos[1], pos[2] };
+	//}
+	//ImGui::Text("Timer:%.3f", timer_);
+	//ImGui::Text("TimerPos:%.3f", transform_.position_.x);
 }
 
 void Timer::Release()

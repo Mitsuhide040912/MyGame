@@ -20,9 +20,9 @@
 #include "Engine/time.h"
 
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
+//#include "imgui/imgui.h"
+//#include "imgui/imgui_impl_dx11.h"
+//#include "imgui/imgui_impl_win32.h"
 
 using namespace DirectX;
 
@@ -370,9 +370,9 @@ void Player::Draw()
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 
-	ImGui::Text("PositionX:%.3f", transform_.position_.x);
-	ImGui::Text("PositionY:%.3f", transform_.position_.y);
-	ImGui::Text("PositionZ:%.3f", transform_.position_.z);
+	//ImGui::Text("PositionX:%.3f", transform_.position_.x);
+	//ImGui::Text("PositionY:%.3f", transform_.position_.y);
+	//ImGui::Text("PositionZ:%.3f", transform_.position_.z);
 }
 
 void Player::Release()
