@@ -34,7 +34,7 @@ void Goblin::Initialize()
 	transform_.rotate_.y = 90.0;
 	transform_.scale_ = { 2.5,2.5,2.5 };
 
-	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 4, 4));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(3, 5, 3));
 	AddCollider(collision);
 
 	animType_ = Gob_ANM_TYPE::GobWAIT;
@@ -44,7 +44,8 @@ void Goblin::Initialize()
 
 void Goblin::Update()
 {
-	transform_.rotate_.y += 1.0f;
+	//↓ゴブリンを左右両方回転させる
+	transform_.rotate_.y += rotateClockwise_ ? 1.0f : -1.0f;
 	switch (animType_)
 	{
 	case Gob_ANM_TYPE::GobWAIT:
@@ -108,8 +109,9 @@ void Goblin::Update()
 		transform_.position_.y -= data.dist - 4;
 	}
 
+
 	//↓yが-157を超えた時点でゴブリン死滅
-	if (transform_.position_.y < -157.0f) {
+	if (transform_.position_.y < -150.0f) {
 		KillMe();
 	}
 }
@@ -128,4 +130,9 @@ void Goblin::Release()
 
 void Goblin::SetPosition(const XMFLOAT3& pos)
 {
+}
+
+void Goblin::SetRotateDir(bool clockWise)
+{
+	rotateClockwise_ = clockWise;
 }

@@ -63,7 +63,7 @@ void Player::Initialize()
 	assert(hModelanime_[0] >= 0);
 	hModelanime_[1] = Model::Load("Model\\Running.fbx");
 	assert(hModelanime_[1] >= 1);
-	hModelanime_[2] = Model::Load("Model\\pickup.fbx");
+	hModelanime_[2] = Model::Load("Model\\PlayerThrow.fbx");
 	assert(hModelanime_[2] >= 2);
 	speed_ = 0.3;
 	transform_.rotate_.y = 180;

@@ -31,6 +31,8 @@ class Goblin :
 
 	static int gModelIdle_;
 	static int gModelRun_;
+
+	bool rotateClockwise_ = true;
 public:
 	Goblin(GameObject* parent);
 
@@ -49,5 +51,7 @@ public:
 	void Release() override;
 
 	void SetPosition(const XMFLOAT3& pos);
+
+	void SetRotateDir(bool clockWise);
 };
 

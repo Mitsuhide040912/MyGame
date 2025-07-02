@@ -37,6 +37,11 @@ void PlayScene::Initialize()
 		float y = goblin->GetPosition().y;
 		float z = (rand() % 96)-68;
 		goblin->SetPosition({ x,y,z });
+
+		Goblin* clockWiseGob = dynamic_cast<Goblin*>(goblin);
+		if (clockWiseGob) {
+			clockWiseGob->SetRotateDir(i < 10);
+		}
 		//goblins.push_back(goblin);
 	}
 
