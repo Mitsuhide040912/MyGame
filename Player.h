@@ -10,9 +10,14 @@ class Player :
     bool canMove_;
     bool hModelanim_;
     bool nextAnimState_;
+    bool thisFall_;
+    bool thisThrow_;
+
     float prevDist_;
     float fallDist_;
-    bool thisFall_;
+
+    float timer_;
+
     float fallTime;
     XMVECTOR front_;
 
@@ -30,6 +35,9 @@ class Player :
     const int ANIM_Idle_FRAME = 600;
     const int ANMI_Running_FRAME = 50;
     const int ANIM_Pickup_FRAME = 50;
+
+    const float THROW_TIME = 0.82;
+    
 
     XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 

@@ -49,7 +49,7 @@ Player::Player(GameObject* parent)
 	,front_({ 0,0,1,0 })
 	,camState_(CAM_TYPE::TPS_TYPE)
 	,isItem_(false)
-	,isGoal_(false),fall_(0),thisFall_(false),prevDist_(9999),canMove_(false)
+	,isGoal_(false),fall_(0),thisFall_(false),prevDist_(9999),canMove_(false),thisThrow_(false),timer_(THROW_TIME)
 {
 }
 
@@ -65,13 +65,15 @@ void Player::Initialize()
 	assert(hModelanime_[1] >= 1);
 	hModelanime_[2] = Model::Load("Model\\PlayerThrow.fbx");
 	assert(hModelanime_[2] >= 2);
+
+
 	speed_ = 0.3;
 	transform_.rotate_.y = 180;
 	transform_.scale_ = { 3.5,3.5,3.5 };
 	transform_.position_ = { -75,0,-20 };
 
 
-	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 3, 0), XMFLOAT3(1, 5, 1));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 3, 0), XMFLOAT3(2, 5, 2));
 	AddCollider(collision);
 
 
@@ -116,33 +118,53 @@ void Player::Update()
 		break;
 	}
 
-	if (thisFall_ != true) {
-		//前進
-		if (Input::IsKey(DIK_W) || stickL.y > 0.3f)//コントローラーの実装もした
-		{
-			animType_ = ANM_TYPE::RUN;
-			dir = SPEED * Time::DeltaTime();
+	if (!thisThrow_) 
+	{
+		if (thisFall_ != true) {
+			//前進
+			if (Input::IsKey(DIK_W) || stickL.y > 0.3f)//コントローラーの実装もした
+			{
+				animType_ = ANM_TYPE::RUN;
+				dir = SPEED * Time::DeltaTime();
+			}
+			else
+			{
+				animType_ = ANM_TYPE::WAIT;
+			}
+			//後退
+			if (Input::IsKey(DIK_S) || stickL.y < -0.3f)//コントローラーの実装もした
+			{
+				animType_ = ANM_TYPE::RUN;
+				dir = -SPEED * Time::DeltaTime();
+			}
 		}
 		else
 		{
 			animType_ = ANM_TYPE::WAIT;
 		}
-		//後退
-		if (Input::IsKey(DIK_S) || stickL.y < -0.3f)//コントローラーの実装もした
+
+		//物をとるアニメーション
+		if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 		{
-			animType_ = ANM_TYPE::RUN;
-			dir = -SPEED * Time::DeltaTime();
+			animType_ = ANM_TYPE::PICK;
+
+			thisThrow_ = true;
+			timer_ = THROW_TIME;
 		}
 	}
 	else
 	{
-		animType_ = ANM_TYPE::WAIT;
+		if (timer_ <= 0)
+		{
+			thisThrow_ = false;
+
+		}
+		else
+		{
+			timer_ -= Time::DeltaTime();
+		}
 	}
-	//物をとるアニメーション
-	if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
-	{
-		animType_ = ANM_TYPE::PICK;
-	}
+
 	//左回転
 	if (Input::IsKey(DIK_A) || stickR.x < -0.3)//コントローラーの実装もした
 	{
@@ -220,60 +242,6 @@ void Player::Update()
 	//	else
 	//	{
 	//		transform_.position_.z -= frontDataZ.dist - 0.2;
-	//	}
-	//}
-
-	//RayCastData frontDataZL;
-	//frontDataZL.start = transform_.position_;
-	//frontDataZL.start.z += 0.2;
-	//frontDataZL.dir = XMFLOAT3({ 0,0,-1 });
-	//Model::RayCast(hGmodel, &frontDataZL);
-
-	//if (frontDataZL.hit)
-	//{
-	//	if (frontRayDist_ < frontDataZL.dist - 0.2)
-	//	{
-	//		wallDist_ = frontDataZL.dist - 0.2;
-	//	}
-	//	else
-	//	{
-	//		transform_.position_.z -= frontDataZ.dist - 0.2;
-	//	}
-	//}
-
-	//RayCastData frontDataX;
-	//frontDataX.start = transform_.position_;
-	//frontDataX.start.x += 0.4;
-	//frontDataX.dir = XMFLOAT3({ 1,0,0 });
-	//Model::RayCast(hGmodel, &frontDataX);
-
-	//if (frontDataX.hit)
-	//{
-	//	if (frontRayDist_ < frontDataX.dist - 0.4)
-	//	{
-	//		wallDist_ = frontDataX.dist - 0.4;
-	//	}
-	//	else
-	//	{
-	//		transform_.position_.x -= frontDataX.dist - 0.4;
-	//	}
-	//}
-
-	//RayCastData frontDataXL;
-	//frontDataXL.start = transform_.position_;
-	//frontDataXL.start.x += 0.4;
-	//frontDataXL.dir = XMFLOAT3({ -1,0,0 });
-	//Model::RayCast(hGmodel, &frontDataXL);
-
-	//if (frontDataXL.hit)
-	//{
-	//	if (frontRayDist_ < frontDataXL.dist - 0.4)
-	//	{
-	//		wallDist_ = frontDataXL.dist - 0.4;
-	//	}
-	//	else
-	//	{
-	//		transform_.position_.x -= frontDataXL.dist - 0.4;
 	//	}
 	//}
 
