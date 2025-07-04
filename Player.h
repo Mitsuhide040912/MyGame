@@ -12,6 +12,8 @@ class Player :
     bool nextAnimState_;
     bool thisFall_;
     bool thisThrow_;
+    bool isItem_;
+    bool throwStone_;
 
     float prevDist_;
     float fallDist_;
@@ -29,14 +31,14 @@ class Player :
     int animType_;//アニメーションのタイプの指定
     //XMFLOAT3 f;
     //XMVECTOR v = XMLoadFloat3(&f);
-    bool isItem_;
+
     const int ANIM_STRT_FRAME = 1;
     const int ANIM_END_SPEED = 1;
     const int ANIM_Idle_FRAME = 600;
     const int ANMI_Running_FRAME = 50;
-    const int ANIM_Pickup_FRAME = 50;
+    const int ANIM_Pickup_FRAME = 66;
 
-    const float THROW_TIME = 0.82;
+    const float THROW_TIME = 1.1;
     
 
     XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));

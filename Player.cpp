@@ -16,6 +16,7 @@
 #include "GoalFrag.h"
 #include "Enemy.h"
 #include "Goblin.h"
+#include "Bullet.h"
 
 #include "Engine/time.h"
 
@@ -38,7 +39,7 @@ enum ANM_TYPE
 {
 	WAIT = 0,
 	RUN,
-	PICK,
+	Throw,
 	MAX
 };
 
@@ -49,7 +50,9 @@ Player::Player(GameObject* parent)
 	,front_({ 0,0,1,0 })
 	,camState_(CAM_TYPE::TPS_TYPE)
 	,isItem_(false)
-	,isGoal_(false),fall_(0),thisFall_(false),prevDist_(9999),canMove_(false),thisThrow_(false),timer_(THROW_TIME)
+	,isGoal_(false)
+	,fall_(0)
+	,thisFall_(false),prevDist_(9999),canMove_(false),thisThrow_(false),timer_(THROW_TIME),throwStone_(false)
 {
 }
 
@@ -111,7 +114,7 @@ void Player::Update()
 	case ANM_TYPE::RUN:
 		hModel_ = hModelanime_[1];
 		break;
-	case ANM_TYPE::PICK:
+	case ANM_TYPE::Throw:
 		hModel_ = hModelanime_[2];
 		break;
 	default:
@@ -143,13 +146,16 @@ void Player::Update()
 			animType_ = ANM_TYPE::WAIT;
 		}
 
-		//物をとるアニメーション
+		//物を投げるアニメーション
 		if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 		{
-			animType_ = ANM_TYPE::PICK;
+			
 
+			animType_ = ANM_TYPE::Throw;
 			thisThrow_ = true;
 			timer_ = THROW_TIME;
+
+
 		}
 	}
 	else
@@ -157,7 +163,20 @@ void Player::Update()
 		if (timer_ <= 0)
 		{
 			thisThrow_ = false;
+			throwStone_ = false;
 
+		}
+		else if (timer_ <= 0.3 && !throwStone_)
+		{
+			XMFLOAT3 bulletPos = Model::GetBonePosition(hModel_, "mixamorig:RightHandIndex1");
+			bulletPos.y += 2;
+			//transform_.rotate_.y;
+			SetRotateY(transform_.rotate_.y);
+			
+			Bullet* pBullet = Instantiate<Bullet>(this->GetParent()->GetParent());
+			pBullet->SetPosition(bulletPos);
+			pBullet->SetSpeed(0.2);
+			throwStone_ = true;
 		}
 		else
 		{

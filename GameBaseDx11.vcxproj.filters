@@ -112,6 +112,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Goblin.cpp" />
+    <ClCompile Include="Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -200,6 +201,7 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Goblin.h" />
+    <ClInclude Include="Bullet.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
