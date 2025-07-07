@@ -154,7 +154,7 @@ void Player::Update()
 			animType_ = ANM_TYPE::Throw;
 			thisThrow_ = true;
 			timer_ = THROW_TIME;
-
+			
 
 		}
 	}
@@ -175,7 +175,11 @@ void Player::Update()
 			
 			Bullet* pBullet = Instantiate<Bullet>(this->GetParent()->GetParent());
 			pBullet->SetPosition(bulletPos);
-			pBullet->SetSpeed(0.2);
+
+			float rad = XMConvertToRadians(transform_.rotate_.y);
+			XMFLOAT3 dir = { sinf(rad),0.0f,cosf(rad) };
+
+			pBullet->SetVelocity(dir, 35.0f, 15.0f);
 			throwStone_ = true;
 		}
 		else

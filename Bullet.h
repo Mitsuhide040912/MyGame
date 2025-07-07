@@ -1,11 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include <DirectXMath.h>
 class Bullet :
     public GameObject
 {
 	int hModel_;
-	XMFLOAT3 moveDir_;
-	float bulletSpeed_;
+	DirectX::XMVECTOR velocity_;
+	float gravity_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
@@ -22,9 +23,7 @@ public:
 
 	//開放
 	void Release() override;
-
-	void SetMoveDir(XMFLOAT3 _move) { moveDir_ = _move; }
-	void SetSpeed(float _speed) { bulletSpeed_ = _speed; }
 	
+	void SetVelocity(const DirectX::XMFLOAT3& dir, float speed, float angreDigrees);
 };
 

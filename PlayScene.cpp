@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "Block.h"
 #include "Goblin.h"
+#include "Bullet.h"
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
 #include "Engine/Model.h"
@@ -44,15 +45,6 @@ void PlayScene::Initialize()
 		}
 		//goblins.push_back(goblin);
 	}
-
-	//for (int j = 0;j < 15;j++)
-	//{
-	//	GameObject* goblin = Instantiate<Goblin>(this);
-	//	float x = rand() % 266 - 70;
-	//	float y = goblin->GetPosition().y;
-	//	float z = -(rand() % 126) - 4;
-	//	goblin->SetPosition({ x,y,z });
-	//}
 
 
 
