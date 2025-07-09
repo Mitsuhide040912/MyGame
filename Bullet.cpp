@@ -1,4 +1,6 @@
 #include "Bullet.h"
+#include "Goblin.h"
+#include "Enemy.h"
 #include "Engine/Model.h"
 #include "Engine/time.h"
 #include "Engine/SphereCollider.h"
@@ -6,7 +8,7 @@
 #include <cmath>
 Bullet::Bullet(GameObject* parent)
 	:GameObject(parent,"Bullet")
-	,hModel_(-1),velocity_(XMVectorZero()),gravity_(-6.0f)
+	,hModel_(-1),velocity_(XMVectorZero()),gravity_(-10.0f)
 {
 }
 
@@ -58,4 +60,14 @@ void Bullet::SetVelocity(const DirectX::XMFLOAT3& dir, float speed, float angreD
 	XMVECTOR verticalVel = XMVectorSet(0, speed * sinA, 0, 0);
 
 	velocity_ = horizonalVel + verticalVel;
+}
+
+void Bullet::OnCollision(GameObject* pTarget)
+{
+	if (pTarget->GetObjectName() == "Goblin") {
+		KillMe();
+	}
+	if (pTarget->GetObjectName() == "Enemy") {
+		KillMe();
+	}
 }

@@ -1,5 +1,6 @@
 ﻿#include "Goblin.h"
 #include "Field.h"
+#include "Bullet.h"
 #include "Engine/Model.h"
 
 #include "Player.h"
@@ -20,7 +21,8 @@ enum Gob_ANM_TYPE
 };
 
 Goblin::Goblin(GameObject* parent)
-	:GameObject(parent, "Goblin"),hModel_(-1),hModelAnimeGob_(-1)
+	:GameObject(parent, "Goblin")
+	,hModel_(-1),hModelAnimeGob_(-1),hitFrag_(false)
 {
 }
 
@@ -34,7 +36,7 @@ void Goblin::Initialize()
 	transform_.rotate_.y = 90.0;
 	transform_.scale_ = { 2.5,2.5,2.5 };
 
-	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(3, 5, 3));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 2, 0), XMFLOAT3(3, 5, 3));
 	AddCollider(collision);
 
 	animType_ = Gob_ANM_TYPE::GobWAIT;
@@ -114,6 +116,7 @@ void Goblin::Update()
 	if (transform_.position_.y < -150.0f) {
 		KillMe();
 	}
+
 }
 
 
@@ -135,4 +138,20 @@ void Goblin::SetPosition(const XMFLOAT3& pos)
 void Goblin::SetRotateDir(bool clockWise)
 {
 	rotateClockwise_ = clockWise;
+}
+
+void Goblin::OnCollision(GameObject* pTarget)
+{
+	if (pTarget->GetObjectName() == "Bullet") {
+		hitFrag_ = true;
+		isHit_++;
+
+		if (isHit_ >= 2) {
+			KillMe();
+		}
+	}
+	else
+	{
+		hitFrag_ = false;
+	}
 }

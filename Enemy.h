@@ -10,15 +10,18 @@ class Enemy :
 	int hGobModel_;
 	int hModelAnimeBoss_[2];
 	int animType_;
+	int isHit_ = 0;
+
+	bool hitFrag_;
 	bool hModelAnim_;
 	bool nextAnimState_;
 
-	float bossSpeed_ = 0.3f;
+	float bossSpeed_ = 0.2f;
 	float EnemyBossPosX = -11;
 	float EnemyBossPosZ = 54;
 
-	float angle = 170.0f;
-	float maxDistance = 35.0f;
+	float angle = 190.0f;
+	float maxDistance = 40.0f;
 
 	EnemyAI em;
 public:
@@ -39,5 +42,7 @@ public:
 	void Release() override;
 
 	void AddPatrolPoint(const DirectX::XMFLOAT3& point);
+
+	void OnCollision(GameObject* pTarget)override;
 };
 

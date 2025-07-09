@@ -5,6 +5,7 @@ class Bullet :
     public GameObject
 {
 	int hModel_;
+	int isHit = 0;
 	DirectX::XMVECTOR velocity_;
 	float gravity_;
 public:
@@ -25,5 +26,6 @@ public:
 	void Release() override;
 	
 	void SetVelocity(const DirectX::XMFLOAT3& dir, float speed, float angreDigrees);
+	void OnCollision(GameObject* pTarget)override;
 };
 

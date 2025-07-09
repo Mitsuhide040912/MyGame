@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "Field.h"
 #include "Player.h"
+#include "Bullet.h"
 #include <DirectXMath.h>
 #include "Engine/Model.h"
 #include "Engine/BoxCollider.h"
@@ -18,7 +19,9 @@ enum ANM_TYPE
 };
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent, "Enemy"), hModel_(-1), hModelAnimeBoss_(-1)
+	:GameObject(parent, "Enemy")
+	, hModel_(-1)
+	, hModelAnimeBoss_(-1),hitFrag_(false)
 {
 }
 
@@ -32,9 +35,9 @@ void Enemy::Initialize()
 	transform_.rotate_.y = 90;
 	transform_.position_ = { EnemyBossPosX,0,EnemyBossPosZ };
 
-	transform_.scale_ = { 4.5,4.5,4.5 };
+	transform_.scale_ = { 4.0,4.0,4.0 };
 
-	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(10, 10, 10));
+	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 7, 0), XMFLOAT3(10, 7, 10));
 	AddCollider(collision);
 
 	animType_ = ANM_TYPE::WAIT;
@@ -129,5 +132,22 @@ void Enemy::Release()
 void Enemy::AddPatrolPoint(const DirectX::XMFLOAT3& point)
 {
 	em.AddPatrolPoint(point);
+}
+
+void Enemy::OnCollision(GameObject* pTarget)
+{
+	if (pTarget->GetObjectName() == "Bullet") {
+		hitFrag_ = true;
+		isHit_++;
+
+		if (isHit_ >= 3) {
+			
+			KillMe();
+		}
+	}
+	else
+	{
+		hitFrag_ = false;
+	}
 }
 

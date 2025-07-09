@@ -5,16 +5,11 @@
 class Goblin :
     public GameObject
 {
-	//struct GoblinUnit
-	//{
-	//	Transform transform;
-	//	Gob_ANM_TYPE animType;
-	//	float animFrame;
-	//};
 	int hModel_;
 
 	int hModelAnimeGob_[2];
 	int animType_;
+	int isHit_ = 0;
 
 	float bossSpeed_ = 0.1f;
 
@@ -33,6 +28,9 @@ class Goblin :
 	static int gModelRun_;
 
 	bool rotateClockwise_ = true;
+	bool hitFrag_;
+
+	
 public:
 	Goblin(GameObject* parent);
 
@@ -53,5 +51,7 @@ public:
 	void SetPosition(const XMFLOAT3& pos);
 
 	void SetRotateDir(bool clockWise);
+
+	void OnCollision(GameObject* pTarget)override;
 };
 
