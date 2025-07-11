@@ -16,12 +16,12 @@ class Enemy :
 	bool hModelAnim_;
 	bool nextAnimState_;
 
-	float bossSpeed_ = 0.15f;
+	float bossSpeed_ = 0.18f;
 	float EnemyBossPosX = -11;
 	float EnemyBossPosZ = 54;
 
-	float angle = 200.0f;
-	float maxDistance = 40.0f;
+	float angle = 210.0f;
+	float maxDistance = 50.0f;
 
 	EnemyAI em;
 public:

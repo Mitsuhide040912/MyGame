@@ -166,11 +166,10 @@ void Player::Update()
 			throwStone_ = false;
 
 		}
-		else if (timer_ <= 0.3 && !throwStone_)
+		else if (timer_ <= 0.2 && !throwStone_)
 		{
 			XMFLOAT3 bulletPos = Model::GetBonePosition(hModel_, "mixamorig:RightHandIndex1");
 			bulletPos.y += 2;
-			//transform_.rotate_.y;
 			SetRotateY(transform_.rotate_.y);
 			
 			Bullet* pBullet = Instantiate<Bullet>(this->GetParent()->GetParent());
@@ -191,12 +190,12 @@ void Player::Update()
 	//左回転
 	if (Input::IsKey(DIK_A) || stickR.x < -0.3)//コントローラーの実装もした
 	{
-		transform_.rotate_.y -= 2.0f;
+		transform_.rotate_.y -= 3.0f;
 	}
 	//右回転
 	if (Input::IsKey(DIK_D) || stickR.x > 0.3f)//コントローラーの実装もした
 	{
-		transform_.rotate_.y += 2.0f;
+		transform_.rotate_.y += 3.0f;
 	}
 
 	//回転行列Y

@@ -11,7 +11,7 @@ class Goblin :
 	int animType_;
 	int isHit_ = 0;
 
-	float gobSpeed_ = 0.17f;
+	float gobSpeed_ = 0.16f;
 
 	float EnemyGobPosX = 10;
 	float EnemyGobPosZ = -48;
