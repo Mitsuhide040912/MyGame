@@ -43,7 +43,6 @@ void Timer::Update()
 			sec_ = temp_ % 10;
 			oneSec_ = 1.0f;
 		}
-		//timer_ -= Time::DeltaTime();
 		if (timer_ <= 0)
 		{
 			timer_ = 0;
