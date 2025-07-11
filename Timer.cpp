@@ -51,7 +51,7 @@ void Timer::Update()
 		if (timer_ == 0)
 		{
 			SceneManager* sm = (SceneManager*)FindObject("SceneManager");
-			sm->ChangeScene(SCENE_ID_CLEAR);
+			sm->ChangeScene(SCENE_ID_GAMEOVER);
 		}
 	}
 }

@@ -170,6 +170,7 @@
     <ClCompile Include="GoalFrag.cpp" />
     <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ManualScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="TestScene.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="GoalFrag.h" />
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ManualScene.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="TestScene.h" />
