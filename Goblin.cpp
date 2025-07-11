@@ -87,7 +87,7 @@ void Goblin::Update()
 		// Maya補正
 		transform_.rotate_.y = degree - 5.0f;
 		// 移動
-		XMVECTOR move = XMVectorScale(dirVec, bossSpeed_);
+		XMVECTOR move = XMVectorScale(dirVec, gobSpeed_);
 		enemyPosVec = XMVectorAdd(enemyPosVec, move);
 		XMStoreFloat3(&transform_.position_, enemyPosVec);
 	}

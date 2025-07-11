@@ -70,7 +70,7 @@ void Player::Initialize()
 	assert(hModelanime_[2] >= 2);
 
 
-	speed_ = 0.3;
+	speed_ = 0.25;
 	transform_.rotate_.y = 180;
 	transform_.scale_ = { 3.5,3.5,3.5 };
 	transform_.position_ = { -75,0,-20 };
