@@ -70,10 +70,10 @@ void Player::Initialize()
 	assert(hModelanime_[2] >= 2);
 
 
-	speed_ = 0.25;
-	transform_.rotate_.y = 180;
-	transform_.scale_ = { 3.5,3.5,3.5 };
-	transform_.position_ = { -75,0,-20 };
+	//speed_ = 0.25;
+	transform_.rotate_.y = PLAYER_IMIT_ROT_Y;
+	transform_.scale_ = { PLAYER_INIT_SCALE,PLAYER_INIT_SCALE,PLAYER_INIT_SCALE };
+	transform_.position_ = PLAYER_INIT_POS;
 
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 3, 0), XMFLOAT3(2, 5, 2));
@@ -92,19 +92,16 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	//XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
 	XMVECTOR move{ 0,0,0,0 };
 	XMVECTOR rotVecY{ 0,0,0,0 };
 	XMVECTOR rotVecX{ 0,0,0,0 };
 	XMFLOAT3 stickL = Input::GetPadStickL();
 	XMFLOAT3 stickR = Input::GetPadStickR();
-	const int SPEED = 60;
+	const int SPEED = PLAYER_SPEED;
 	float dir;
 	dir = 0.0f;
-
-
-	dir += (float) dir/1000.0f * (speed_ * Time::DeltaTime());
+	//dir += (float) dir/1000.0f * (speed_ * Time::DeltaTime());
 
 	switch (animType_)
 	{
@@ -166,7 +163,7 @@ void Player::Update()
 			throwStone_ = false;
 
 		}
-		else if (timer_ <= 0.2 && !throwStone_)
+		else if (timer_ <= 0.1 && !throwStone_)
 		{
 			XMFLOAT3 bulletPos = Model::GetBonePosition(hModel_, "mixamorig:RightHandIndex1");
 			bulletPos.y += 2;
@@ -178,7 +175,7 @@ void Player::Update()
 			float rad = XMConvertToRadians(transform_.rotate_.y);
 			XMFLOAT3 dir = { sinf(rad),0.0f,cosf(rad) };
 
-			pBullet->SetVelocity(dir, 35.0f, 15.0f);
+			pBullet->SetVelocity(dir,BULLET_SPEED, BULLET_GRAVITY);
 			throwStone_ = true;
 		}
 		else
@@ -208,8 +205,8 @@ void Player::Update()
 
 	XMStoreFloat3(&(transform_.position_), pos);
 
-	transform_.position_.x = std::clamp(transform_.position_.x, -110.0f, 235.0f);//←プレイヤーが横方向に一定距離以外に達したら出ないように
-	transform_.position_.z = std::clamp(transform_.position_.z, -190.0f, 190.0f);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
+	transform_.position_.x = std::clamp(transform_.position_.x,STAGE_X_MIN, STAGE_X_MAX);//←プレイヤーが横方向に一定距離以外に達したら出ないように
+	transform_.position_.z = std::clamp(transform_.position_.z,STAGE_Z_MIN, STAGE_Z_MAX);//←プレイヤーが奥方向に一定距離以外に達したら出ないように
 	//↓いちおう地面との当たり判定
 	Field* pGround = (Field*)FindObject("Field");
 	int hGmodel = pGround->GetModelHandle();
@@ -320,7 +317,7 @@ void Player::Update()
 		CarryItem->SetTransform(itemPos, itemRot);
 	}
 	//↓yが-157を超えた時点でゲームオーバー
-	if (transform_.position_.y < -157.0f) {
+	if (transform_.position_.y < PLAYER_DETH_HEIGHT) {
 		KillMe();
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 		sm->ChangeScene(SCENE_ID_GAMEOVER);
@@ -352,7 +349,7 @@ void Player::OnCollision(GameObject* pTarget)
 
 void Player::Fall()
 {
-	transform_.position_.y -= 15 * Time::DeltaTime();
+	transform_.position_.y -= PLAYER_FALL_SPEED * Time::DeltaTime();
 	fallTime -= Time::DeltaTime();
 }
 
@@ -369,9 +366,3 @@ void Player::Draw()
 void Player::Release()
 {
 }
-
-
-
-
-
-
