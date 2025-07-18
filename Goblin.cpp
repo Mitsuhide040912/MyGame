@@ -39,9 +39,7 @@ void Goblin::Initialize()
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 2, 0), XMFLOAT3(3, 5, 3));
 	AddCollider(collision);
 
-	animType_ = Gob_ANM_TYPE::GobWAIT;
-	hModel_ = hModelAnimeGob_[0];
-	Model::SetAnimFrame(hModel_, 1, 183, 1);
+	Model::SetAnimFrame(hModelAnimeGob_[0], 1, 183, 1);
 }
 
 void Goblin::Update()

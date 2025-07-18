@@ -25,6 +25,7 @@ class Player :
     float frontRayDist_;
     float wallDist_;
     float speed_ = 50;
+    float itemDir;
 
 
     const int ANIM_STRT_FRAME = 1;
@@ -36,7 +37,7 @@ class Player :
     const float THROW_TIME = 0.7;
     //プレイヤーの初期化
     const float PLAYER_IMIT_ROT_Y = 180.0f;
-    const float PLAYER_INIT_SCALE = { 3.5f };
+    const XMFLOAT3 PLAYER_INIT_SCALE = { 3.5f,3.5f,3.5f };
     const XMFLOAT3 PLAYER_INIT_POS = { -75.0f,0.0f,-20.0f };
     //移動・速度
     const float PLAYER_SPEED = 600.0f;
@@ -58,7 +59,7 @@ class Player :
     XMMATRIX WorldMatrix;//自分のワールド行列
     Item* CarryItem = nullptr;//今持ってるアイテム
 
-    float itemDir;
+
 public:
     bool isGoal_;
     Player(GameObject* parent);

@@ -17,11 +17,17 @@ class Enemy :
 	bool nextAnimState_;
 
 	float bossSpeed_ = 0.18f;
-	float EnemyBossPosX = -11;
-	float EnemyBossPosZ = 54;
-
 	float angle = 210.0f;
 	float maxDistance = 50.0f;
+	//É{ÉXÇÃèâä˙âª
+	const float ENEMY_INIT_ROT_Y = 90.0f;
+	const XMFLOAT3 ENEMY_INIT_SCALE = { 4.0f,4.0f,4.0f };
+	const XMFLOAT3 ENEMY_INIT_POS = { -11.0f,0.0f,54.0f };
+
+	const int ANIM_STRT_FRAME = 1;
+	const int ANIM_END_SPEED = 1;
+	const int ANIM_Idle_FRAME = 242;
+	const int ANIM_Walk_FRAME = 86;
 
 	EnemyAI em;
 public:

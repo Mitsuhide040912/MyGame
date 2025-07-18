@@ -32,17 +32,15 @@ void Enemy::Initialize()
 	hModelAnimeBoss_[1] = Model::Load("Model\\BossWalking.fbx");//Å©ï‡Ç≠
 	assert(hModelAnimeBoss_[1] >= 0);
 	
-	transform_.rotate_.y = 90;
-	transform_.position_ = { EnemyBossPosX,0,EnemyBossPosZ };
+	transform_.rotate_.y = ENEMY_INIT_ROT_Y;
+	transform_.position_ = ENEMY_INIT_POS;
 
-	transform_.scale_ = { 4.0,4.0,4.0 };
+	transform_.scale_ = ENEMY_INIT_SCALE;
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 7, 0), XMFLOAT3(10, 7, 10));
 	AddCollider(collision);
-
-	animType_ = ANM_TYPE::WAIT;
-	hModel_ = hModelAnimeBoss_[0];
-	Model::SetAnimFrame(hModel_, 1, 242, 1);
+	//Å´ë“ã@ÉÇÅ[ÉVÉáÉì
+	Model::SetAnimFrame(hModelAnimeBoss_[0], ANIM_STRT_FRAME, ANIM_Idle_FRAME, ANIM_END_SPEED);
 
 }
 
@@ -91,7 +89,7 @@ void Enemy::Update()
 	if (isPlayerInRangeBoss) {
 		if (animType_ != ANM_TYPE::Walk) {
 			animType_ = ANM_TYPE::Walk;
-			Model::SetAnimFrame(hModelAnimeBoss_[1], 1, 86, 1);
+			Model::SetAnimFrame(hModelAnimeBoss_[1], ANIM_STRT_FRAME, ANIM_Walk_FRAME, ANIM_END_SPEED);
 		}
 		XMVECTOR enemyPosVec = XMLoadFloat3(&transform_.position_);
 		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
@@ -114,7 +112,7 @@ void Enemy::Update()
 	{
 		if (animType_ != ANM_TYPE::WAIT) {
 			animType_ = ANM_TYPE::WAIT;
-			Model::SetAnimFrame(hModelAnimeBoss_[0], 1, 242, 1);
+			Model::SetAnimFrame(hModelAnimeBoss_[0], ANIM_STRT_FRAME, ANIM_Idle_FRAME, ANIM_END_SPEED);
 		}
 	}
 }

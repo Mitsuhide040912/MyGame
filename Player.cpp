@@ -72,7 +72,7 @@ void Player::Initialize()
 
 	//speed_ = 0.25;
 	transform_.rotate_.y = PLAYER_IMIT_ROT_Y;
-	transform_.scale_ = { PLAYER_INIT_SCALE,PLAYER_INIT_SCALE,PLAYER_INIT_SCALE };
+	transform_.scale_ = { PLAYER_INIT_SCALE };
 	transform_.position_ = PLAYER_INIT_POS;
 
 
