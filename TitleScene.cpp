@@ -9,7 +9,7 @@ TitleScene::TitleScene(GameObject* parent)
 
 void TitleScene::Initialize()
 {
-	hImege_ = Image::Load("Model\\CLEAR2.png");
+	hImege_ = Image::Load("Model\\EggHunterGameTitle.png");
 	assert(hImege_ >= 0);
 }
 

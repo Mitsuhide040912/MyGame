@@ -9,7 +9,7 @@ CLEAR::CLEAR(GameObject* parent)
 
 void CLEAR::Initialize()
 {
-	hImege_ = Image::Load("Model\\CLEAR.png");
+	hImege_ = Image::Load("Model\\CLEAR2.png");
 	assert(hImege_ >= 0);
 }
 
