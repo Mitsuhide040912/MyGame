@@ -12,7 +12,7 @@ Timer::Timer(GameObject* parent)
 	,timer_(300.0f)
 	,isTimeUp_(false)
 	,hImage_(-1)
-	,x(0.7),y(0.7),z(0),tenMin_(0),min_(0),tenSec_(0),sec_(0),oneSec_(1.0f)
+	,tenMin_(0),min_(0),tenSec_(0),sec_(0),oneSec_(1.0f)
 {
 }
 
