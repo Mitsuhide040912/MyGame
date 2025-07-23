@@ -40,7 +40,7 @@ class Player :
     const XMFLOAT3 PLAYER_INIT_SCALE = { 3.5f,3.5f,3.5f };
     const XMFLOAT3 PLAYER_INIT_POS = { -75.0f,0.0f,-20.0f };
     //à⁄ìÆÅEë¨ìx
-    const float PLAYER_SPEED = 600.0f;
+    const float PLAYER_SPEED = 350.0f;
     const float PLAYER_FALL_SPEED = 15.0f;
     //ìäÇ∞ÇÈêŒ
     const float BULLET_SPEED = 35.0f;

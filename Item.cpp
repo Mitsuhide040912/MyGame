@@ -4,7 +4,7 @@
 #include "Engine/Model.h"
 #include "Engine/SphereCollider.h"
 #include "Engine/BoxCollider.h"
-#include"Engine/SceneManager.h"
+#include "Engine/SceneManager.h"
 
 //#include "imgui/imgui.h"
 //#include "imgui/imgui_impl_dx11.h"
@@ -22,10 +22,8 @@ void Item::Initialize()
 {
 	hModel_ = Model::Load("Model\\egg.fbx");
 	assert(hModel_ > 0);
-	transform_.position_ = { -75.0,0,160.0 };
-	transform_.scale_ = { 0.8,0.8,0.8 };
-	//SphereCollider* Collision = new SphereCollider(XMFLOAT3(0, 1, 0), 1.2f);
-	//AddCollider(Collision);
+	transform_.position_ = EGG_INIT_POS;
+	transform_.scale_ = EGG_INIT_SCALE;
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 1, 0), XMFLOAT3(2, 2, 2));
 	AddCollider(collision);
 }

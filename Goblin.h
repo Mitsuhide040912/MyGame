@@ -6,29 +6,28 @@ class Goblin :
     public GameObject
 {
 	int hModel_;
-
 	int hModelAnimeGob_[2];
 	int animType_;
 	int isHit_ = 0;
 
 	float gobSpeed_ = 0.16f;
-
-	float EnemyGobPosX = 10;
-	float EnemyGobPosZ = -48;
-
 	float angle = 160.0f;
 	float maxDistance = 30.0f;
 
-	
-	//std::vector<GoblinUnit>Goblins_;
-
-
-
-	static int gModelIdle_;
-	static int gModelRun_;
-
 	bool rotateClockwise_ = true;
 	bool hitFrag_;
+
+	//ゴブリンの初期化
+	const XMFLOAT3 GOB_INIT_SCALE = { 2.5f,2.5f,2.5f };
+	//ゴブリンのフレーム
+	const int ANIM_STRT_FRAME = 1;
+	const int ANIM_END_SPEED = 1;
+	const int ANIM_Idle_FRAME = 183;
+	const int ANIM_Walk_FRAME = 48;
+	//ゴブリンが一定のyの値を超えていたら削除
+	const float GOBLIN_DETH_HEIGHT = -150.0f;
+	//Mayaで作ったモデルの角度が若干ずれているため
+	const float mayaCorection = 5.0f;
 
 	
 public:

@@ -341,7 +341,7 @@ void Player::OnCollision(GameObject* pTarget)
 	}
 
 	if (pTarget->GetObjectName() == "Goblin") {
-		transform_.position_ = { -75,-30,-20 };
+		transform_.position_ = { -75,-110,-20 };
 		//SceneManager* ov = (SceneManager*)FindObject("SceneManager");
 		//ov->ChangeScene(SCENE_ID_GAMEOVER);
 	}

@@ -8,6 +8,7 @@ class Bullet :
 	int isHit = 0;
 	DirectX::XMVECTOR velocity_;
 	float gravity_;
+	const float BULLET_DETH_HEIGHT = -140.0f;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

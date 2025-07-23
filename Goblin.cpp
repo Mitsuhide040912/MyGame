@@ -32,14 +32,13 @@ void Goblin::Initialize()
 	assert(hModelAnimeGob_[0] >= 0);
 	hModelAnimeGob_[1] = Model::Load("Model\\GoblinRun.fbx");//←歩く
 	assert(hModelAnimeGob_[1] >= 0);
-	transform_.position_ = { EnemyGobPosX ,0,EnemyGobPosZ };
-	transform_.rotate_.y = 90.0;
-	transform_.scale_ = { 2.5,2.5,2.5 };
+	//transform_.position_ = { EnemyGobPosX ,0,EnemyGobPosZ };
+	transform_.scale_ = GOB_INIT_SCALE;
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 2, 0), XMFLOAT3(3, 5, 3));
 	AddCollider(collision);
 
-	Model::SetAnimFrame(hModelAnimeGob_[0], 1, 183, 1);
+	Model::SetAnimFrame(hModelAnimeGob_[0], ANIM_STRT_FRAME, ANIM_Idle_FRAME, ANIM_END_SPEED);
 }
 
 void Goblin::Update()
@@ -70,7 +69,7 @@ void Goblin::Update()
 	if (isPlayerInRangeGoblin) {
 		if (animType_ != Gob_ANM_TYPE::GobWalk) {
 			animType_ = Gob_ANM_TYPE::GobWalk;
-			Model::SetAnimFrame(hModelAnimeGob_[1], 1, 48, 1);
+			Model::SetAnimFrame(hModelAnimeGob_[1], ANIM_STRT_FRAME, ANIM_Walk_FRAME, ANIM_END_SPEED);
 		}
 		XMVECTOR enemyPosVec = XMLoadFloat3(&transform_.position_);
 		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
@@ -83,7 +82,7 @@ void Goblin::Update()
 		float angle = atan2f(dirFlat.x, dirFlat.z);
 		float degree = XMConvertToDegrees(angle);
 		// Maya補正
-		transform_.rotate_.y = degree - 5.0f;
+		transform_.rotate_.y = degree - mayaCorection;
 		// 移動
 		XMVECTOR move = XMVectorScale(dirVec, gobSpeed_);
 		enemyPosVec = XMVectorAdd(enemyPosVec, move);
@@ -93,7 +92,7 @@ void Goblin::Update()
 	{
 		if (animType_ != Gob_ANM_TYPE::GobWAIT) {
 			animType_ = Gob_ANM_TYPE::GobWAIT;
-			Model::SetAnimFrame(hModelAnimeGob_[0], 1, 183, 1);
+			Model::SetAnimFrame(hModelAnimeGob_[0], ANIM_STRT_FRAME, ANIM_Idle_FRAME, ANIM_END_SPEED);
 		}
 	}
 	Field* pField = (Field*)FindObject("Field");
@@ -111,7 +110,7 @@ void Goblin::Update()
 
 
 	//↓yが-157を超えた時点でゴブリン死滅
-	if (transform_.position_.y < -150.0f) {
+	if (transform_.position_.y < GOBLIN_DETH_HEIGHT) {
 		KillMe();
 	}
 

@@ -3,14 +3,16 @@
 class Item :
     public GameObject
 {
-    float speed_;
-    XMVECTOR front_;
-
     int hModel_;
     XMMATRIX LocalMatrix = XMMatrixIdentity();
     XMMATRIX WorldMatrix = XMMatrixIdentity();
     Item* CarryItem = nullptr;//今持ってるアイテム
     float x, y, z;
+
+    //アイテムの初期化
+    const XMFLOAT3 EGG_INIT_SCALE = { 0.8f,0.8f,0.8f };
+    const XMFLOAT3 EGG_INIT_POS = { -75.0f,0,160.0f };
+
 public:
 
     Item(GameObject* parent);

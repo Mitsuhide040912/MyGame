@@ -10,7 +10,7 @@ using std::string;
 using std::to_string;
 
 Field::Field(GameObject* parent)
-	:GameObject(parent, "Field"), hModel_(-1),hField_1(-1),hField_2(-1),hField_3(-1),hField_4(-1)
+	:GameObject(parent, "Field"), hModel_(-1)
 {
 }
 

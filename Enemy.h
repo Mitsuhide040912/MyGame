@@ -23,11 +23,13 @@ class Enemy :
 	const float ENEMY_INIT_ROT_Y = 90.0f;
 	const XMFLOAT3 ENEMY_INIT_SCALE = { 4.0f,4.0f,4.0f };
 	const XMFLOAT3 ENEMY_INIT_POS = { -11.0f,0.0f,54.0f };
-
+	//ボスのフレーム
 	const int ANIM_STRT_FRAME = 1;
 	const int ANIM_END_SPEED = 1;
 	const int ANIM_Idle_FRAME = 242;
 	const int ANIM_Walk_FRAME = 86;
+	//Mayaで作ったモデルの角度が若干ずれているため
+	const float mayaCorection = 5.0f;
 
 	EnemyAI em;
 public:

@@ -32,7 +32,7 @@ void Bullet::Update()
 	XMStoreFloat3(&transform_.position_, pos);
 
 	//«y‚ª-140‚ğ’´‚¦‚½“_‚ÅÎ‚ğÁ‹
-	if (transform_.position_.y < -140.0f) {
+	if (transform_.position_.y < BULLET_DETH_HEIGHT) {
 		KillMe();
 	}
 }

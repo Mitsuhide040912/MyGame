@@ -102,7 +102,7 @@ void Enemy::Update()
 		float angle = atan2f(dirFlat.x, dirFlat.z);
 		float degree = XMConvertToDegrees(angle);
 		// Mayaï‚ê≥
-		transform_.rotate_.y = degree - 5.0f;
+		transform_.rotate_.y = degree - mayaCorection;
 		// à⁄ìÆ
 		XMVECTOR move = XMVectorScale(dirVec, bossSpeed_);
 		enemyPosVec = XMVectorAdd(enemyPosVec, move);

@@ -20,8 +20,6 @@ void Timer::Initialize()
 {
 	hImage_ = Image::Load("Model\\GameNumber.png");
 	assert(hImage_ >= 0);
-
-	transform_.position_ = { x,y,z };
 }
 
 void Timer::Update()
@@ -61,22 +59,22 @@ void Timer::Draw()
 	Transform trs = transform_;
 	trs.position_.x = 0.6;
 	Image::SetTransform(hImage_, trs);
-	Image::SetRect(hImage_, IMAGE_WIDTH * tenMin_, 30, 50, 90);
+	Image::SetRect(hImage_, IMAGE_WIDTH * tenMin_, cutOutRangeY, cutOutRangewidth, cutOutRangeheight);
 	Image::Draw(hImage_);
 	
 	trs.position_.x = 0.7;
 	Image::SetTransform(hImage_, trs);
-	Image::SetRect(hImage_, IMAGE_WIDTH * min_, 30, 50, 90);
+	Image::SetRect(hImage_, IMAGE_WIDTH * min_, cutOutRangeY, cutOutRangewidth, cutOutRangeheight);
 	Image::Draw(hImage_);
 
 	trs.position_.x = 0.8;
 	Image::SetTransform(hImage_, trs);
-	Image::SetRect(hImage_, IMAGE_WIDTH * tenSec_, 30, 50, 90);
+	Image::SetRect(hImage_, IMAGE_WIDTH * tenSec_, cutOutRangeY, cutOutRangewidth, cutOutRangeheight);
 	Image::Draw(hImage_);
 
 	trs.position_.x = 0.9;
 	Image::SetTransform(hImage_, trs);
-	Image::SetRect(hImage_, IMAGE_WIDTH * sec_, 30, 50, 90);
+	Image::SetRect(hImage_, IMAGE_WIDTH * sec_, cutOutRangeY, cutOutRangewidth, cutOutRangeheight);
 	Image::Draw(hImage_);
 
 	//static float pos[3] = { x,y,z };

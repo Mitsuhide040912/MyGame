@@ -23,7 +23,7 @@ PlayScene::PlayScene(GameObject* parent)
 void PlayScene::Initialize()
 {
 	Instantiate<Field>(this);
-	Instantiate<Block>(this);
+	//Instantiate<Block>(this);
 	Instantiate<Player>(this);
 	Instantiate<Item>(this);
 	Instantiate<Enemy>(this);
