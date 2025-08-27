@@ -7,7 +7,7 @@ class ManualScene :
 	int select_;//選択
 	int prevUpKey_;//前フレームの上キー
 	int prevDownKey_;//前フレームの下キー
-
+	int hSound_;//サウンド番号
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
