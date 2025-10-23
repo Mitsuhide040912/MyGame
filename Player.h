@@ -9,6 +9,7 @@ class Player :
     int fall_;
     int camState_;//カメラタイプの指定
     int animType_;//アニメーションのタイプの指定
+    int hSound_;//音のデータ
 
     bool canMove_;
     bool hModelanim_;

@@ -17,6 +17,7 @@
 #include "Enemy.h"
 #include "Goblin.h"
 #include "Bullet.h"
+#include "Engine/Audio.h"
 
 #include "Engine/time.h"
 
@@ -69,6 +70,9 @@ void Player::Initialize()
 	hModelanime_[2] = Model::Load("Model\\PlayerThrow.fbx");
 	assert(hModelanime_[2] >= 2);
 
+	hSound_ = Audio::Load("Model\\sandworlk.wav");
+	assert(hSound_ >= 0);
+
 
 	//speed_ = 0.25;
 	transform_.rotate_.y = PLAYER_IMIT_ROT_Y;
@@ -107,9 +111,11 @@ void Player::Update()
 	{
 	case ANM_TYPE::WAIT:
 		hModel_ = hModelanime_[0];
+		Audio::Stop(hSound_);
 		break;
 	case ANM_TYPE::RUN:
 		hModel_ = hModelanime_[1];
+		Audio::Play(hSound_);
 		break;
 	case ANM_TYPE::Throw:
 		hModel_ = hModelanime_[2];
@@ -122,7 +128,7 @@ void Player::Update()
 	{
 		if (thisFall_ != true) {
 			//前進
-			if (Input::IsKey(DIK_W) || stickL.y > 0.3f)//コントローラーの実装もした
+			if (Input::IsKey(DIK_W) || stickL.y > 0.3f)//0.3→コントローラーの倒した感覚
 			{
 				animType_ = ANM_TYPE::RUN;
 				dir = SPEED * Time::DeltaTime();
@@ -132,7 +138,7 @@ void Player::Update()
 				animType_ = ANM_TYPE::WAIT;
 			}
 			//後退
-			if (Input::IsKey(DIK_S) || stickL.y < -0.3f)//コントローラーの実装もした
+			if (Input::IsKey(DIK_S) || stickL.y < -0.3f)//0.3→コントローラーの倒した感覚
 			{
 				animType_ = ANM_TYPE::RUN;
 				dir = -SPEED * Time::DeltaTime();
@@ -308,7 +314,7 @@ void Player::Update()
 		sm->ChangeScene(SCENE_ID_CLEAR);
 	}
 
-	if (CarryItem != nullptr) {
+	if (CarryItem != nullptr&&isItem_) {
 		
 		XMFLOAT3 itemPos = { transform_.position_.x,
 			transform_.position_.y + 5.0f,
@@ -322,6 +328,7 @@ void Player::Update()
 		SceneManager* sm = (SceneManager*)FindObject("SceneManager");
 		sm->ChangeScene(SCENE_ID_GAMEOVER);
 	}
+
 }
 
 void Player::OnCollision(GameObject* pTarget)
@@ -341,6 +348,7 @@ void Player::OnCollision(GameObject* pTarget)
 	}
 
 	if (pTarget->GetObjectName() == "Goblin") {
+		isItem_ = false;
 		transform_.position_ = { -75,-110,-20 };
 		//SceneManager* ov = (SceneManager*)FindObject("SceneManager");
 		//ov->ChangeScene(SCENE_ID_GAMEOVER);
