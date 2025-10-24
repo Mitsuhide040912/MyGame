@@ -10,7 +10,7 @@ class Goblin :
 	int animType_;
 	int isHit_ = 0;
 
-	float gobSpeed_ = 0.16f;
+	float gobSpeed_ = 0.19f;
 	float angle = 160.0f;
 	float maxDistance = 30.0f;
 

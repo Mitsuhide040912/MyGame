@@ -143,7 +143,7 @@ void Goblin::OnCollision(GameObject* pTarget)
 		hitFrag_ = true;
 		isHit_++;
 
-		if (isHit_ >= 2) {
+		if (isHit_ >= 1) {
 			KillMe();
 		}
 	}
