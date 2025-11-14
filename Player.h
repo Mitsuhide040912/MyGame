@@ -39,7 +39,7 @@ class Player :
     //プレイヤーの初期化
     const float PLAYER_IMIT_ROT_Y = 180.0f;
     const XMFLOAT3 PLAYER_INIT_SCALE = { 3.5f,3.5f,3.5f };
-    const XMFLOAT3 PLAYER_INIT_POS = { -75.0f,0.0f,-20.0f };
+    const XMFLOAT3 PLAYER_INIT_POS = { -75.0f,-110.0f,-20.0f };
     //移動・速度
     const float PLAYER_SPEED = 350.0f;
     const float PLAYER_FALL_SPEED = 15.0f;

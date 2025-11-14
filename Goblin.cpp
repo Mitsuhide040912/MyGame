@@ -16,7 +16,7 @@ using namespace DirectX;
 enum Gob_ANM_TYPE
 {
 	GobWAIT = 0,
-	GobWalk,
+	GobWALK,
 	GobMAX
 };
 
@@ -43,14 +43,12 @@ void Goblin::Initialize()
 
 void Goblin::Update()
 {
-	//↓ゴブリンを左右両方回転させる
-	transform_.rotate_.y += rotateClockwise_ ? 1.0f : -1.0f;
 	switch (animType_)
 	{
 	case Gob_ANM_TYPE::GobWAIT:
 		hModel_ = hModelAnimeGob_[0];
 		break;
-	case Gob_ANM_TYPE::GobWalk:
+	case Gob_ANM_TYPE::GobWALK:
 		hModel_ = hModelAnimeGob_[1];
 		break;
 	default:
@@ -60,39 +58,55 @@ void Goblin::Update()
 	Player* pPlayer = (Player*)FindObject("Player");  // プレイヤーオブジェクトを取得
 	if (!pPlayer) return;  // プレイヤーが見つからない場合は何もしない
 	XMFLOAT3 playerPos = pPlayer->GetPosition();  // プレイヤーの位置を取得
-	XMMATRIX world = transform_.GetWorldMatrix();
-	XMVECTOR forwardVec = XMVector3Normalize(world.r[2]);
-	XMFLOAT3 enemyForward;
-	XMStoreFloat3(&enemyForward, forwardVec);
 
-	bool isPlayerInRangeGoblin = EnemyAI::IsEnemyTarget(transform_.position_, enemyForward, playerPos, angle, maxDistance);
-	if (isPlayerInRangeGoblin) {
-		if (animType_ != Gob_ANM_TYPE::GobWalk) {
-			animType_ = Gob_ANM_TYPE::GobWalk;
+	float distance = XMVectorGetX(XMVector3Length(XMLoadFloat3(&transform_.position_) - XMLoadFloat3(&playerPos)));
+	XMFLOAT3 forward = { sinf(XMConvertToRadians(transform_.rotate_.y)),0.0f,cosf(XMConvertToRadians(transform_.rotate_.y)) };
+	XMVECTOR enemyForward = XMVector3Normalize(XMLoadFloat3(&forward));
+	XMVECTOR toPlayer = XMVector3Normalize(XMLoadFloat3(&playerPos) - XMLoadFloat3(&transform_.position_));
+	float dot = XMVectorGetX(XMVector3Dot(enemyForward, toPlayer));
+	dot = (dot < -1.0f) ? -1.0f : (dot > 1.0f ? 1.0f : dot);
+	float angleToPlayer = acosf(dot);
+
+	const float VIEN_ANGLE = XMConvertToRadians(100.0f);
+
+	if (distance < CHASE_RANGE && angleToPlayer < VIEN_ANGLE / 2) {
+		
+		chasing_ = true;
+	}
+	if (chasing_&&!returning_){
+		if (animType_ != Gob_ANM_TYPE::GobWALK) {
+			animType_ = Gob_ANM_TYPE::GobWALK;
+			Model::SetAnimFrame(hModelAnimeGob_[1], ANIM_STRT_FRAME, ANIM_Walk_FRAME, ANIM_END_SPEED);
+		}
+		XMVECTOR dirVec = XMVector3Normalize(XMLoadFloat3(&playerPos) - XMLoadFloat3(&transform_.position_));
+		transform_.rotate_.y = XMConvertToDegrees(atan2f(XMVectorGetX(dirVec), XMVectorGetZ(dirVec))) - mayaCorection;
+		XMVECTOR move = XMVectorScale(dirVec, gobSpeed_);
+		XMStoreFloat3(&transform_.position_, XMVectorAdd(XMLoadFloat3(&transform_.position_), move));
+
+		if (distance >= LOST_RANGE) {
+			returning_ = true;
+		}
+	}
+	if (returning_&&chasing_) {
+		if (animType_ != Gob_ANM_TYPE::GobWALK) {
+			animType_ = Gob_ANM_TYPE::GobWALK;
 			Model::SetAnimFrame(hModelAnimeGob_[1], ANIM_STRT_FRAME, ANIM_Walk_FRAME, ANIM_END_SPEED);
 		}
 		XMVECTOR enemyPosVec = XMLoadFloat3(&transform_.position_);
-		XMVECTOR playerPosVec = XMLoadFloat3(&playerPos);
-		// 方向ベクトル（XZ）
-		XMVECTOR dirVec = XMVectorSubtract(playerPosVec, enemyPosVec);
-		dirVec = XMVector3Normalize(dirVec);
-		// atan2 → ラジアン → 度数へ変換
-		XMFLOAT3 dirFlat;
-		XMStoreFloat3(&dirFlat, dirVec);
-		float angle = atan2f(dirFlat.x, dirFlat.z);
-		float degree = XMConvertToDegrees(angle);
-		// Maya補正
-		transform_.rotate_.y = degree - mayaCorection;
-		// 移動
-		XMVECTOR move = XMVectorScale(dirVec, gobSpeed_);
-		enemyPosVec = XMVectorAdd(enemyPosVec, move);
-		XMStoreFloat3(&transform_.position_, enemyPosVec);
-	}
-	else
-	{
-		if (animType_ != Gob_ANM_TYPE::GobWAIT) {
-			animType_ = Gob_ANM_TYPE::GobWAIT;
-			Model::SetAnimFrame(hModelAnimeGob_[0], ANIM_STRT_FRAME, ANIM_Idle_FRAME, ANIM_END_SPEED);
+		XMVECTOR homePosVec = XMLoadFloat3(&initPos_);
+		XMVECTOR dirVec = XMVector3Normalize(XMVectorSubtract(homePosVec, enemyPosVec));
+		transform_.rotate_.y = XMConvertToDegrees(atan2f(XMVectorGetX(dirVec), XMVectorGetZ(dirVec))) - mayaCorection;
+		XMVECTOR move = XMVectorScale(dirVec, gobReturnSpeed_);
+		XMStoreFloat3(&transform_.position_, XMVectorAdd(enemyPosVec, move));
+		float homeDist = XMVectorGetX(XMVector3Length(XMLoadFloat3(&transform_.position_) - XMLoadFloat3(&initPos_)));
+		if (homeDist < 1.0f) {
+			returning_ = false;
+			chasing_ = false;
+			if (animType_ != Gob_ANM_TYPE::GobWAIT) {
+				animType_ = Gob_ANM_TYPE::GobWAIT;
+				Model::SetAnimFrame(hModelAnimeGob_[0], ANIM_STRT_FRAME, ANIM_Idle_FRAME, ANIM_END_SPEED);
+			}
+
 		}
 	}
 	Field* pField = (Field*)FindObject("Field");
@@ -102,13 +116,12 @@ void Goblin::Update()
 	data.start.y += 4;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hFieldModel, &data);
+	initPos_.y = transform_.position_.y;
 
 	if (data.hit)
 	{
 		transform_.position_.y -= data.dist - 4;
 	}
-
-
 	//↓yが-157を超えた時点でゴブリン死滅
 	if (transform_.position_.y < GOBLIN_DETH_HEIGHT) {
 		KillMe();
@@ -130,11 +143,9 @@ void Goblin::Release()
 
 void Goblin::SetPosition(const XMFLOAT3& pos)
 {
-}
-
-void Goblin::SetRotateDir(bool clockWise)
-{
-	rotateClockwise_ = clockWise;
+	transform_.position_ = pos;
+	initPos_ = pos;
+	
 }
 
 void Goblin::OnCollision(GameObject* pTarget)
@@ -143,7 +154,7 @@ void Goblin::OnCollision(GameObject* pTarget)
 		hitFrag_ = true;
 		isHit_++;
 
-		if (isHit_ >= 1) {
+		if (isHit_ >= 2) {
 			KillMe();
 		}
 	}

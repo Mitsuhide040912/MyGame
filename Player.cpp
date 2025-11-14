@@ -105,7 +105,6 @@ void Player::Update()
 	const int SPEED = PLAYER_SPEED;
 	float dir;
 	dir = 0.0f;
-	//dir += (float) dir/1000.0f * (speed_ * Time::DeltaTime());
 
 	switch (animType_)
 	{
@@ -152,13 +151,9 @@ void Player::Update()
 		//物を投げるアニメーション
 		if (Input::IsKey(DIK_J) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 		{
-			
-
 			animType_ = ANM_TYPE::Throw;
 			thisThrow_ = true;
 			timer_ = THROW_TIME;
-			
-
 		}
 	}
 	else
@@ -251,25 +246,6 @@ void Player::Update()
 			thisFall_ = false;
 		}
 	}
-
-	//RayCastData frontDataZ;
-	//frontDataZ.start = transform_.position_;
-	//frontDataZ.start.z += 0.2;
-	//frontDataZ.dir = XMFLOAT3({ 0,0,-1 });
-	//Model::RayCast(hGmodel, &frontDataZ);
-
-	//if (frontDataZ.hit)
-	//{
-	//	if (frontRayDist_ < frontDataZ.dist - 0.2)
-	//	{
-	//		wallDist_ = frontDataZ.dist - 0.2;
-	//	}
-	//	else
-	//	{
-	//		transform_.position_.z -= frontDataZ.dist - 0.2;
-	//	}
-	//}
-
 	//カメラの表示変更
 	if (Input::IsKeyDown(DIK_Z) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
@@ -349,9 +325,7 @@ void Player::OnCollision(GameObject* pTarget)
 
 	if (pTarget->GetObjectName() == "Goblin") {
 		isItem_ = false;
-		transform_.position_ = { -75,-110,-20 };
-		//SceneManager* ov = (SceneManager*)FindObject("SceneManager");
-		//ov->ChangeScene(SCENE_ID_GAMEOVER);
+		transform_.position_ = PLAYER_INIT_POS;//<=PLAYERのリスポーン位置
 	}
 }
 

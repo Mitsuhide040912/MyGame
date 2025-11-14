@@ -31,20 +31,32 @@ void PlayScene::Initialize()
 
 
 	std::vector<Goblin*>goblins;
-	for (int i = 0;i < 20; i++)
-	{
-		GameObject* goblin = Instantiate<Goblin>(this);
-		float x = (rand() %  141)-18;
-		float y = goblin->GetPosition().y;
-		float z = (rand() % 96)-68;
-		goblin->SetPosition({ x,y,z });
+	XMFLOAT3 goblinPositions[5] = {
+		{-70.0f,   0.0f, 20.0f },
+		{  0.0f,   0.0f, 50.0f },
+		{ 40.0f,   0.0f, 10.0f },
+		{ 80.0f,   0.0f,-30.0f },
+		{-20.0f,   0.0f,-60.0f }
+	};
 
-		Goblin* clockWiseGob = dynamic_cast<Goblin*>(goblin);
-		if (clockWiseGob) {
-			clockWiseGob->SetRotateDir(i < 10);
-		}
-		//goblins.push_back(goblin);
+	for (int i = 0;i < 5;i++) {
+		Goblin* goblin = Instantiate<Goblin>(this);
+		goblin->SetPosition(goblinPositions[i]);
 	}
+	//for (int i = 0;i < 20; i++)
+	//{
+	//	GameObject* goblin = Instantiate<Goblin>(this);
+	//	float x = (rand() %  141)-18;
+	//	float y = goblin->GetPosition().y;
+	//	float z = (rand() % 96)-68;
+	//	goblin->SetPosition({ x,y,z });
+
+	//	Goblin* clockWiseGob = dynamic_cast<Goblin*>(goblin);
+	//	if (clockWiseGob) {
+	//		clockWiseGob->SetRotateDir(i < 10);
+	//	}
+	//	//goblins.push_back(goblin);
+	//}
 
 
 
