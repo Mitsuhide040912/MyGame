@@ -23,43 +23,21 @@ PlayScene::PlayScene(GameObject* parent)
 void PlayScene::Initialize()
 {
 	Instantiate<Field>(this);
-	//Instantiate<Block>(this);
 	Instantiate<Player>(this);
 	Instantiate<Item>(this);
 	Instantiate<Enemy>(this);
-
-
-
 	std::vector<Goblin*>goblins;
 	XMFLOAT3 goblinPositions[5] = {
-		{-70.0f,   0.0f, 20.0f },
-		{  0.0f,   0.0f, 50.0f },
-		{ 40.0f,   0.0f, 10.0f },
-		{ 80.0f,   0.0f,-30.0f },
-		{-20.0f,   0.0f,-60.0f }
+		{ 110.0f,   0.0f, -50.0f },
+		{ 100.0f,   0.0f, -70.0f },
+		{ 30.0f,   0.0f, -50.0f },
+		{ 100.0f,   0.0f,  50.0f },
+		{-20.0f,   0.0f,  40.0f }
 	};
-
 	for (int i = 0;i < 5;i++) {
 		Goblin* goblin = Instantiate<Goblin>(this);
 		goblin->SetPosition(goblinPositions[i]);
 	}
-	//for (int i = 0;i < 20; i++)
-	//{
-	//	GameObject* goblin = Instantiate<Goblin>(this);
-	//	float x = (rand() %  141)-18;
-	//	float y = goblin->GetPosition().y;
-	//	float z = (rand() % 96)-68;
-	//	goblin->SetPosition({ x,y,z });
-
-	//	Goblin* clockWiseGob = dynamic_cast<Goblin*>(goblin);
-	//	if (clockWiseGob) {
-	//		clockWiseGob->SetRotateDir(i < 10);
-	//	}
-	//	//goblins.push_back(goblin);
-	//}
-
-
-
 	Instantiate<Timer>(this);
 }
 

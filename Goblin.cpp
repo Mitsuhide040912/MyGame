@@ -10,6 +10,7 @@
 #include "EnemyAI.h"
 #include <cmath>
 #include"Engine/Debug.h"
+#include "Engine/time.h"
 
 using namespace DirectX;
 
@@ -109,6 +110,32 @@ void Goblin::Update()
 
 		}
 	}
+
+	if (!chasing_ && !returning_)
+	{
+		if (animType_ != Gob_ANM_TYPE::GobWALK) {
+			animType_ = Gob_ANM_TYPE::GobWALK;
+			Model::SetAnimFrame(hModelAnimeGob_[1], ANIM_STRT_FRAME, ANIM_Walk_FRAME, ANIM_END_SPEED);
+		}
+
+		patrolTimer_ -= PATROL_UPDATE_DT;
+		if (patrolTimer_ <= 0.0f)
+		{
+			float randAngle = (float)(rand() % (int)PATROL_ANGLE_RANGE);
+			patrolDir_.x = sinf(XMConvertToRadians(randAngle));
+			patrolDir_.z = cosf(XMConvertToRadians(randAngle));
+
+			float randFactor = (float)(rand() % 100) / 100.0f;
+			patrolTimer_ = PATROL_MIN_TIME + (PATROL_MAX_TIME - PATROL_MIN_TIME) * randFactor;
+		}
+
+		transform_.rotate_.y = XMConvertToDegrees(atan2f(patrolDir_.x, patrolDir_.z)) - mayaCorection;
+
+		XMVECTOR move = XMVectorScale(XMLoadFloat3(&patrolDir_), gobSpeed_ * PATROL_SPEED_RATE);
+
+		XMStoreFloat3(&transform_.position_, XMVectorAdd(XMLoadFloat3(&transform_.position_), move));
+	}
+
 	Field* pField = (Field*)FindObject("Field");
 	int hFieldModel = pField->GetModelHandle();
 	RayCastData data;
@@ -117,11 +144,39 @@ void Goblin::Update()
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hFieldModel, &data);
 	initPos_.y = transform_.position_.y;
-
-	if (data.hit)
+	if (!thisFall_)
 	{
-		transform_.position_.y -= data.dist - 4;
+		if (data.hit)
+		{
+			if (prevDist_ < data.dist - 4)
+			{
+				fallDist_ = data.dist - 4;
+				thisFall_ = true;
+				fallTime_ = fallDist_ / 15;
+			}
+			else
+			{
+				transform_.position_.y -= data.dist - 4;
+				prevDist_ = data.dist;
+			}
+			
+		}
 	}
+	else
+	{
+		if (fallTime_ > 0)
+		{
+			Fall();
+		}
+		else
+		{
+			thisFall_ = false;
+		}
+	}
+	//if (data.hit)
+	//{
+	//	transform_.position_.y -= data.dist - 4;
+	//}
 	//↓yが-157を超えた時点でゴブリン死滅
 	if (transform_.position_.y < GOBLIN_DETH_HEIGHT) {
 		KillMe();
@@ -162,4 +217,10 @@ void Goblin::OnCollision(GameObject* pTarget)
 	{
 		hitFrag_ = false;
 	}
+}
+
+void Goblin::Fall()
+{
+	transform_.position_.y -= GOB_FALL_SPEED * Time::DeltaTime();
+	fallTime_ -= Time::DeltaTime();
 }

@@ -73,7 +73,7 @@ void Player::Initialize()
 	hSound_ = Audio::Load("Model\\sandworlk.wav");
 	assert(hSound_ >= 0);
 
-
+	
 	//speed_ = 0.25;
 	transform_.rotate_.y = PLAYER_IMIT_ROT_Y;
 	transform_.scale_ = { PLAYER_INIT_SCALE };
@@ -185,7 +185,7 @@ void Player::Update()
 		}
 	}
 
-	//左回転
+	//左回転=
 	if (Input::IsKey(DIK_A) || stickR.x < -0.3)//0.3→コントローラーの倒した感覚
 	{
 		transform_.rotate_.y -= 3.0f;
