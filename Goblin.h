@@ -44,6 +44,9 @@ class Goblin :
 	const float PATROL_SPEED_RATE = 0.6f;
 	const float PATROL_ANGLE_RANGE = 360.0f;
 
+	const float CHECK_FORWARD_DIST = 3.0f;
+	const float MAX_FLOOR_HEIGHT_DIST = 10.0f;
+
 	const float GOB_FALL_SPEED = 15.0f;
 
 	//ƒSƒuƒŠƒ“‚ªˆê’è‚Ìy‚Ì’l‚ğ’´‚¦‚Ä‚¢‚½‚çíœ

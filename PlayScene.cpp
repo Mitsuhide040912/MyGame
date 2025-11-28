@@ -28,11 +28,11 @@ void PlayScene::Initialize()
 	Instantiate<Enemy>(this);
 	std::vector<Goblin*>goblins;
 	XMFLOAT3 goblinPositions[5] = {
-		{ 110.0f,   0.0f, -50.0f },
-		{ 100.0f,   0.0f, -70.0f },
-		{ 30.0f,   0.0f, -50.0f },
-		{ 100.0f,   0.0f,  50.0f },
-		{-20.0f,   0.0f,  40.0f }
+		{ 110.0f,   -20.0f, -50.0f },
+		{ 100.0f,   -20.0f, -70.0f },
+		{ 30.0f,   -20.0f, -50.0f },
+		{ 100.0f,   -20.0f,  50.0f },
+		{-20.0f,   -20.0f,  40.0f }
 	};
 	for (int i = 0;i < 5;i++) {
 		Goblin* goblin = Instantiate<Goblin>(this);

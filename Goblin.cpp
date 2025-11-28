@@ -44,6 +44,9 @@ void Goblin::Initialize()
 
 void Goblin::Update()
 {
+
+	Field* pField = (Field*)FindObject("Field");
+	int hFieldModel = pField->GetModelHandle();
 	switch (animType_)
 	{
 	case Gob_ANM_TYPE::GobWAIT:
@@ -131,13 +134,10 @@ void Goblin::Update()
 
 		transform_.rotate_.y = XMConvertToDegrees(atan2f(patrolDir_.x, patrolDir_.z)) - mayaCorection;
 
-		XMVECTOR move = XMVectorScale(XMLoadFloat3(&patrolDir_), gobSpeed_ * PATROL_SPEED_RATE);
+		XMVECTOR move = XMVectorScale(XMLoadFloat3(&patrolDir_), gobSpeed_ * 0.6f);
 
 		XMStoreFloat3(&transform_.position_, XMVectorAdd(XMLoadFloat3(&transform_.position_), move));
 	}
-
-	Field* pField = (Field*)FindObject("Field");
-	int hFieldModel = pField->GetModelHandle();
 	RayCastData data;
 	data.start = transform_.position_;
 	data.start.y += 4;
@@ -173,10 +173,6 @@ void Goblin::Update()
 			thisFall_ = false;
 		}
 	}
-	//if (data.hit)
-	//{
-	//	transform_.position_.y -= data.dist - 4;
-	//}
 	//↓yが-157を超えた時点でゴブリン死滅
 	if (transform_.position_.y < GOBLIN_DETH_HEIGHT) {
 		KillMe();
