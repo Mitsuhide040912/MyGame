@@ -36,6 +36,8 @@ class Player :
     const int ANIM_Pickup_FRAME = 63;
 
     const float THROW_TIME = 0.7;
+    //レイの位置
+    const float RAY_START_HEIGHT = 4.0f;
     //プレイヤーの初期化
     const float PLAYER_IMIT_ROT_Y = 180.0f;
     const XMFLOAT3 PLAYER_INIT_SCALE = { 3.5f,3.5f,3.5f };

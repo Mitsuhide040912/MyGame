@@ -214,22 +214,22 @@ void Player::Update()
 	//レイキャスト
 	RayCastData data;
 	data.start = transform_.position_;
-	data.start.y += 4;
+	data.start.y += RAY_START_HEIGHT;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hGmodel, &data);
 	if (!thisFall_)
 	{
 		if (data.hit)
 		{
-			if (prevDist_ < data.dist - 4)
+			if (prevDist_ < data.dist - RAY_START_HEIGHT)
 			{
-				fallDist_ = data.dist - 4;
+				fallDist_ = data.dist - RAY_START_HEIGHT;
 				thisFall_ = true;
-				fallTime = fallDist_ / 15;
+				fallTime = fallDist_ / PLAYER_FALL_SPEED;
 			}
 			else
 			{
-				transform_.position_.y -= data.dist - 4;
+				transform_.position_.y -= data.dist - RAY_START_HEIGHT;
 				prevDist_ = data.dist;
 			}
 

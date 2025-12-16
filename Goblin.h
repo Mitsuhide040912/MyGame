@@ -62,9 +62,6 @@ class Goblin :
 	//Mayaで作ったモデルの角度が若干ずれているため
 	const float mayaCorection = 5.0f;
 
-	//落下速度
-	const float FALL_SPEED = 15.0f;
-
 	XMFLOAT3 initPos_;//初期位置
 
 	XMFLOAT3 patrolDir_{ 0,0,0 };

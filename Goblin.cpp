@@ -137,7 +137,7 @@ void Goblin::Update()
 	}
 	RayCastData data;
 	data.start = transform_.position_;
-	data.start.y = RAY_START_HEIGHT;//上からレイを打つ
+	data.start.y += RAY_START_HEIGHT;//上からレイを打つ
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hFieldModel, &data);
 	initPos_.y = transform_.position_.y;
@@ -149,7 +149,7 @@ void Goblin::Update()
 			{
 				fallDist_ = data.dist - RAY_START_HEIGHT;
 				thisFall_ = true;
-				fallTime_ = fallDist_ / FALL_SPEED;
+				fallTime_ = fallDist_ / GOB_FALL_SPEED;
 			}
 			else
 			{

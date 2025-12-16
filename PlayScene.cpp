@@ -25,7 +25,7 @@ void PlayScene::Initialize()
 	Instantiate<Field>(this);
 	Instantiate<Player>(this);
 	Instantiate<Item>(this);
-	Instantiate<Enemy>(this);
+	//Instantiate<Enemy>(this);
 	std::vector<Goblin*>goblins;
 	XMFLOAT3 goblinPositions[5] = {
 		{ 110.0f,   -20.0f, -50.0f },
