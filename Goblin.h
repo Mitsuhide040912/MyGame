@@ -33,9 +33,17 @@ class Goblin :
 	const int ANIM_Idle_FRAME = 183;
 	const int ANIM_Walk_FRAME = 48;
 
+	//ランダム係数
+	const int RAND_FACTOR = 100;
+
+	//レイの位置
+	const float RAY_START_HEIGHT = 4.0f;
+
 
 	const float CHASE_RANGE = 40.0f;//追跡開始距離
 	const float LOST_RANGE = 50.0f; //視野外
+
+	const float VIEN_ANGLE = XMConvertToRadians(100.0f);//ゴブリンの視野角（度→ラジアン）
 
 	//徘徊用定数
 	const float PATROL_UPDATE_DT = 0.016f;
@@ -53,6 +61,9 @@ class Goblin :
 	const float GOBLIN_DETH_HEIGHT = -150.0f;
 	//Mayaで作ったモデルの角度が若干ずれているため
 	const float mayaCorection = 5.0f;
+
+	//落下速度
+	const float FALL_SPEED = 15.0f;
 
 	XMFLOAT3 initPos_;//初期位置
 

@@ -33,7 +33,6 @@ void Goblin::Initialize()
 	assert(hModelAnimeGob_[0] >= 0);
 	hModelAnimeGob_[1] = Model::Load("Model\\GoblinRun.fbx");//←歩く
 	assert(hModelAnimeGob_[1] >= 0);
-	//transform_.position_ = { EnemyGobPosX ,0,EnemyGobPosZ };
 	transform_.scale_ = GOB_INIT_SCALE;
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 2, 0), XMFLOAT3(3, 5, 3));
@@ -70,8 +69,6 @@ void Goblin::Update()
 	float dot = XMVectorGetX(XMVector3Dot(enemyForward, toPlayer));
 	dot = (dot < -1.0f) ? -1.0f : (dot > 1.0f ? 1.0f : dot);
 	float angleToPlayer = acosf(dot);
-
-	const float VIEN_ANGLE = XMConvertToRadians(100.0f);
 
 	if (distance < CHASE_RANGE && angleToPlayer < VIEN_ANGLE / 2) {
 		
@@ -128,7 +125,7 @@ void Goblin::Update()
 			patrolDir_.x = sinf(XMConvertToRadians(randAngle));
 			patrolDir_.z = cosf(XMConvertToRadians(randAngle));
 
-			float randFactor = (float)(rand() % 100) / 100.0f;
+			float randFactor = static_cast<float>(rand() % RAND_FACTOR) / static_cast<float>(RAND_FACTOR);
 			patrolTimer_ = PATROL_MIN_TIME + (PATROL_MAX_TIME - PATROL_MIN_TIME) * randFactor;
 		}
 
@@ -140,7 +137,7 @@ void Goblin::Update()
 	}
 	RayCastData data;
 	data.start = transform_.position_;
-	data.start.y += 4;
+	data.start.y = RAY_START_HEIGHT;//上からレイを打つ
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hFieldModel, &data);
 	initPos_.y = transform_.position_.y;
@@ -148,15 +145,15 @@ void Goblin::Update()
 	{
 		if (data.hit)
 		{
-			if (prevDist_ < data.dist - 4)
+			if (prevDist_ < data.dist - RAY_START_HEIGHT)//地面にめり込まないように
 			{
-				fallDist_ = data.dist - 4;
+				fallDist_ = data.dist - RAY_START_HEIGHT;
 				thisFall_ = true;
-				fallTime_ = fallDist_ / 15;
+				fallTime_ = fallDist_ / FALL_SPEED;
 			}
 			else
 			{
-				transform_.position_.y -= data.dist - 4;
+				transform_.position_.y -= data.dist - RAY_START_HEIGHT;
 				prevDist_ = data.dist;
 			}
 			
