@@ -110,7 +110,7 @@ void Goblin::Update()
 
 		}
 	}
-
+	//適当に歩く↓
 	if (!chasing_ && !returning_)
 	{
 		if (animType_ != Gob_ANM_TYPE::GobWALK) {
