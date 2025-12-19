@@ -13,7 +13,7 @@ TitleScene::TitleScene(GameObject* parent)
 void TitleScene::Initialize()
 {
 	//Title画像のロード
-	hImege_ = Image::Load("Model\\EggHunterGameTitle.png");
+	hImege_ = Image::Load("Model\\EHT.png");
 	assert(hImege_ >= 0);
 	//サウンドデータのロード
 	hSound_ = Audio::Load("Model\\fanfare.wav");

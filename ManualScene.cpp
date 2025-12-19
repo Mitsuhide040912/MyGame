@@ -12,7 +12,7 @@ ManualScene::ManualScene(GameObject* parent)
 
 void ManualScene::Initialize()
 {
-	hImege_ = Image::Load("Model\\ManualScene.png");
+	hImege_ = Image::Load("Model\\EHM.png");
 	assert(hImege_ >= 0);
 	//サウンドデータのロード
 	hSound_ = Audio::Load("Model\\fanfare.wav");
