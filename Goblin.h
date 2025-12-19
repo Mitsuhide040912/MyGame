@@ -8,6 +8,8 @@ class Goblin :
 	int hModel_;
 	int hModelAnimeGob_[2];
 	int animType_;
+
+	int hSound_;//音のデータ
 	//何回当たっているか
 	int isHit_ = 0;
 	//ゴブリンがプレイヤーを追いかけたりするときの速度

@@ -12,6 +12,8 @@
 #include"Engine/Debug.h"
 #include "Engine/time.h"
 
+#include "Engine/Audio.h"
+
 using namespace DirectX;
 
 enum Gob_ANM_TYPE
@@ -34,6 +36,9 @@ void Goblin::Initialize()
 	hModelAnimeGob_[1] = Model::Load("Model\\GoblinRun.fbx");//←歩く
 	assert(hModelAnimeGob_[1] >= 0);
 	transform_.scale_ = GOB_INIT_SCALE;
+
+	hSound_ = Audio::Load("Model\\Stone.wav");
+	assert(hSound_ >= 0);
 
 	BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 2, 0), XMFLOAT3(3, 5, 3));
 	AddCollider(collision);
@@ -200,9 +205,12 @@ void Goblin::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetObjectName() == "Bullet") {
 		hitFrag_ = true;
+
+		Audio::Play(hSound_);
+
 		isHit_++;
 
-		if (isHit_ >= 2) {
+		if (isHit_ >= 1) {
 			KillMe();
 		}
 	}
